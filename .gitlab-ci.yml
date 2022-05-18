@@ -19,11 +19,12 @@ variables:
 
 # Packages installation before running script
 before_script:
+  - touch local.properties
   - apt-get --quiet update --yes
   - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
 
   # Setup path as ANDROID_SDK_ROOT for moving/exporting the downloaded sdk into it
-  - export ANDROID_SDK_ROOT="${PWD}/sdk"
+  - export ANDROID_SDK_ROOT="${PWD}/android-home"
   # Create a new directory at specified location
   - install -d $ANDROID_SDK_ROOT
   # Here we are installing androidSDK tools from official source,
