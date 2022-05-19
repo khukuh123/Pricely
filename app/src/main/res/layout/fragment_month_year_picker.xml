@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dimen_16dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvMonthAndYearTitle"
+        style="@style/PricelyInterBoldText.GreyBlackish"
+        android:layout_width="@dimen/dimen_0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/title_pick_month_and_year"
+        android:textSize="@dimen/text_size_18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilMonth"
+        style="@style/PricelyExposedDropdownMenu"
+        android:layout_width="@dimen/dimen_0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_24dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toStartOf="@id/tilYear"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMonthAndYearTitle">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/spnMonth"
+            style="@style/PricelyAutoCompleteTextView"
+            android:layout_width="match_parent"
+            android:hint="@string/hint_month" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilYear"
+        style="@style/PricelyExposedDropdownMenu"
+        android:layout_width="@dimen/dimen_0dp"
+        android:layout_height="wrap_content"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tilMonth"
+        app:layout_constraintTop_toTopOf="@id/tilMonth">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/spnYear"
+            style="@style/PricelyAutoCompleteTextView"
+            android:layout_width="match_parent"
+            android:hint="@string/hint_year" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNeutral"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="@dimen/dimen_0dp"
+        app:layout_constraintWidth_default="wrap"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_18dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
+        android:text="@string/action_cancel"
+        app:layout_constraintEnd_toStartOf="@id/btnPositive"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilMonth" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPositive"
+        android:layout_width="@dimen/dimen_0dp"
+        app:layout_constraintWidth_default="wrap"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_18dp"
+        android:text="@string/action_pick"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:enabled="false"
+        app:layout_constraintStart_toEndOf="@id/btnNeutral"
+        app:layout_constraintTop_toBottomOf="@id/tilMonth" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

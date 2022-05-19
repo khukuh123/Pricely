@@ -2,10 +2,7 @@
 package com.bangkit.pricely.base
 
 import android.app.Application
-import com.bangkit.pricely.di.networkModule
-import com.bangkit.pricely.di.repositoryModule
-import com.bangkit.pricely.di.useCaseModule
-import com.bangkit.pricely.di.viewModelModule
+import com.bangkit.pricely.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin

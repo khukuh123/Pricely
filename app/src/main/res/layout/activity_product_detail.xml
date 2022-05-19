@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".presentation.detail.ProductDetailActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/layout_general_toolbar" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgProduct"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_200dp"
+                android:src="@drawable/ic_baseline_image_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvProductName"
+                style="@style/PricelyInterBoldText.GreyBlackish"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_16dp"
+                android:layout_marginStart="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                android:textSize="@dimen/text_size_18sp"
+                app:layout_constraintEnd_toStartOf="@id/btnMontAndYearPicker"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imgProduct"
+                tools:text="@string/sample_product_name" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvProductWeightPerPiece"
+                style="@style/PricelyInterRegularText.AnotherGrey"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/sample_weight_per_piece"
+                android:textSize="@dimen/text_size_12sp"
+                app:layout_constraintEnd_toEndOf="@id/tvProductName"
+                app:layout_constraintStart_toStartOf="@id/tvProductName"
+                app:layout_constraintTop_toBottomOf="@id/tvProductName" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvProductPrice"
+                style="@style/PricelyInterBoldText.GreyBlackish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                tools:text="@string/samples_price"
+                android:textSize="@dimen/text_size_16sp"
+                app:layout_constraintEnd_toStartOf="@id/imgIndicator"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="@id/tvProductName"
+                app:layout_constraintTop_toBottomOf="@id/tvProductWeightPerPiece" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imgIndicator"
+                android:layout_width="@dimen/dimen_16dp"
+                android:layout_height="@dimen/dimen_16dp"
+                android:layout_marginStart="@dimen/dimen_8dp"
+                app:layout_constraintBottom_toBottomOf="@id/tvProductPrice"
+                app:layout_constraintEnd_toStartOf="@id/tvPriceInfo"
+                app:layout_constraintStart_toEndOf="@id/tvProductPrice"
+                app:layout_constraintTop_toTopOf="@id/tvProductPrice"
+                tools:src="@drawable/ic_indicator_up" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvPriceInfo"
+                style="@style/PricelyInterRegularText.AnotherGrey"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_8dp"
+                android:textSize="@dimen/text_size_12sp"
+                app:layout_constraintBottom_toBottomOf="@id/tvProductPrice"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imgIndicator"
+                app:layout_constraintTop_toTopOf="@id/tvProductPrice"
+                tools:text="@string/label_current_month" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMontAndYearPicker"
+                android:layout_width="@dimen/dimen_48dp"
+                android:layout_height="@dimen/dimen_48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                app:layout_constraintTop_toTopOf="@id/tvProductName"
+                app:layout_constraintStart_toEndOf="@id/tvProductName"
+                app:icon="@drawable/ic_baseline_calendar_month_24"
+                app:iconGravity="textStart"
+                android:paddingStart="@dimen/dimen_0dp"
+                android:paddingEnd="@dimen/dimen_0dp"
+                app:iconPadding="@dimen/dimen_0dp"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvProductDescription"
+                style="@style/PricelyInterRegularText.BlackIndigo"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:ellipsize="end"
+                android:justificationMode="inter_word"
+                android:maxLines="8"
+                android:textSize="@dimen/text_size_12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProductPrice"
+                app:lineHeight="@dimen/dimen_20dp"
+                tools:targetApi="o"
+                tools:text="@tools:sample/lorem/random" />
+
+            <View
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_6dp"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                android:background="@color/whiteGrayish"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProductDescription" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvPriceChartLabel"
+                style="@style/PricelyInterBoldText.GreyBlackish"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_16dp"
+                android:layout_marginTop="@dimen/dimen_38dp"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                android:text="@string/label_price_chart"
+                android:textSize="@dimen/text_size_18sp"
+                app:layout_constraintEnd_toStartOf="@id/tilChartType"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProductDescription"
+                app:layout_constraintWidth_min="@dimen/dimen_200dp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilChartType"
+                style="@style/PricelyExposedDropdownMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvPriceChartLabel"
+                app:layout_constraintTop_toTopOf="@id/tvPriceChartLabel">
+
+                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                    android:id="@+id/spnChartType"
+                    style="@style/PricelyAutoCompleteTextView"
+                    android:layout_width="match_parent"
+                    tools:text="Month" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/crtPrices"
+                android:layout_width="@dimen/dimen_0dp"
+                android:layout_height="@dimen/dimen_0dp"
+                app:layout_constraintTop_toBottomOf="@id/tilChartType"
+                app:layout_constraintDimensionRatio="1:1"
+                android:layout_marginTop="@dimen/dimen_16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginHorizontal="@dimen/dimen_16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="@dimen/dimen_16dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
