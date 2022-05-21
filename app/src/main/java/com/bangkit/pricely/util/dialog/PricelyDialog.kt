@@ -1,4 +1,4 @@
-package com.bangkit.pricely.util
+package com.bangkit.pricely.util.dialog
 
 import android.content.Context
 import android.view.LayoutInflater

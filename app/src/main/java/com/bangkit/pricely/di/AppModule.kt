@@ -10,11 +10,10 @@ import com.bangkit.pricely.domain.product.ProductInteractor
 import com.bangkit.pricely.domain.product.ProductUseCase
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.AppConst
+import com.bangkit.pricely.util.chart.LeftAxisValueFormatter
+import com.bangkit.pricely.util.chart.YValueFormatter
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.Protocol
-import okhttp3.Response
-import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named

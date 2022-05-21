@@ -2,4 +2,14 @@
     <string name="app_name">Pricely</string>
     <string name="label_error">Error</string>
     <string name="action_retry">Retry</string>
+    <string name="label_price_chart">Price Chart</string>
+    <string name="title_product_detail">Product Detail</string>
+    <string name="label_current_month">(current month)</string>
+    <string name="title_pick_month_and_year">Pick month and year</string>
+    <string name="hint_month">Month</string>
+    <string name="hint_year">Year</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_pick">Pick</string>
+    <string name="label_history">History</string>
+    <string name="label_prediction">Prediction</string>
 </resources>

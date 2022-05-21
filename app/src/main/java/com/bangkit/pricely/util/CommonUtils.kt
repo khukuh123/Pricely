@@ -3,9 +3,12 @@ package com.bangkit.pricely.util
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,6 +19,18 @@ import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
+import java.util.*
+
+val localeId = Locale("id", "ID")
+
+private val currencyFormatter = NumberFormat.getCurrencyInstance(localeId)
+
+fun Double.formatCurrency(numberFormat: NumberFormat = currencyFormatter): String{
+    return StringBuilder(numberFormat.format(this))
+        .insert(2, ' ')
+        .toString()
+}
 
 fun Context.showToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
@@ -54,7 +69,8 @@ fun <T> LiveData<Resource<T>>.observe(
     }
 }
 
-fun AppCompatActivity.setupToolbar(title: String, showBack: Boolean) {
+fun AppCompatActivity.setupToolbar(toolbar: Toolbar,title: String, showBack: Boolean) {
+    setSupportActionBar(toolbar)
     supportActionBar?.apply {
         this.title = title
         setDisplayHomeAsUpEnabled(showBack)
@@ -67,5 +83,58 @@ fun <T> CoroutineScope.collectResult(liveData: MutableLiveData<T>, block: suspen
         result.collect {
             liveData.postValue(it)
         }
+    }
+}
+
+fun formatLargeValue(value: Long, digit: Int = 1, base: Array<String>): String {
+    val textValue = value.toString()
+    val chunkedTextValue = textValue.reversed().chunked(3) {
+        it.reversed()
+    }.reversed()
+    val result = StringBuilder("${chunkedTextValue.first()}.")
+    for (i in 0 until digit) {
+        result.append(chunkedTextValue[1][i])
+    }
+    result.append(base[chunkedTextValue.size - 1])
+    return if (chunkedTextValue.size > 1)
+        result.toString()
+    else
+        textValue
+}
+
+fun getMonths(): List<String> {
+    return listOf(
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Des"
+    )
+}
+
+fun <T> AutoCompleteTextView.setAdapter(
+    context: Context,
+    data: List<T>,
+    mapper: (T) -> String,
+    onItemClicked: (position: Int, item: T) -> Unit
+){
+    val adapter = ArrayAdapter(
+        context,
+        R.layout.item_dropdown,
+        R.id.tvItemDropdown,
+        data.map { mapper(it) }
+    )
+    this.apply {
+        setOnItemClickListener { _, _, position, _ ->
+            onItemClicked.invoke(position, data[position])
+        }
+        setAdapter(adapter)
     }
 }
