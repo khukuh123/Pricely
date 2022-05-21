@@ -10,4 +10,3 @@ data class Product (
     val price: Int,
     val unit: String
 ): Parcelable
-

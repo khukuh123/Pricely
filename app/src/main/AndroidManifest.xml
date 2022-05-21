@@ -28,6 +28,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.main.DetailCategoryActivity"
+            android:exported="false">
+
+        </activity>
+
+        <activity
+            android:name=".presentation.main.SearchScreenActivity"
+            android:exported="true" >
+        </activity>
     </application>
 
 </manifest>

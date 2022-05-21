@@ -21,8 +21,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.lang.StringBuilder
-import java.util.*
 import java.text.NumberFormat
+import java.util.*
 
 val Int.dp
     get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
@@ -94,6 +94,10 @@ fun <T> CoroutineScope.collectResult(liveData: MutableLiveData<T>, block: suspen
             liveData.postValue(it)
         }
     }
+}
+fun formatPrice(price: Int): StringBuilder {
+    val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+    return StringBuilder(format.format(price)).insert(2, ' ')
 }
 
 fun formatPrice(price: Int): StringBuilder {
