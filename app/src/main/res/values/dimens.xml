@@ -18,4 +18,6 @@
     <dimen name="dimen_64dp">64dp</dimen>
     <dimen name="dimen_48dp">48dp</dimen>
     <dimen name="dimen_24dp">24dp</dimen>
+    <dimen name="dimen_150dp">150dp</dimen>
+    <dimen name="dimen_120dp">120dp</dimen>
 </resources>
