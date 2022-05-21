@@ -27,6 +27,8 @@ before_script:
   - export ANDROID_SDK_ROOT="${PWD}/android-home"
   # Create a new directory at specified location
   - install -d $ANDROID_SDK_ROOT
+  # Create a path to Gradle
+  - export GRADLE_USER_HOME=`pwd`/.gradle
   # Here we are installing androidSDK tools from official source,
   # (the key thing here is the url from where you are downloading these sdk tool for command line, so please do note this url pattern there and here as well)
   # after that unzipping those tools and
@@ -53,6 +55,11 @@ before_script:
 
   # Not necessary, but just for surity
   - chmod +x ./gradlew
+
+cache:
+  paths:
+     - .gradle/wrapper
+     - .gradle/caches
 
 # Basic android and gradle stuff
 # Check linting
