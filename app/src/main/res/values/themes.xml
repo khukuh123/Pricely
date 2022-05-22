@@ -88,6 +88,13 @@
         <item name="android:minWidth">@dimen/dimen_0dp</item>
         <item name="android:textAppearance">@style/PricelyTextButtonTextAppearance</item>
     </style>
+    
+    <style name="PricelyPrimaryButton.IconOnly">
+        <item name="iconGravity">textStart</item>
+        <item name="android:paddingStart">@dimen/dimen_0dp</item>
+        <item name="android:paddingEnd">@dimen/dimen_0dp</item>
+        <item name="iconPadding">@dimen/dimen_0dp</item>
+    </style>
 
     <!--    ShapeAppearance-->
     <style name="PricelyShape">

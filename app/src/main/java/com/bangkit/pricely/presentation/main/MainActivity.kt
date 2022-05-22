@@ -1,9 +1,12 @@
 package com.bangkit.pricely.presentation.main
 
+import android.view.Menu
+import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.RecyclerView
+import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityMainBinding
 import com.bangkit.pricely.domain.product.model.Category
@@ -72,6 +75,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun setupObserver() {}
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_search -> showToast("Go to search screen")
+            else -> {
+
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     private fun setupRecyclerView() {
         with(binding) {

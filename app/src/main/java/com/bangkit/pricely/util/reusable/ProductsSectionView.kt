@@ -10,6 +10,8 @@ import com.bangkit.pricely.databinding.LayoutProductsSectionBinding
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.detail.ProductDetailActivity
 import com.bangkit.pricely.presentation.main.HorizontalProductAdapter
+import com.bangkit.pricely.util.dp
+import com.bangkit.pricely.util.recyclerview.PricelyLinearLayoutItemDecoration
 import com.bangkit.pricely.util.showToast
 
 class ProductsSectionView @JvmOverloads constructor(
@@ -59,6 +61,7 @@ class ProductsSectionView @JvmOverloads constructor(
             rvSectionProducts.apply {
                 adapter = productAdapter
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                addItemDecoration(PricelyLinearLayoutItemDecoration(16.dp, orientation = LinearLayoutManager.HORIZONTAL, edge = 24.dp))
             }
         }
     }

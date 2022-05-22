@@ -3,14 +3,19 @@
     android:id="@+id/toolbar"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/dimen_8dp"
+    android:paddingEnd="@dimen/dimen_8dp"
+    app:menu="@menu/menu_main">
 
     <ImageView
         android:id="@+id/imgIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="@dimen/dimen_32dp"
+        android:layout_height="@dimen/dimen_32dp"
         android:contentDescription="@string/text_icon"
+        android:scaleX="2"
+        android:scaleY="2"
+        android:layout_marginEnd="@dimen/dimen_8dp"
         android:src="@drawable/ic_launcher_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="@dimen/dimen_12dp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgIcon"

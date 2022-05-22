@@ -101,13 +101,10 @@
                 android:layout_height="@dimen/dimen_48dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="@dimen/dimen_16dp"
+                style="@style/PricelyPrimaryButton.IconOnly"
                 app:layout_constraintTop_toTopOf="@id/tvProductName"
                 app:layout_constraintStart_toEndOf="@id/tvProductName"
-                app:icon="@drawable/ic_baseline_calendar_month_24"
-                app:iconGravity="textStart"
-                android:paddingStart="@dimen/dimen_0dp"
-                android:paddingEnd="@dimen/dimen_0dp"
-                app:iconPadding="@dimen/dimen_0dp"/>
+                app:icon="@drawable/ic_baseline_calendar_month_24"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvProductDescription"

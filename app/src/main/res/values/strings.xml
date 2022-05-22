@@ -3,7 +3,7 @@
     <string name="label_error">Error</string>
     <string name="action_retry">Retry</string>
     <string name="text_icon">Icon</string>
-    <string name="text_search">Search</string>
+    <string name="menu_search">Search</string>
     <string name="label_all_product">All Product</string>
     <string name="fruit">Fruit</string>
     <string name="meat">Meat</string>

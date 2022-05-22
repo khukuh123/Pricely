@@ -108,12 +108,13 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
     private fun setLineChart(data: List<Entry>, xAxisLabels: List<String>) {
         val historyDataSet = LineDataSet(data.subList(0, (data.size+1)/2), getString(R.string.label_history))
-        val predictionDataSet = LineDataSet(data.subList((data.size+1)/2-1, data.size), getString(R.string.label_prediction))
+        val predictionDataSet = LineDataSet(data.subList(((data.size+1)/2)-1, data.size), getString(R.string.label_prediction))
         historyDataSet.apply {
             val mColor = ContextCompat.getColor(this@ProductDetailActivity, R.color.greenLeaf)
             color = mColor
             setCircleColor(mColor)
             lineWidth = 2f
+            mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         }
         predictionDataSet.apply {
             val mColor = ContextCompat.getColor(this@ProductDetailActivity, R.color.anotherGrey)
@@ -121,6 +122,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             enableDashedLine(20f, 10f, 0f)
             setCircleColor(mColor)
             lineWidth = 2f
+            mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         }
         binding.crtPrices.apply {
             val lineData = LineData(historyDataSet, predictionDataSet).apply {
