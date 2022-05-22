@@ -4,15 +4,139 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".presentation.main.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <include android:id="@+id/toolbar"
+        layout="@layout/layout_toolbar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCategory"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_margin="24dp"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_category"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+    <View
+        android:id="@+id/section"
+        style="@style/view_section"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvCategory" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/section">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvAllProduct"
+                style="@style/header_text"
+                android:layout_margin="24dp"
+                android:text="@string/all_product"
+                android:textColor="@color/grayBlackish"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/btnViewAllProduct"
+                style="@style/horizontal_layout"
+                android:layout_marginEnd="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvAllProduct"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvAllProduct"
+                tools:ignore="UseCompoundDrawables">
+
+                <TextView
+                    style="@style/button_text"
+                    android:layout_gravity="center"
+                    android:text="@string/view_all"
+                    android:textColor="@color/greenLeaf" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:contentDescription="@string/view_all"
+                    android:src="@drawable/ic_next" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAllProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                tools:listitem="@layout/item_product"
+                tools:itemCount="1"
+                app:layout_constraintTop_toBottomOf="@id/btnViewAllProduct"/>
+
+            <View
+                android:id="@+id/section2"
+                style="@style/view_section"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rvAllProduct" />
+
+            <TextView
+                android:id="@+id/tvRecommendation"
+                style="@style/header_text"
+                android:layout_margin="24dp"
+                android:text="@string/recommendation"
+                android:textColor="@color/grayBlackish"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/section2" />
+
+            <LinearLayout
+                android:id="@+id/btnViewAllRecommendation"
+                style="@style/horizontal_layout"
+                android:layout_marginEnd="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvRecommendation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tvRecommendation"
+                tools:ignore="UseCompoundDrawables">
+
+                <TextView
+                    style="@style/button_text"
+                    android:layout_gravity="center"
+                    android:text="@string/view_all"
+                    android:textColor="@color/greenLeaf" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:contentDescription="@string/view_all"
+                    android:src="@drawable/ic_next" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecommendation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_marginStart="16dp"
+                tools:listitem="@layout/item_product"
+                app:layout_constraintTop_toBottomOf="@id/btnViewAllRecommendation"
+                tools:itemCount="1"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

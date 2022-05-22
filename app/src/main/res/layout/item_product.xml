@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="132dp"
+    android:layout_height="188dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="4dp"
+    android:layout_margin="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imgProduct"
+            android:layout_width="match_parent"
+            android:layout_height="96dp"
+            android:contentDescription="@string/product_image"
+            android:src="@drawable/img_dummy_product"
+            android:translationY="-8dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTitleProduct"
+            style="@style/title_text"
+            android:text="@string/tomato"
+            android:textColor="@color/grayBlackish"
+            android:layout_marginStart="16dp"
+            android:maxLines="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imgProduct" />
+
+        <TextView
+            android:id="@+id/tvUnitProduct"
+            style="@style/subtitle_text"
+            android:text="@string/dummy_kg"
+            android:textColor="@color/gray"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/tvTitleProduct"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitleProduct" />
+
+        <TextView
+            android:id="@+id/tvPriceProduct"
+            style="@style/title_text"
+            android:text="@string/dummy_price"
+            android:textColor="@color/grayBlackish"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tvUnitProduct"
+            app:layout_constraintTop_toBottomOf="@+id/tvUnitProduct" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

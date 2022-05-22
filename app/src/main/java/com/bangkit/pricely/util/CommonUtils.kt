@@ -19,6 +19,9 @@ import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import java.lang.StringBuilder
+import java.text.NumberFormat
+import java.util.*
 import java.text.NumberFormat
 import java.util.*
 
@@ -84,6 +87,11 @@ fun <T> CoroutineScope.collectResult(liveData: MutableLiveData<T>, block: suspen
             liveData.postValue(it)
         }
     }
+}
+
+fun formatPrice(price: Int): StringBuilder {
+    val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
+    return StringBuilder(format.format(price)).insert(2, ' ')
 }
 
 fun formatLargeValue(value: Long, digit: Int = 1, base: Array<String>): String {

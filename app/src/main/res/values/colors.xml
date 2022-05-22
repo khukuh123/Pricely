@@ -10,6 +10,9 @@
     <color name="greenLeaf">#4E944F</color>
     <color name="greenDarker">#466124</color>
     <color name="greenBrighter">#83BD75</color>
+    <color name="gray">#969696</color>
+    <color name="section">#F3F3F3</color>
+    <color name="grayBlackish">#4D4D4D</color>
     <color name="greyBlackish">#4D4D4D</color>
     <color name="anotherGrey">#969696</color>
     <color name="blackIndigo">#1D232E</color>
