@@ -4,7 +4,7 @@
     <string name="action_retry">Retry</string>
     <string name="text_icon">Icon</string>
     <string name="text_search">Search</string>
-    <string name="all_product">All Product</string>
+    <string name="label_all_product">All Product</string>
     <string name="fruit">Fruit</string>
     <string name="meat">Meat</string>
     <string name="vegetable">Vegetable</string>
@@ -14,8 +14,8 @@
     <string name="other">Other</string>
     <string name="seafood">Seafood</string>
     <string name="seasoning">Seasoning</string>
-    <string name="recommendation">Recommendation</string>
-    <string name="view_all">View All</string>
+    <string name="label_recommendation">Recommendation</string>
+    <string name="action_view_all">View All</string>
     <string name="product_image">Product Image</string>
     <string name="tomato">Tomato</string>
     <string name="dummy_kg">Kg / Kg</string>

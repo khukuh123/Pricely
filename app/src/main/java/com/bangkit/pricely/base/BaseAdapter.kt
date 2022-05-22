@@ -3,9 +3,10 @@ package com.bangkit.pricely.base
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
-abstract class BaseAdapter<T, VB : ViewBinding, VH : BaseViewHolder<T, VB>>(
+abstract class BaseAdapter<T, VB : ViewBinding, VH : BaseViewHolder<T>>(
     diffUtil: DiffUtil.ItemCallback<T>,
 ) : ListAdapter<T, VH>(
     diffUtil

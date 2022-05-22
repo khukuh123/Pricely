@@ -4,8 +4,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
 
-abstract class BaseViewHolder<T, VB : ViewBinding>(private val mBinding: VB) : RecyclerView.ViewHolder(mBinding.root) {
-    val binding: VB
+abstract class BaseViewHolder<T>(private val mBinding: ViewBinding) : RecyclerView.ViewHolder(mBinding.root) {
+    val binding: ViewBinding
         get() = mBinding
 
     abstract fun bind(data: T)

@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_width="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/layoutAllProduct"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgIconCategory"
+        style="@style/PricelyCategoryIcon"
+        tools:src="@drawable/ic_baseline_image_24" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvCategory"
+        style="@style/PricelyInterMediumText.AnotherGrey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_gravity="center_horizontal"
+        android:text="@string/label_all_product"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_12sp" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imgIconCategory"
-            style="@style/category_icon"
-            android:src="@color/gray" />
-
-        <TextView
-            android:id="@+id/tvCategory"
-            style="@style/category_text"
-            android:text="@string/all_product"
-            android:textColor="@color/gray" />
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

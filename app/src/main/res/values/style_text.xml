@@ -36,6 +36,19 @@
         <item name="fontFamily">@font/inter_medium</item>
     </style>
 
+    <style name="PricelyInterMediumText.AnotherGrey">
+        <item name="android:textColor">@color/anotherGrey</item>
+    </style>
+
+    <style name="PricelyInterSemiBoldText.GreenLeaf">
+        <item name="android:textColor">@color/greenLeaf</item>
+    </style>
+
+    <style name="PricelyInterSemiBoldText">
+        <item name="fontFamily">@font/inter_semibold</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+    </style>
+
 <!--    Toolbar-->
     <style name="PricelyToolbarTextAppearance" parent="PricelyInterBoldText">
         <item name="android:textSize">@dimen/text_size_18sp</item>
@@ -44,8 +57,11 @@
 <!--    Button-->
     <style name="PricelyButtonTextAppearance" parent="PricelyInterBoldText">
         <item name="android:textSize">@dimen/text_size_16sp</item>
-        <item name="fontFamily">@font/inter_bold</item>
-        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="PricelyTextButtonTextAppearance" parent="PricelyInterSemiBoldText.GreenLeaf">
+        <item name="android:textSize">@dimen/text_size_12sp</item>
         <item name="textAllCaps">false</item>
     </style>
 

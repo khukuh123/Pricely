@@ -3,22 +3,17 @@ package com.bangkit.pricely.presentation.main
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityMainBinding
 import com.bangkit.pricely.domain.product.model.Category
 import com.bangkit.pricely.domain.product.model.Product
+import com.bangkit.pricely.util.dp
+import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
+import com.bangkit.pricely.util.setupToolbar
 import com.bangkit.pricely.util.showToast
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
-
-    private val productAdapter by lazy {
-        ProductAdapter(
-            onItemClicked = { product ->
-                showToast("Terpilih: ${product.name} dengan id ${product.id}")
-                // TODO: Intent with Object to ProductDetailActivity
-            }
-        )
-    }
 
     private val categoryAdapter by lazy {
         CategoryAdapter(
@@ -45,28 +40,34 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun setupIntent() {}
 
     override fun setupUI() {
+        setupToolbar(
+            binding.toolbar.toolbar,
+            "",
+            false
+        )
         setupRecyclerView()
     }
 
     override fun setupAction() {
         with(binding) {
-            toolbar.btnSearch.setOnClickListener {
-                showToast("Search")
-                // TODO: Go to SearchActivity
+//            toolbar.btnSearch.setOnClickListener {
+//                showToast("Search")
+//                // TODO: Go to SearchActivity
+//            }
+            viewAllProductSection.setOnViewAllButtonClicked {
+                showToast("Go to all product page")
             }
-            binding.btnViewAllProduct.setOnClickListener {
-                showToast("View All Product")
-                // TODO: Go to CategoryDetailActivity(AllProduct)
-            }
-            binding.btnViewAllRecommendation.setOnClickListener {
-                showToast("View All Recommendation")
-                // TODO: Go to CategoryDetailActivity(Recommendation)
+            viewRecommendationSection.setOnViewAllButtonClicked {
+                showToast("Go to recommendation page")
             }
         }
     }
 
     override fun setupProcess() {
-        productAdapter.submitList(getDummyProducts())
+        with(binding){
+            viewAllProductSection.setProducts(getDummyProducts())
+            viewRecommendationSection.setProducts(getDummyProducts())
+        }
         categoryAdapter.submitList(getDummyCategory())
     }
 
@@ -77,20 +78,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             rvCategory.apply {
                 adapter = categoryAdapter
                 layoutManager = GridLayoutManager(this@MainActivity, 4)
-            }
-            rvAllProduct.apply {
-                adapter = productAdapter
-                layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
-            }
-            rvRecommendation.apply {
-                adapter = productAdapter
-                layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.HORIZONTAL, false)
+                addItemDecoration(PricelyGridLayoutItemDecoration(4, 8.dp))
             }
         }
     }
 
     private fun getDummyProducts() =
-        Array(5){
+        Array(6){
             val rand = (300..500).random()
             val price = "${rand}00".toInt()
             Product(

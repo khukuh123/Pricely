@@ -2,6 +2,7 @@ package com.bangkit.pricely.util
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -20,10 +21,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.lang.StringBuilder
-import java.text.NumberFormat
 import java.util.*
 import java.text.NumberFormat
-import java.util.*
+
+val Int.dp
+    get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
 val localeId = Locale("id", "ID")
 
@@ -49,11 +51,16 @@ fun View.gone() {
 
 @SuppressLint("CheckResult")
 fun ImageView.setImageFromUrl(image: String, size: Int? = null) {
+    this.setImageFromUrl(image, size, size)
+}
+
+@SuppressLint("CheckResult")
+fun ImageView.setImageFromUrl(image: String, width: Int?, height: Int?) {
     val request = RequestOptions().apply {
         error(R.drawable.ic_baseline_image_24)
         placeholder(R.drawable.ic_baseline_image_24)
     }
-    if (size != null) request.override(size)
+    if (width != null && height != null) request.override(width, height)
     Glide.with(this).load(image).apply(request).into(this)
 }
 
