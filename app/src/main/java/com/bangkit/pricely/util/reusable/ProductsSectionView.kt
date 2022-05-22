@@ -12,7 +12,6 @@ import com.bangkit.pricely.presentation.detail.ProductDetailActivity
 import com.bangkit.pricely.presentation.main.HorizontalProductAdapter
 import com.bangkit.pricely.util.dp
 import com.bangkit.pricely.util.recyclerview.PricelyLinearLayoutItemDecoration
-import com.bangkit.pricely.util.showToast
 
 class ProductsSectionView @JvmOverloads constructor(
     context: Context,
@@ -27,14 +26,12 @@ class ProductsSectionView @JvmOverloads constructor(
         HorizontalProductAdapter(
             onItemClicked = {
                 ProductDetailActivity.start(context)
-            },
-            onViewAllButtonClicked = {
-                onViewAllButtonClicked?.invoke()
             }
         )
     }
 
     private var sectionTitle = ""
+    private var products: MutableList<Product> = mutableListOf()
     private var onViewAllButtonClicked: (() -> Unit)? = null
 
     init {
@@ -59,7 +56,9 @@ class ProductsSectionView @JvmOverloads constructor(
             tvSectionTitle.text = sectionTitle
 
             rvSectionProducts.apply {
-                adapter = productAdapter
+                adapter = productAdapter.withFooter(ViewAllAdapter {
+                    onViewAllButtonClicked?.invoke()
+                })
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 addItemDecoration(PricelyLinearLayoutItemDecoration(16.dp, orientation = LinearLayoutManager.HORIZONTAL, edge = 24.dp))
             }
@@ -73,7 +72,17 @@ class ProductsSectionView @JvmOverloads constructor(
     }
 
     fun setProducts(data: List<Product>?) {
-        productAdapter.submitList(data)
+        productAdapter.submitList(null)
+        products.apply {
+            clear()
+            data?.let { addAll(data) }
+        }
+        productAdapter.submitList(products.toList())
+    }
+
+    fun addProducts(vararg product: Product){
+        products.addAll(product)
+        productAdapter.submitList(products.toList())
     }
 
     fun setOnViewAllButtonClicked(listener: () -> Unit) {

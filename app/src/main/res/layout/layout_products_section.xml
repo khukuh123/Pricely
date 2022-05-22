@@ -26,7 +26,7 @@
         app:icon="@drawable/ic_next"
         app:iconGravity="end"
         app:iconPadding="@dimen/dimen_0dp"
-        android:layout_marginEnd="@dimen/dimen_24dp"
+        android:layout_marginEnd="@dimen/dimen_16dp"
         app:layout_constraintBottom_toBottomOf="@id/tvSectionTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvSectionTitle"
@@ -43,7 +43,6 @@
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:orientation="horizontal"
         tools:itemCount="6"
-        android:overScrollMode="never"
         tools:listitem="@layout/item_product" />
 
 </merge>

@@ -58,6 +58,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //                // TODO: Go to SearchActivity
 //            }
             viewAllProductSection.setOnViewAllButtonClicked {
+                viewAllProductSection.addProducts(Product("${System.currentTimeMillis()}", "adsa", 123, "adad"))
                 showToast("Go to all product page")
             }
             viewRecommendationSection.setOnViewAllButtonClicked {
