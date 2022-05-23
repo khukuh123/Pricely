@@ -12,6 +12,7 @@ import com.bangkit.pricely.databinding.ItemProductBinding
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.util.PricelyDiffUtil
 import com.bangkit.pricely.util.formatPrice
+import com.bangkit.pricely.util.reusable.ViewAllAdapter
 
 class HorizontalProductAdapter(
     private val onItemClicked: (Product) -> Unit,
@@ -30,9 +31,17 @@ class HorizontalProductAdapter(
         }
     }
 
+    private var footerAdapter: ViewAllAdapter? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Product> =
         ProductViewHolder(ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
-    fun <VH : RecyclerView.ViewHolder, A : BaseFooterAdapter<VH>> withFooter(adapter: A) =
-        ConcatAdapter(this, adapter)
+    fun <VH : RecyclerView.ViewHolder, A : BaseFooterAdapter<VH>> withFooter(adapter: A): ConcatAdapter {
+        footerAdapter = adapter as ViewAllAdapter
+        return ConcatAdapter(this, adapter)
+    }
+
+    fun showFooter(isShow: Boolean){
+        footerAdapter?.show(isShow)
+    }
 }

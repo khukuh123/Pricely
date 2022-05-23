@@ -19,17 +19,19 @@ class PricelyLinearLayoutItemDecoration(
         }else{
             when (position) {
                 0 -> {
-                    outRect.left = edge
+                    outRect.left = edge - (spacing / 2)
                 }
                 itemCount - 1 -> {
-                    outRect.left = spacing
-                    outRect.right = edge
+                    outRect.right = edge - (spacing / 2)
                 }
                 else -> {
-                    outRect.left = spacing
+                    outRect.right = 0
+                    outRect.left = 0
                 }
             }
             (spacing / 2).let {
+                outRect.right += it
+                outRect.left += it
                 outRect.top = it
                 outRect.bottom = it
             }
