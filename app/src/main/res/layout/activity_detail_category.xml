@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".presentation.main.DetailCategoryActivity">
+    tools:context=".presentation.main.CategoryDetailActivity">
 
     <include
-        android:id="@+id/include"
-        layout="@layout/layout_detail_toolbar" />
+        android:id="@+id/toolbar"
+        layout="@layout/layout_general_toolbar" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -20,27 +20,31 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tvDescription"
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvCategoryDescription"
+                style="@style/PricelyInterRegularText.BlackIndigo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:lineHeight="20dp"
-                android:textColor="#1D232E"
-                android:padding="16dp"
-                android:text="@string/description"
-                android:textSize="12sp" />
+                android:justificationMode="inter_word"
+                android:paddingHorizontal="@dimen/dimen_16dp"
+                android:paddingTop="@dimen/dimen_16dp"
+                android:textSize="@dimen/text_size_12sp"
+                app:lineHeight="@dimen/dimen_20dp"
+                tools:targetApi="o"
+                tools:text="@string/samples_description" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:background="#F3F3F3" />
+            <View style="@style/PricelySectionDivider" />
 
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvItem"
+                android:id="@+id/rvVerticalProdcuts"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="8dp" />
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_product"
+                tools:spanCount="2" />
 
 
         </LinearLayout>

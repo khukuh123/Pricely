@@ -23,8 +23,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             onItemClicked = { category ->
                 when(category.type) {
                     1 -> {
-                        showToast("Terpilih: ${category.name} dengan deskripsi ${category.description}")
-                        // TODO: Go to CategoryDetailActivity(category.name)
+                        CategoryDetailActivity.start(this)
                     }
                     2 -> {
                         showToast("Open Other Category")
@@ -53,10 +52,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setupAction() {
         with(binding) {
-//            toolbar.btnSearch.setOnClickListener {
-//                showToast("Search")
-//                // TODO: Go to SearchActivity
-//            }
             viewAllProductSection.setOnViewAllButtonClicked {
                 viewAllProductSection.addProducts(Product("${System.currentTimeMillis()}", "adsa", 123, "adad"))
                 showToast("Go to all product page")
@@ -84,7 +79,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.menu_search -> showToast("Go to search screen")
+            R.id.menu_search -> SearchScreenActivity.start(this)
             else -> {
 
             }

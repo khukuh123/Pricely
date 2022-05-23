@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.main.DetailCategoryActivity"
+            android:name=".presentation.main.CategoryDetailActivity"
             android:exported="false">
 
         </activity>

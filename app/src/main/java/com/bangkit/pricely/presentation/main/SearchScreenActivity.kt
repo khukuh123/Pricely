@@ -1,15 +1,12 @@
 package com.bangkit.pricely.presentation.main
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.content.Context
+import android.content.Intent
 import android.view.KeyEvent
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
-import com.bangkit.pricely.base.BaseAdapter
 import com.bangkit.pricely.databinding.ActivitySearchScreenBinding
-import com.bangkit.pricely.databinding.ItemCardBinding
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.util.showToast
 
@@ -18,11 +15,9 @@ class SearchScreenActivity :  BaseActivity<ActivitySearchScreenBinding>() {
     private lateinit var text: String
 
     private val searchProductAdapter by lazy{
-        SearchProductAdapter(
-            onItemClicked = { product ->
-                showToast("Terpilih: ${product.name} dengan id ${product.id}")
-            }
-        )
+        ProductAdapter{
+
+        }
     }
 
     override fun getViewBinding(): ActivitySearchScreenBinding =
@@ -86,17 +81,22 @@ class SearchScreenActivity :  BaseActivity<ActivitySearchScreenBinding>() {
     }
 
     private fun setupRecyclerView(){
-        binding.rvItem.apply {
+        binding.rvVerticalProdcuts.apply {
             adapter = searchProductAdapter
             layoutManager = GridLayoutManager(this@SearchScreenActivity, 2)
         }
     }
 
-    private fun getDummyData(): List<Product>{
+    private fun getDummyData(): List<Product> {
         return listOf(
             Product("0", "Tomat", 3000, "500 gram / pack"),
             Product("1", "Tomat", 3000, "500 gram / pack")
         )
     }
 
+    companion object {
+        @JvmStatic
+        fun start(context: Context) =
+            context.startActivity(Intent(context, SearchScreenActivity::class.java))
+    }
 }

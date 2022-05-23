@@ -100,11 +100,6 @@ fun formatPrice(price: Int): StringBuilder {
     return StringBuilder(format.format(price)).insert(2, ' ')
 }
 
-fun formatPrice(price: Int): StringBuilder {
-    val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
-    return StringBuilder(format.format(price)).insert(2, ' ')
-}
-
 fun formatLargeValue(value: Long, digit: Int = 1, base: Array<String>): String {
     val textValue = value.toString()
     val chunkedTextValue = textValue.reversed().chunked(3) {
