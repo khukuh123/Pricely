@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:layout_marginVertical="@dimen/dimen_8dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvSuggestion"
+        style="@style/PricelyInterRegularText.BlackIndigo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/dimen_8dp"
+        android:textSize="@dimen/text_size_12sp"
+        android:paddingBottom="@dimen/dimen_2dp"
+        app:drawableStartCompat="@drawable/ic_suggestion"
+        tools:text="@tools:sample/lorem" />
+
+</LinearLayout>

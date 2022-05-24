@@ -18,40 +18,33 @@ class PricelyGridLayoutItemDecoration(
         val rowPos = position.floorDiv(spanCount)
         val rowCount = ceil((parent.adapter?.itemCount ?: 0).toDouble() / spanCount.toDouble()).toInt()
 
-        val columnWidth = parent.width / spanCount
-        val availableWidth: Int = if(columnPos == 0 || columnPos == spanCount - 1){
-            columnWidth - (spacing / 2)
-        }else{
-            columnWidth - spacing
-        }
         outRect.apply {
             when(rowPos){
                 0 -> {
-                    top = edge
-                    bottom = spacing / 2
+                    top += edge
+                    bottom += spacing / 2
                 }
                 rowCount - 1 -> {
-                    top = spacing / 2
-                    bottom = edge
+                    top += spacing / 2
+                    bottom += edge
                 }
                 else -> {
-                    top = spacing / 2
-                    bottom = spacing / 2
+                    top += spacing / 2
+                    bottom += spacing / 2
                 }
             }
-            val margin = (width() - availableWidth)
             when(columnPos){
                 0 -> {
-                    left = edge
-                    right = (margin / 1.5).toInt()
+                    left += edge
+                    right += spacing / 2
                 }
                 spanCount - 1 -> {
-                    left = (margin / 1.5).toInt()
-                    right = edge
+                    left += spacing / 2
+                    right += edge
                 }
                 else -> {
-                    left = (margin / 1.5).toInt()
-                    right = (margin / 1.5).toInt()
+                    left += spacing / 2
+                    right += spacing / 2
                 }
             }
         }

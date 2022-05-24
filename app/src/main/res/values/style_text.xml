@@ -49,6 +49,10 @@
         <item name="android:fontFamily">@font/inter_semibold</item>
     </style>
 
+    <style name="PricelyInterSemiBoldText.GreyBlackish">
+        <item name="android:textColor">@color/greyBlackish</item>
+    </style>
+
 <!--    Toolbar-->
     <style name="PricelyToolbarTextAppearance" parent="PricelyInterBoldText">
         <item name="android:textSize">@dimen/text_size_18sp</item>

@@ -8,21 +8,22 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgEmpty"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="@dimen/dimen_64dp"
+        android:layout_height="@dimen/dimen_64dp"
         android:src="@drawable/ic_baseline_mood_bad_24"
         app:layout_constraintBottom_toTopOf="@id/tvEmptyTitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/dimen_16dp"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvEmptyTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textSize="18sp"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        android:textSize="@dimen/text_size_18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/tvEmptyMessage"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,8 +34,8 @@
         android:id="@+id/tvEmptyMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textSize="16sp"
+        android:layout_marginBottom="@dimen/dimen_16dp"
+        android:textSize="@dimen/text_size_16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

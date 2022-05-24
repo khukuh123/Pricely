@@ -6,14 +6,14 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
-import com.bangkit.pricely.databinding.ActivityDetailCategoryBinding
+import com.bangkit.pricely.databinding.ActivityCategoryDetailBinding
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.detail.ProductDetailActivity
 import com.bangkit.pricely.util.dp
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
 import com.bangkit.pricely.util.setupToolbar
 
-class CategoryDetailActivity :  BaseActivity<ActivityDetailCategoryBinding>() {
+class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
 
     private val productAdapter by lazy {
         ProductVerticalAdapter {
@@ -21,8 +21,8 @@ class CategoryDetailActivity :  BaseActivity<ActivityDetailCategoryBinding>() {
         }
     }
 
-    override fun getViewBinding(): ActivityDetailCategoryBinding =
-        ActivityDetailCategoryBinding.inflate(layoutInflater)
+    override fun getViewBinding(): ActivityCategoryDetailBinding =
+        ActivityCategoryDetailBinding.inflate(layoutInflater)
 
     override fun setupIntent() {
         
@@ -62,8 +62,8 @@ class CategoryDetailActivity :  BaseActivity<ActivityDetailCategoryBinding>() {
     private fun setupRecyclerView(){
         binding.rvVerticalProdcuts.apply {
             adapter =  productAdapter
-            layoutManager = GridLayoutManager(this@CategoryDetailActivity, 4)
-            addItemDecoration(PricelyGridLayoutItemDecoration(4, 16.dp, edge = 16.dp))
+            layoutManager = GridLayoutManager(this@CategoryDetailActivity, 3)
+            addItemDecoration(PricelyGridLayoutItemDecoration(3, 16.dp, edge = 16.dp))
         }
     }
 
