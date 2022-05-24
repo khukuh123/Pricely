@@ -15,26 +15,39 @@ class PricelyLinearLayoutItemDecoration(
         val itemCount = parent.adapter?.itemCount ?: 0
 
         if(orientation == LinearLayoutManager.VERTICAL){
-
+            when(position){
+                0 -> {
+                    outRect.top += edge
+                    outRect.bottom += spacing / 2
+                }
+                itemCount - 1 -> {
+                    outRect.top += spacing / 2
+                    outRect.bottom += edge
+                }
+                else -> {
+                    outRect.bottom += spacing / 2
+                    outRect.top += spacing / 2
+                }
+            }
+            outRect.left += edge
+            outRect.right += edge
         }else{
             when (position) {
                 0 -> {
-                    outRect.left = edge - (spacing / 2)
+                    outRect.left += edge
+                    outRect.right += spacing / 2
                 }
                 itemCount - 1 -> {
-                    outRect.right = edge - (spacing / 2)
+                    outRect.left += spacing / 2
+                    outRect.right += edge
                 }
                 else -> {
-                    outRect.right = 0
-                    outRect.left = 0
+                    outRect.left += spacing / 2
+                    outRect.right += spacing / 2
                 }
             }
-            (spacing / 2).let {
-                outRect.right += it
-                outRect.left += it
-                outRect.top = it
-                outRect.bottom = it
-            }
+            outRect.top += edge / 2
+            outRect.bottom += edge / 2
         }
     }
 }

@@ -9,7 +9,7 @@ import com.bangkit.pricely.R
 import com.bangkit.pricely.databinding.LayoutProductsSectionBinding
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.detail.ProductDetailActivity
-import com.bangkit.pricely.presentation.main.HorizontalProductAdapter
+import com.bangkit.pricely.presentation.main.ProductAdapter
 import com.bangkit.pricely.util.dp
 import com.bangkit.pricely.util.recyclerview.PricelyLinearLayoutItemDecoration
 
@@ -22,8 +22,8 @@ class ProductsSectionView @JvmOverloads constructor(
     private var _binding: LayoutProductsSectionBinding? = null
     private val binding
         get() = _binding!!
-    private val productAdapter: HorizontalProductAdapter by lazy {
-        HorizontalProductAdapter(
+    private val productAdapter: ProductAdapter by lazy {
+        ProductAdapter(
             onItemClicked = {
                 ProductDetailActivity.start(context)
             }

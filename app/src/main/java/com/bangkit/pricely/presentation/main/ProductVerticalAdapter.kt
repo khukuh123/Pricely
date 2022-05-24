@@ -9,19 +9,20 @@ import com.bangkit.pricely.base.BaseAdapter
 import com.bangkit.pricely.base.BaseFooterAdapter
 import com.bangkit.pricely.base.BaseViewHolder
 import com.bangkit.pricely.databinding.ItemProductBinding
+import com.bangkit.pricely.databinding.ItemProductVerticalBinding
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.util.PricelyDiffUtil
 import com.bangkit.pricely.util.formatPrice
 import com.bangkit.pricely.util.reusable.ViewAllAdapter
 
-class HorizontalProductAdapter(
+class ProductVerticalAdapter(
     private val onItemClicked: (Product) -> Unit,
-) : BaseAdapter<Product, ItemProductBinding, BaseViewHolder<Product>>
+) : BaseAdapter<Product, ItemProductVerticalBinding, BaseViewHolder<Product>>
     (PricelyDiffUtil.productDiffUtil) {
     inner class ProductViewHolder(mBinding: ViewBinding) :
         BaseViewHolder<Product>(mBinding) {
         override fun bind(data: Product) {
-            with(binding as ItemProductBinding) {
+            with(binding as ItemProductVerticalBinding) {
                 tvProductName.text = data.name
                 tvPriceProduct.text = formatPrice(data.price)
                 root.setOnClickListener {
@@ -34,7 +35,7 @@ class HorizontalProductAdapter(
     private var footerAdapter: ViewAllAdapter? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<Product> =
-        ProductViewHolder(ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        ProductViewHolder(ItemProductVerticalBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     fun <VH : RecyclerView.ViewHolder, A : BaseFooterAdapter<VH>> withFooter(adapter: A): ConcatAdapter {
         footerAdapter = adapter as ViewAllAdapter

@@ -16,6 +16,8 @@
         <item name="materialButtonStyle">@style/PricelyPrimaryButton</item>
         <item name="materialButtonOutlinedStyle">@style/PricelyOutlinedButton</item>
         <item name="toolbarStyle">@style/PricelyToolbar</item>
+        <item name="textInputStyle">@style/PricelyTextInputLayout</item>
+        <item name="bottomSheetDialogTheme">@style/PricelyBottomSheet</item>
     </style>
 
 <!--    DropDownMenu-->
@@ -99,15 +101,24 @@
     <!--    ShapeAppearance-->
     <style name="PricelyShape">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">16dp</item>
+        <item name="cornerSize">@dimen/dimen_16dp</item>
     </style>
 
     <style name="PricelyShape.ExposedDropDownMenu">
-        <item name="cornerSize">8dp</item>
+        <item name="cornerSize">@dimen/dimen_8dp</item>
     </style>
 
     <style name="PricelyShape.Button">
-        <item name="cornerSize">32dp</item>
+        <item name="cornerSize">@dimen/dimen_32dp</item>
+    </style>
+
+    <style name="PricelyShape.8">
+        <item name="cornerSize">@dimen/dimen_8dp</item>
+    </style>
+
+    <style name="PricelyShape.TopOnly">
+        <item name="cornerSizeTopLeft">@dimen/dimen_16dp</item>
+        <item name="cornerSizeTopRight">@dimen/dimen_16dp</item>
     </style>
 
     <!--    LoadingDialog-->
@@ -127,5 +138,39 @@
     <!--    Toolbar-->
     <style name="PricelyToolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="titleTextAppearance">@style/PricelyToolbarTextAppearance</item>
+    </style>
+
+<!--    TextInputLayout-->
+    <style name="PricelyTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxStrokeWidth">@dimen/dimen_0dp</item>
+        <item name="boxStrokeWidthFocused">@dimen/dimen_0dp</item>
+        <item name="hintEnabled">false</item>
+        <item name="shapeAppearanceOverlay">@style/PricelyShape</item>
+    </style>
+
+    <style name="PricelyTextInputLayout.Search">
+        <item name="endIconMode">clear_text</item>
+        <item name="endIconTint">@color/red</item>
+        <item name="shapeAppearanceOverlay">@style/PricelyShape.8</item>
+    </style>
+
+<!--    TextInputEditText-->
+    <style name="PricelyTextInputEditText.Search" parent="Widget.AppCompat.EditText">
+        <item name="android:hint">@string/hint_search</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textAppearance">@style/PricelyInterRegularText</item>
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:paddingVertical" tools:ignore="NewApi">@dimen/dimen_0dp</item>
+    </style>
+
+<!--    BottomSheet-->
+    <style name="PricelyBottomSheet" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ThemeOverlay.App.BottomSheetDialog</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">@style/PricelyShape</item>
     </style>
 </resources>

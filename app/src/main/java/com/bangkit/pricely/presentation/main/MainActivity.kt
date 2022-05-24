@@ -3,9 +3,7 @@ package com.bangkit.pricely.presentation.main
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.recyclerview.widget.RecyclerView
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityMainBinding
@@ -23,12 +21,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             onItemClicked = { category ->
                 when(category.type) {
                     1 -> {
-                        showToast("Terpilih: ${category.name} dengan deskripsi ${category.description}")
-                        // TODO: Go to CategoryDetailActivity(category.name)
+                        CategoryDetailActivity.start(this)
                     }
                     2 -> {
-                        showToast("Open Other Category")
-                        // TODO: Open Category BottomSheetDialog
+                        CategoryBottomSheet.newInstance(ArrayList(getDummyCategory())){
+                            CategoryDetailActivity.start(this)
+                        }.showDialog(supportFragmentManager)
                     }
                 }
             }
@@ -53,12 +51,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setupAction() {
         with(binding) {
-//            toolbar.btnSearch.setOnClickListener {
-//                showToast("Search")
-//                // TODO: Go to SearchActivity
-//            }
             viewAllProductSection.setOnViewAllButtonClicked {
-                viewAllProductSection.addProducts(Product("${System.currentTimeMillis()}", "adsa", 123, "adad"))
                 showToast("Go to all product page")
             }
             viewRecommendationSection.setOnViewAllButtonClicked {
@@ -84,7 +77,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-            R.id.menu_search -> showToast("Go to search screen")
+            R.id.menu_search -> SearchActivity.start(this)
             else -> {
 
             }

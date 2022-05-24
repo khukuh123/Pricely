@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageView
@@ -21,8 +22,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.lang.StringBuilder
-import java.util.*
 import java.text.NumberFormat
+import java.util.*
 
 val Int.dp
     get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
@@ -95,7 +96,6 @@ fun <T> CoroutineScope.collectResult(liveData: MutableLiveData<T>, block: suspen
         }
     }
 }
-
 fun formatPrice(price: Int): StringBuilder {
     val format = NumberFormat.getCurrencyInstance(Locale("id", "ID"))
     return StringBuilder(format.format(price)).insert(2, ' ')
@@ -152,4 +152,9 @@ fun <T> AutoCompleteTextView.setAdapter(
         }
         setAdapter(adapter)
     }
+}
+
+fun Context.hideSoftInput(view: View){
+    val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
