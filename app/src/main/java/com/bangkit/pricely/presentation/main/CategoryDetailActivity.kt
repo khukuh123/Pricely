@@ -62,8 +62,8 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
     private fun setupRecyclerView(){
         binding.rvVerticalProdcuts.apply {
             adapter =  productAdapter
-            layoutManager = GridLayoutManager(this@CategoryDetailActivity, 3)
-            addItemDecoration(PricelyGridLayoutItemDecoration(3, 16.dp, edge = 16.dp))
+            layoutManager = GridLayoutManager(this@CategoryDetailActivity, 2)
+            addItemDecoration(PricelyGridLayoutItemDecoration(2, 16.dp, edge = 16.dp))
         }
     }
 

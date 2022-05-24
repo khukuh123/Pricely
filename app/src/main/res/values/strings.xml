@@ -37,4 +37,5 @@
     <string name="empty_search">It\'s empty</string>
     <string name="message_search">Try another keyword?</string>
     <string name="label_search_result">Show __%d__ result for __\"%s\"__</string>
+    <string name="label_product_category">Product Category</string>
 </resources>

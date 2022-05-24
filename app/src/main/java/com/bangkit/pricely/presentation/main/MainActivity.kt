@@ -24,8 +24,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                         CategoryDetailActivity.start(this)
                     }
                     2 -> {
-                        showToast("Open Other Category")
-                        // TODO: Open Category BottomSheetDialog
+                        CategoryBottomSheet.newInstance(ArrayList(getDummyCategory())){
+                            CategoryDetailActivity.start(this)
+                        }.showDialog(supportFragmentManager)
                     }
                 }
             }

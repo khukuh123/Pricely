@@ -17,6 +17,7 @@
         <item name="materialButtonOutlinedStyle">@style/PricelyOutlinedButton</item>
         <item name="toolbarStyle">@style/PricelyToolbar</item>
         <item name="textInputStyle">@style/PricelyTextInputLayout</item>
+        <item name="bottomSheetDialogTheme">@style/PricelyBottomSheet</item>
     </style>
 
 <!--    DropDownMenu-->
@@ -115,6 +116,11 @@
         <item name="cornerSize">@dimen/dimen_8dp</item>
     </style>
 
+    <style name="PricelyShape.TopOnly">
+        <item name="cornerSizeTopLeft">@dimen/dimen_16dp</item>
+        <item name="cornerSizeTopRight">@dimen/dimen_16dp</item>
+    </style>
+
     <!--    LoadingDialog-->
     <style name="PricelyLoadingDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
         <item name="android:windowMinWidthMajor">40%</item>
@@ -157,5 +163,14 @@
         <item name="android:textAppearance">@style/PricelyInterRegularText</item>
         <item name="android:textSize">@dimen/text_size_14sp</item>
         <item name="android:paddingVertical" tools:ignore="NewApi">@dimen/dimen_0dp</item>
+    </style>
+
+<!--    BottomSheet-->
+    <style name="PricelyBottomSheet" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ThemeOverlay.App.BottomSheetDialog</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">@style/PricelyShape</item>
     </style>
 </resources>
