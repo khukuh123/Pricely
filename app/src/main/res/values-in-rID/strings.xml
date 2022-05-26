@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pricely</string>
+
+    <string name="label_error" translatable="true">Error</string>
+    <string name="action_retry" translatable="true">Ulangi</string>
+    <string name="samples_description" translatable="true">Sayuran adalah bagian tumbuhan yang dikonsumsi oleh manusia atau hewan lain sebagai makanan. Arti aslinya masih umum digunakan dan diterapkan pada tanaman secara kolektif untuk merujuk pada semua materi tanaman yang dapat dimakan, termasuk bunga, buah, batang, daun, akar, dan biji.</string>
+    <string name="title" translatable="true">Sayuran</string>
+    <string name="text_icon" translatable="true">Icon</string>
+    <string name="menu_search" translatable="true">Cari</string>
+    <string name="menu_language" translatable="true">Bahasa</string>
+    <string name="label_all_product" translatable="true">Semua Produk</string>
+    <string name="fruit" translatable="true">Buah</string>
+    <string name="meat" translatable="true">Daging</string>
+    <string name="vegetable" translatable="true">Sayuran</string>
+    <string name="food" translatable="true">Makanan</string>
+    <string name="drink" translatable="true">Minuman</string>
+    <string name="grocery" translatable="true">Sembako</string>
+    <string name="other" translatable="true">Lainnya</string>
+    <string name="seafood" translatable="true">Seafood</string>
+    <string name="seasoning" translatable="true">Bumbu Dapur</string>
+    <string name="label_recommendation" translatable="true">Rekomendasi</string>
+    <string name="action_view_all" translatable="true">Lihat Semua</string>
+    <string name="product_image" translatable="true">Gambar Produk</string>
+    <string name="tomato" translatable="true">Tomat</string>
+    <string name="dummy_kg" translatable="true">Kg / Kg</string>
+    <string name="dummy_price" translatable="true">Rp 12.905</string>
+    <string name="label_price_chart" translatable="true">Grafik Harga</string>
+    <string name="title_product_detail" translatable="true">Detail Produk</string>
+    <string name="label_current_month" translatable="true">(bulan ini)</string>
+    <string name="title_pick_month_and_year" translatable="true">Pilih bulan dan tahun</string>
+    <string name="hint_month" translatable="true">Bulan</string>
+    <string name="hint_year" translatable="true">Tahun</string>
+    <string name="action_cancel" translatable="true">Batal</string>
+    <string name="action_pick" translatable="true">Pilih</string>
+    <string name="label_history" translatable="true">Riwayat</string>
+    <string name="label_prediction" translatable="true">Prediksi</string>
+    <string name="hint_search" translatable="true">Mau cari produk apa?</string>
+    <string name="label_suggestion" translatable="true">Saran</string>
+    <string name="empty_search" translatable="true">Yah kosong</string>
+    <string name="message_search" translatable="true">Coba kata kunci lain?</string>
+    <string name="label_search_result" translatable="true">Menampilkan __%d__ hasil untuk __\"%s\"__</string>
+    <string name="label_product_category" translatable="true">Kategori Produk</string>
+</resources>
