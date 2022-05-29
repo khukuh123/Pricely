@@ -1,5 +1,6 @@
 package com.bangkit.pricely.presentation.main
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
@@ -9,6 +10,7 @@ import com.bangkit.pricely.domain.product.model.Category
 import com.bangkit.pricely.util.BundleKeys
 import com.bangkit.pricely.util.dp
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class CategoryBottomSheet private constructor(
     private val onItemClicked: (Category) -> Unit,
