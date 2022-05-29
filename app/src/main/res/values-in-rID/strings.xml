@@ -5,26 +5,26 @@
     <string name="label_error" translatable="true">Error</string>
     <string name="action_retry" translatable="true">Ulangi</string>
     <string name="samples_description" translatable="true">Sayuran adalah bagian tumbuhan yang dikonsumsi oleh manusia atau hewan lain sebagai makanan. Arti aslinya masih umum digunakan dan diterapkan pada tanaman secara kolektif untuk merujuk pada semua materi tanaman yang dapat dimakan, termasuk bunga, buah, batang, daun, akar, dan biji.</string>
-    <string name="title" translatable="true">Sayuran</string>
-    <string name="text_icon" translatable="true">Icon</string>
+    <string name="title_vegetables" translatable="true">Sayuran</string>
+    <string name="content_icon" translatable="true">Icon</string>
     <string name="menu_search" translatable="true">Cari</string>
     <string name="menu_language" translatable="true">Bahasa</string>
     <string name="label_all_product" translatable="true">Semua Produk</string>
-    <string name="fruit" translatable="true">Buah</string>
-    <string name="meat" translatable="true">Daging</string>
-    <string name="vegetable" translatable="true">Sayuran</string>
-    <string name="food" translatable="true">Makanan</string>
-    <string name="drink" translatable="true">Minuman</string>
-    <string name="grocery" translatable="true">Sembako</string>
-    <string name="other" translatable="true">Lainnya</string>
-    <string name="seafood" translatable="true">Seafood</string>
-    <string name="seasoning" translatable="true">Bumbu Dapur</string>
+    <string name="label_fruit" translatable="true">Buah</string>
+    <string name="label_meat" translatable="true">Daging</string>
+    <string name="label_vegetable" translatable="true">Sayuran</string>
+    <string name="label_food" translatable="true">Makanan</string>
+    <string name="label_drink" translatable="true">Minuman</string>
+    <string name="label_grocery" translatable="true">Sembako</string>
+    <string name="label_other" translatable="true">Lainnya</string>
+    <string name="label_seafood" translatable="true">Seafood</string>
+    <string name="label_seasoning" translatable="true">Bumbu Dapur</string>
     <string name="label_recommendation" translatable="true">Rekomendasi</string>
     <string name="action_view_all" translatable="true">Lihat Semua</string>
-    <string name="product_image" translatable="true">Gambar Produk</string>
-    <string name="tomato" translatable="true">Tomat</string>
-    <string name="dummy_kg" translatable="true">Kg / Kg</string>
-    <string name="dummy_price" translatable="true">Rp 12.905</string>
+    <string name="content_product_image" translatable="true">Gambar Produk</string>
+    <string name="samples_product_name" translatable="true">Tomat</string>
+    <string name="samples_product_unit" translatable="true">Kg / Kg</string>
+    <string name="samples_product_prices" translatable="true">Rp 12.905</string>
     <string name="label_price_chart" translatable="true">Grafik Harga</string>
     <string name="title_product_detail" translatable="true">Detail Produk</string>
     <string name="label_current_month" translatable="true">(bulan ini)</string>
@@ -41,4 +41,8 @@
     <string name="message_search" translatable="true">Coba kata kunci lain?</string>
     <string name="label_search_result" translatable="true">Menampilkan __%d__ hasil untuk __\"%s\"__</string>
     <string name="label_product_category" translatable="true">Kategori Produk</string>
+    <string name="sample_product_name">Tomat</string>
+    <string name="sample_weight_per_piece">500 gram / pack</string>
+    <string name="samples_price">Rp 13.000</string>
+    <string name="samples_month_3_letter">Jan</string>
 </resources>

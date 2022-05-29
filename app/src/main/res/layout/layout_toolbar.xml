@@ -12,7 +12,7 @@
         android:id="@+id/imgIcon"
         android:layout_width="@dimen/dimen_32dp"
         android:layout_height="@dimen/dimen_32dp"
-        android:contentDescription="@string/text_icon"
+        android:contentDescription="@string/content_icon"
         android:scaleX="2"
         android:scaleY="2"
         android:layout_marginEnd="@dimen/dimen_8dp"
