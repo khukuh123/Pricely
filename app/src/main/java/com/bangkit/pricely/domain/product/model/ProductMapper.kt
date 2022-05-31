@@ -1,9 +1,9 @@
 package com.bangkit.pricely.domain.product.model
 
-import com.bangkit.pricely.data.product.remote.response.ProductDetail
+import com.bangkit.pricely.data.product.remote.response.ProductDetailItem
 import com.bangkit.pricely.util.orZero
 
-fun ProductDetail.map() =
+fun ProductDetailItem.map() =
     Product(
         id = id.orZero(),
         imageUrl = imageUrl.orEmpty(),

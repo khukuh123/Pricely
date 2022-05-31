@@ -42,7 +42,8 @@ fun <T> Response<BaseResponse<T>>.call(): Flow<ApiResult<T>> =
             } else {
                 response.errorBody()?.let {
                     val errorResponse = Gson().fromJson(it.string(), BaseResponse::class.java)
-                    emit(ApiResult.Error(errorResponse.code, errorResponse.message.orEmpty()))
+                    val message = "${errorResponse.message.orEmpty()} ${errorResponse.detail}"
+                    emit(ApiResult.Error(errorResponse.code, message))
                 }
             }
         } catch (e: Exception) {

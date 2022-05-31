@@ -17,6 +17,7 @@ import androidx.lifecycle.MutableLiveData
 import com.bangkit.pricely.R
 import com.bangkit.pricely.domain.util.Resource
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -73,6 +74,7 @@ fun ImageView.setImageFromUrl(image: String, width: Int?, height: Int?) {
     val request = RequestOptions().apply {
         error(R.drawable.ic_baseline_image_24)
         placeholder(R.drawable.ic_baseline_image_24)
+        diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
     }
     if (width != null && height != null) request.override(width, height)
     Glide.with(this).load(image).apply(request).into(this)

@@ -2,7 +2,7 @@ package com.bangkit.pricely.data.product.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class ProductDetail(
+data class ProductDetailItem(
     @SerializedName("description")
     val description: String?,
     @SerializedName("id")

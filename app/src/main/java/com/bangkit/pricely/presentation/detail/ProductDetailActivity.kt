@@ -7,7 +7,9 @@ import androidx.core.content.ContextCompat
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityProductDetailBinding
+import com.bangkit.pricely.domain.price.model.Price
 import com.bangkit.pricely.domain.product.model.Product
+import com.bangkit.pricely.presentation.viewmodel.PriceViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.*
 import com.bangkit.pricely.util.chart.LeftAxisValueFormatter
@@ -25,15 +27,16 @@ import kotlin.random.Random
 
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
-    private val monthYearPickerDialog by lazy {
-        MonthYearPickerDialog.newInstance(
-            ArrayList(getMonths()),
-            arrayListOf("2022", "2023")
-        )
+    private val monthYearPickerDialog: MonthYearPickerDialog by lazy {
+        MonthYearPickerDialog.newInstance()
     }
     private val productViewModel: ProductViewModel by inject()
+    private val priceViewModel: PriceViewModel by inject()
 
     private var productId: Int = 0
+    private val availableYears: MutableList<Price> = mutableListOf()
+    private var month: Int = 1
+    private var year: Int = 2022
 
     override fun getViewBinding(): ActivityProductDetailBinding =
         ActivityProductDetailBinding.inflate(layoutInflater)
@@ -59,12 +62,13 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             monthYearPickerDialog.show(supportFragmentManager)
         }
         monthYearPickerDialog.setOnMontAndYearPicked { month, year ->
-            showToast("${month.first} and ${year.second}")
+            getPriceByMonthAndYear(month.first, year.second.toInt())
         }
     }
 
     override fun setupProcess() {
         getProductDetail()
+        getAvailableYears()
     }
 
     override fun setupObserver() {
@@ -79,6 +83,37 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             onSuccess = {
                 dismissLoading()
                 setProductDetail(it)
+            }
+        )
+        priceViewModel.availableYears.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it, ::getAvailableYears)
+            },
+            onSuccess = {
+                dismissLoading()
+                availableYears.addAll(it)
+                val years = availableYears.map { yearItem -> yearItem.year.toString() }
+                monthYearPickerDialog.setMonthsAndYears(
+                    ArrayList(getMonths()),
+                    ArrayList(years)
+                )
+            }
+        )
+        priceViewModel.priceByMontAndYear.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it){ getPriceByMonthAndYear(month, year) }
+            },
+            onSuccess = {
+                dismissLoading()
+                setPriceByMonthAndYear(it)
             }
         )
     }
@@ -122,6 +157,14 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 //            setLineChart(getMonthlyPricesData(), getMonths())
 
             setupDropDown()
+        }
+    }
+
+    private fun setPriceByMonthAndYear(price: Price){
+        with(binding){
+            tvProductPrice.text = price.price.formatCurrency()
+            val info = "(${price.month.replaceFirstChar { it.uppercase() }} ${price.year})"
+            tvPriceInfo.text = info
         }
     }
 
@@ -196,8 +239,16 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         }
     }
 
-    fun getProductDetail(){
+    private fun getProductDetail(){
         productViewModel.getProductDetail(productId)
+    }
+
+    private fun getAvailableYears(){
+        priceViewModel.getAvailableYears(productId)
+    }
+
+    private fun getPriceByMonthAndYear(month: Int, year: Int){
+        priceViewModel.getPriceByMonthAndYear(productId, month, year)
     }
 
     companion object{

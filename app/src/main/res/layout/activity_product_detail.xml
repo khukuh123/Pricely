@@ -164,7 +164,7 @@
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/spnChartType"
                     style="@style/PricelyAutoCompleteTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     tools:text="Month" />
 
             </com.google.android.material.textfield.TextInputLayout>

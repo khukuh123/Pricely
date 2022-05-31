@@ -1,8 +1,6 @@
 package com.bangkit.pricely.data.product
 
 import com.bangkit.pricely.data.product.remote.ProductApi
-import com.bangkit.pricely.data.product.remote.response.ProductDetail
-import com.bangkit.pricely.data.util.ApiResult
 import com.bangkit.pricely.data.util.call
 import com.bangkit.pricely.data.util.mapToDomain
 import com.bangkit.pricely.domain.product.model.Product
