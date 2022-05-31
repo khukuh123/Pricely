@@ -22,6 +22,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.lang.StringBuilder
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
 import java.util.*
 
@@ -31,11 +33,22 @@ val Int.dp
 val localeId = Locale("id", "ID")
 
 private val currencyFormatter = NumberFormat.getCurrencyInstance(localeId)
+private val decimalFormatSymbols = DecimalFormatSymbols(localeId).apply {
+    groupingSeparator  = ' '
+    digit = '.'
+}
+private val numberFormatter = DecimalFormat("###,###.#", decimalFormatSymbols)
 
-fun Double.formatCurrency(numberFormat: NumberFormat = currencyFormatter): String{
+fun Int?.orZero(): Int = (this ?: 0)
+
+fun Int.formatCurrency(numberFormat: NumberFormat = currencyFormatter): String{
     return StringBuilder(numberFormat.format(this))
         .insert(2, ' ')
         .toString()
+}
+
+fun Int.formatThousand(numberFormat: NumberFormat = numberFormatter): String{
+    return numberFormat.format(this)
 }
 
 fun Context.showToast(message: String) {

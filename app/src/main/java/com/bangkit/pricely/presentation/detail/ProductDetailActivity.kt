@@ -3,22 +3,24 @@ package com.bangkit.pricely.presentation.detail
 import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityProductDetailBinding
-import com.bangkit.pricely.domain.product.Product
+import com.bangkit.pricely.domain.product.model.Product
+import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.*
 import com.bangkit.pricely.util.chart.LeftAxisValueFormatter
 import com.bangkit.pricely.util.chart.XAxisValueFormatter
 import com.bangkit.pricely.util.chart.YValueFormatter
 import com.bangkit.pricely.util.dialog.MonthYearPickerDialog
+import com.bangkit.pricely.util.dialog.getErrorDialog
+import com.bangkit.pricely.util.dialog.getLoadingDialog
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import org.koin.android.ext.android.inject
 import kotlin.random.Random
 
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
@@ -29,12 +31,15 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             arrayListOf("2022", "2023")
         )
     }
+    private val productViewModel: ProductViewModel by inject()
+
+    private var productId: Int = 0
 
     override fun getViewBinding(): ActivityProductDetailBinding =
         ActivityProductDetailBinding.inflate(layoutInflater)
 
     override fun setupIntent() {
-
+        productId = intent?.getIntExtra(BundleKeys.PRODUCT_ID, 0) as Int
     }
 
     override fun setupUI() {
@@ -43,6 +48,8 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             getString(R.string.title_product_detail),
             true
         )
+        setLoadingDialog(getLoadingDialog(this))
+        setErrorDialog(getErrorDialog(this))
 
         setupChart()
     }
@@ -57,11 +64,23 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
     }
 
     override fun setupProcess() {
-        setProductDetail(DummyData.product)
+        getProductDetail()
     }
 
     override fun setupObserver() {
-
+        productViewModel.productDetail.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it, ::getProductDetail)
+            },
+            onSuccess = {
+                dismissLoading()
+                setProductDetail(it)
+            }
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -92,15 +111,15 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
     private fun setProductDetail(product: Product){
         with(binding){
-//            imgProduct.setImageFromUrl()
+            imgProduct.setImageFromUrl(product.imageUrl, 200.dp, 100.dp)
             tvProductName.text = product.name
-            val weightPerPiece = "${product.weight} ${product.unit}"
+            val weightPerPiece = "${product.weight.formatThousand()} ${product.unit}"
             tvProductWeightPerPiece.text = weightPerPiece
             tvProductPrice.text = product.price.formatCurrency()
             tvProductDescription.text = product.description
             imgIndicator.setImageResource(if(product.isRise) R.drawable.ic_indicator_up else R.drawable.ic_indicator_down)
             tvPriceInfo.text = getString(R.string.label_current_month)
-            setLineChart(getMonthlyPricesData(), getMonths())
+//            setLineChart(getMonthlyPricesData(), getMonths())
 
             setupDropDown()
         }
@@ -177,11 +196,15 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         }
     }
 
+    fun getProductDetail(){
+        productViewModel.getProductDetail(productId)
+    }
+
     companion object{
         @JvmStatic
-        fun start(context: Context) {
+        fun start(context: Context, productId: Int) {
             context.startActivity(Intent(context, ProductDetailActivity::class.java).apply {
-
+                putExtra(BundleKeys.PRODUCT_ID, productId)
             })
         }
     }

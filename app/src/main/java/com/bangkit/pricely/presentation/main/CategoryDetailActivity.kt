@@ -17,7 +17,7 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
 
     private val productAdapter by lazy {
         ProductVerticalAdapter {
-            ProductDetailActivity.start(this)
+            ProductDetailActivity.start(this, it.id)
         }
     }
 
@@ -72,10 +72,10 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
             val rand = (300..500).random()
             val price = "${rand}00".toInt()
             Product(
-                id = it.toString(),
-                "Product #$it",
-                price,
-                "500 gram / pack"
+                id = it,
+                name = "Product #$it",
+                price = price,
+                unit = "gram / pack"
             )
         }.toList()
 

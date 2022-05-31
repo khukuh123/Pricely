@@ -101,10 +101,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             val rand = (300..500).random()
             val price = "${rand}00".toInt()
             Product(
-                id = it.toString(),
-                "Product #$it",
-                price,
-                "Kg / Kg"
+                id = it,
+                name = "Product #$it",
+                price = price,
+                unit = "Kg / Kg"
             )
         }.toList()
 

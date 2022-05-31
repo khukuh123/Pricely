@@ -16,7 +16,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField "String", "API_BASE_URL", "\"https://62848640a48bd3c40b709f89.mockapi.io/api/v1/\""
+        buildConfigField "String", "API_BASE_URL", "\"https://34.124.235.106\""
+        buildConfigField "String", "API_KEY", "\"pUTkjmx1Q0DkEctdSbfO\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
