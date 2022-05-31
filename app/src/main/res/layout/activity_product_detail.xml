@@ -23,8 +23,10 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/imgProduct"
                 android:layout_width="@dimen/dimen_0dp"
-                android:layout_height="@dimen/dimen_200dp"
+                android:layout_height="@dimen/dimen_0dp"
                 android:src="@drawable/ic_baseline_image_24"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1:0.5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -162,7 +164,7 @@
                 <com.google.android.material.textfield.MaterialAutoCompleteTextView
                     android:id="@+id/spnChartType"
                     style="@style/PricelyAutoCompleteTextView"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     tools:text="Month" />
 
             </com.google.android.material.textfield.TextInputLayout>

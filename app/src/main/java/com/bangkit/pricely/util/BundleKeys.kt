@@ -4,4 +4,5 @@ object BundleKeys {
     const val MONTHS = "months"
     const val YEARS = "years"
     const val CATEGORIES = "categories"
+    const val PRODUCT_ID = "product_id"
 }

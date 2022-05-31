@@ -24,7 +24,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
 
     private val searchProductAdapter by lazy {
         ProductVerticalAdapter {
-            ProductDetailActivity.start(this)
+            ProductDetailActivity.start(this, it.id)
         }
     }
     private val suggestionAdapter by lazy {
@@ -140,10 +140,10 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
 
     private fun getDummyData(): List<Product> {
         return listOf(
-            Product("0", "Tomat", 3000, "500 gram / pack"),
-            Product("1", "Tomat", 3000, "500 gram / pack"),
-            Product("2", "Tomat", 3000, "500 gram / pack"),
-            Product("3", "Tomat", 3000, "500 gram / pack"),
+            Product(0, name = "Tomat", price= 3000, unit = "gram / pack"),
+            Product(1, name = "Tomat", price= 3000, unit = "gram / pack"),
+            Product(2, name = "Tomat", price= 3000, unit = "gram / pack"),
+            Product(3, name = "Tomat", price= 3000, unit = "gram / pack"),
         )
     }
 

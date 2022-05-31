@@ -15,8 +15,8 @@ typealias DateSet = Pair<Int, String>
 
 class MonthYearPickerDialog : DialogFragment() {
 
-    private lateinit var months: ArrayList<String>
-    private lateinit var years: ArrayList<String>
+    private val months: ArrayList<String> = arrayListOf()
+    private val years: ArrayList<String> = arrayListOf()
     private var selectedMonth: DateSet? = null
     private var selectedYear: DateSet? = null
     private var isSelected = false
@@ -43,8 +43,7 @@ class MonthYearPickerDialog : DialogFragment() {
     }
 
     private fun setupIntent() {
-        months = arguments?.getStringArrayList(BundleKeys.MONTHS) as ArrayList<String>
-        years = arguments?.getStringArrayList(BundleKeys.YEARS) as ArrayList<String>
+
     }
 
     private fun setupUI() {
@@ -109,16 +108,20 @@ class MonthYearPickerDialog : DialogFragment() {
         }
     }
 
+    fun setMonthsAndYears(months: ArrayList<String>, years: ArrayList<String>){
+        this.months.addAll(months)
+        this.years.addAll(years)
+    }
+
     fun setOnMontAndYearPicked(onMonthAndYearPicked: (month: DateSet, year: DateSet) -> Unit){
         this.onMonthAndYearPicked = onMonthAndYearPicked
     }
 
     companion object{
-        fun newInstance(months: ArrayList<String>, years: ArrayList<String>): MonthYearPickerDialog =
+        fun newInstance(): MonthYearPickerDialog =
             MonthYearPickerDialog().apply {
                 arguments = Bundle().apply {
-                    putStringArrayList(BundleKeys.MONTHS, months)
-                    putStringArrayList(BundleKeys.YEARS, years)
+
                 }
             }
     }

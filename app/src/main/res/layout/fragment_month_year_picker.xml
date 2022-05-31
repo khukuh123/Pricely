@@ -59,7 +59,7 @@
         android:id="@+id/btnNeutral"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="@dimen/dimen_0dp"
-        app:layout_constraintWidth_default="wrap"
+        app:layout_constraintWidth="wrap_content_constrained"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_18dp"
         android:layout_marginEnd="@dimen/dimen_16dp"
@@ -71,7 +71,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnPositive"
         android:layout_width="@dimen/dimen_0dp"
-        app:layout_constraintWidth_default="wrap"
+        app:layout_constraintWidth="wrap_content_constrained"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimen_18dp"
         android:text="@string/action_pick"

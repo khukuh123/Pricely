@@ -25,7 +25,7 @@ class ProductsSectionView @JvmOverloads constructor(
     private val productAdapter: ProductAdapter by lazy {
         ProductAdapter(
             onItemClicked = {
-                ProductDetailActivity.start(context)
+                ProductDetailActivity.start(context, it.id)
             }
         )
     }

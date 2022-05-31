@@ -17,11 +17,14 @@ import androidx.lifecycle.MutableLiveData
 import com.bangkit.pricely.R
 import com.bangkit.pricely.domain.util.Resource
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.lang.StringBuilder
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
 import java.util.*
 
@@ -31,11 +34,22 @@ val Int.dp
 val localeId = Locale("id", "ID")
 
 private val currencyFormatter = NumberFormat.getCurrencyInstance(localeId)
+private val decimalFormatSymbols = DecimalFormatSymbols(localeId).apply {
+    groupingSeparator  = ' '
+    digit = '.'
+}
+private val numberFormatter = DecimalFormat("###,###.#", decimalFormatSymbols)
 
-fun Double.formatCurrency(numberFormat: NumberFormat = currencyFormatter): String{
+fun Int?.orZero(): Int = (this ?: 0)
+
+fun Int.formatCurrency(numberFormat: NumberFormat = currencyFormatter): String{
     return StringBuilder(numberFormat.format(this))
         .insert(2, ' ')
         .toString()
+}
+
+fun Int.formatThousand(numberFormat: NumberFormat = numberFormatter): String{
+    return numberFormat.format(this)
 }
 
 fun Context.showToast(message: String) {
@@ -60,6 +74,7 @@ fun ImageView.setImageFromUrl(image: String, width: Int?, height: Int?) {
     val request = RequestOptions().apply {
         error(R.drawable.ic_baseline_image_24)
         placeholder(R.drawable.ic_baseline_image_24)
+        diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
     }
     if (width != null && height != null) request.override(width, height)
     Glide.with(this).load(image).apply(request).into(this)

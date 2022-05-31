@@ -3,38 +3,48 @@ package com.bangkit.pricely.presentation.detail
 import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityProductDetailBinding
-import com.bangkit.pricely.domain.product.Product
+import com.bangkit.pricely.domain.price.model.Price
+import com.bangkit.pricely.domain.product.model.Product
+import com.bangkit.pricely.presentation.viewmodel.PriceViewModel
+import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.*
 import com.bangkit.pricely.util.chart.LeftAxisValueFormatter
 import com.bangkit.pricely.util.chart.XAxisValueFormatter
 import com.bangkit.pricely.util.chart.YValueFormatter
 import com.bangkit.pricely.util.dialog.MonthYearPickerDialog
+import com.bangkit.pricely.util.dialog.getErrorDialog
+import com.bangkit.pricely.util.dialog.getLoadingDialog
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import org.koin.android.ext.android.inject
+import java.lang.StringBuilder
 import kotlin.random.Random
 
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
-    private val monthYearPickerDialog by lazy {
-        MonthYearPickerDialog.newInstance(
-            ArrayList(getMonths()),
-            arrayListOf("2022", "2023")
-        )
+    private val monthYearPickerDialog: MonthYearPickerDialog by lazy {
+        MonthYearPickerDialog.newInstance()
     }
+    private val productViewModel: ProductViewModel by inject()
+    private val priceViewModel: PriceViewModel by inject()
+
+    private var productId: Int = 0
+    private val availableYears: MutableList<Price> = mutableListOf()
+    private var month: Int = 1
+    private var year: Int = 2022
+    private var isMonthly = true
 
     override fun getViewBinding(): ActivityProductDetailBinding =
         ActivityProductDetailBinding.inflate(layoutInflater)
 
     override fun setupIntent() {
-
+        productId = intent?.getIntExtra(BundleKeys.PRODUCT_ID, 0) as Int
     }
 
     override fun setupUI() {
@@ -43,6 +53,8 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             getString(R.string.title_product_detail),
             true
         )
+        setLoadingDialog(getLoadingDialog(this))
+        setErrorDialog(getErrorDialog(this))
 
         setupChart()
     }
@@ -52,16 +64,81 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             monthYearPickerDialog.show(supportFragmentManager)
         }
         monthYearPickerDialog.setOnMontAndYearPicked { month, year ->
-            showToast("${month.first} and ${year.second}")
+            this.month = month.first + 1
+            this.year = year.second.toInt()
+            getProductPriceByMonthAndYear(month.first + 1, year.second.toInt())
         }
     }
 
     override fun setupProcess() {
-        setProductDetail(DummyData.product)
+        getProductDetail()
+        getProductAvailableYears()
+        getProductPrices(isMonthly)
     }
 
     override fun setupObserver() {
-
+        productViewModel.productDetail.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it, ::getProductDetail)
+            },
+            onSuccess = {
+                dismissLoading()
+                setProductDetail(it)
+            }
+        )
+        priceViewModel.availableYears.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it, ::getProductAvailableYears)
+            },
+            onSuccess = {
+                dismissLoading()
+                availableYears.addAll(it)
+                val years = availableYears.map { yearItem -> yearItem.year.toString() }
+                monthYearPickerDialog.setMonthsAndYears(
+                    ArrayList(getMonths()),
+                    ArrayList(years)
+                )
+            }
+        )
+        priceViewModel.priceByMontAndYear.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it){ getProductPriceByMonthAndYear(month, year) }
+            },
+            onSuccess = {
+                dismissLoading()
+                setPriceByMonthAndYear(it)
+            }
+        )
+        priceViewModel.productPrices.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it) { getProductPrices(isMonthly) }
+            },
+            onSuccess = {
+                dismissLoading()
+                val xAxisLabels = if(isMonthly){
+                    getMonthlyLabel(it)
+                }else{
+                    getAnnualLabel(it)
+                }
+                setLineChart(historicalData = getEntryList(it), xAxisLabels = xAxisLabels)
+            }
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -78,10 +155,11 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
                     mapper = { it },
                     onItemClicked = { position, _ ->
                         if(position == 0){
-                            setLineChart(getMonthlyPricesData(), getMonths())
+                            isMonthly = true
+                            getProductPrices(isMonthly)
                         }else{
-                            val annualPricesData = getAnnualPricesData()
-                            setLineChart(annualPricesData, annualPricesData.map { "%.0f".format(it.x + 2015) })
+                            isMonthly = false
+                            getProductPrices(isMonthly)
                         }
                     }
                 )
@@ -92,35 +170,48 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
     private fun setProductDetail(product: Product){
         with(binding){
-//            imgProduct.setImageFromUrl()
+            imgProduct.setImageFromUrl(product.imageUrl, 200.dp, 100.dp)
             tvProductName.text = product.name
-            val weightPerPiece = "${product.weight} ${product.unit}"
+            val weightPerPiece = "${product.weight.formatThousand()} ${product.unit}"
             tvProductWeightPerPiece.text = weightPerPiece
             tvProductPrice.text = product.price.formatCurrency()
             tvProductDescription.text = product.description
             imgIndicator.setImageResource(if(product.isRise) R.drawable.ic_indicator_up else R.drawable.ic_indicator_down)
             tvPriceInfo.text = getString(R.string.label_current_month)
-            setLineChart(getMonthlyPricesData(), getMonths())
 
             setupDropDown()
         }
     }
 
-    private fun setLineChart(data: List<Entry>, xAxisLabels: List<String>) {
-        val historyDataSet = LineDataSet(data.subList(0, (data.size+1)/2), getString(R.string.label_history))
-        val predictionDataSet = LineDataSet(data.subList(((data.size+1)/2)-1, data.size), getString(R.string.label_prediction))
+    private fun setPriceByMonthAndYear(price: Price){
+        with(binding){
+            tvProductPrice.text = price.price.formatCurrency()
+            val info = "(${price.month.replaceFirstChar { it.uppercase() }} ${price.year})"
+            tvPriceInfo.text = info
+        }
+    }
+
+    private fun setLineChart(historicalData: List<Entry>, predictionData: List<Entry> = listOf(), xAxisLabels: List<String>) {
+        val historyDataSet = LineDataSet(historicalData, getString(R.string.label_history))
+        val predictionDataSet = LineDataSet(predictionData, getString(R.string.label_prediction))
         historyDataSet.apply {
             val mColor = ContextCompat.getColor(this@ProductDetailActivity, R.color.greenLeaf)
             color = mColor
-            setCircleColor(mColor)
+            setDrawValues(false)
+            circleColors = listOf(mColor)
+            circleHoleRadius = 1.5f
+            circleRadius = 3f
             lineWidth = 2f
             mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         }
         predictionDataSet.apply {
             val mColor = ContextCompat.getColor(this@ProductDetailActivity, R.color.anotherGrey)
             color = mColor
+            setDrawValues(false)
+            circleColors = listOf(mColor)
+            circleHoleRadius = 1.5f
+            circleRadius = 3f
             enableDashedLine(20f, 10f, 0f)
-            setCircleColor(mColor)
             lineWidth = 2f
             mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         }
@@ -129,7 +220,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
                 setValueFormatter(YValueFormatter(this@ProductDetailActivity))
             }
             xAxis.valueFormatter = XAxisValueFormatter(this@ProductDetailActivity, xAxisLabels)
-            setData(lineData)
+            data = lineData
             invalidate()
         }
     }
@@ -177,11 +268,45 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         }
     }
 
+    private fun getProductDetail(){
+        productViewModel.getProductDetail(productId)
+    }
+
+    private fun getProductAvailableYears(){
+        priceViewModel.getProductAvailableYears(productId)
+    }
+
+    private fun getProductPriceByMonthAndYear(month: Int, year: Int){
+        priceViewModel.getProductPriceByMonthAndYear(productId, month, year)
+    }
+
+    private fun getProductPrices(isMonthly: Boolean){
+        priceViewModel.getProductPrices(productId, isMonthly)
+    }
+
+    private fun getEntryList(items: List<Price>): List<Entry> =
+        items.mapIndexed{ index, price -> Entry(index.toFloat(), price.price.toFloat()) }
+
+    private fun getMonthlyLabel(items: List<Price>): List<String> =
+        items.map {
+            val month = it.month.take(3).replaceFirstChar { char -> char.uppercase() }
+            val stringBuilder = StringBuilder(month)
+            val year = it.year.toString().takeLast(2)
+            stringBuilder.apply {
+                append(" '")
+                append(year)
+            }
+            stringBuilder.toString()
+        }
+
+    private fun getAnnualLabel(items: List<Price>): List<String> =
+        items.map { it.year.toString() }
+
     companion object{
         @JvmStatic
-        fun start(context: Context) {
+        fun start(context: Context, productId: Int) {
             context.startActivity(Intent(context, ProductDetailActivity::class.java).apply {
-
+                putExtra(BundleKeys.PRODUCT_ID, productId)
             })
         }
     }
