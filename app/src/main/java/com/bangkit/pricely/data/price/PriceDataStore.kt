@@ -9,9 +9,14 @@ import com.bangkit.pricely.domain.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 class PriceDataStore(private val webService: PriceApiClient) : PriceRepository {
-    override suspend fun getAvailableYears(productId: Int): Flow<Resource<List<Price>>> =
-        webService.getAvailableYears(productId).call().mapToDomain { it.map() }
+    override suspend fun getProductAvailableYears(productId: Int): Flow<Resource<List<Price>>> =
+        webService.getProductAvailableYears(productId).call().mapToDomain { it.map() }
 
-    override suspend fun getPriceByMonthAndYear(productId: Int, month: Int, year: Int): Flow<Resource<Price>> =
-        webService.getPriceByMonthAndYear(productId, month, year).call().mapToDomain { it.map() }
+    override suspend fun getProductPriceByMonthAndYear(productId: Int, month: Int, year: Int): Flow<Resource<Price>> =
+        webService.getProductPriceByMonthAndYear(productId, month, year).call().mapToDomain { it.map() }
+
+    override suspend fun getProductPrices(productId: Int, isMonthly: Boolean): Flow<Resource<List<Price>>> {
+        val query = if (isMonthly) mapOf("month" to "true") else mapOf("year" to "true")
+        return webService.getProductPrices(productId, query).call().mapToDomain { it.map() }
+    }
 }

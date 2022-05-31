@@ -6,9 +6,12 @@ import com.bangkit.pricely.data.util.BaseResponse
 import retrofit2.Response
 
 class PriceApi(private val api: PriceApiClient): PriceApiClient {
-    override suspend fun getAvailableYears(productId: Int): Response<BaseResponse<PriceListResponse>> =
-        api.getAvailableYears(productId)
+    override suspend fun getProductAvailableYears(productId: Int): Response<BaseResponse<PriceListResponse>> =
+        api.getProductAvailableYears(productId)
 
-    override suspend fun getPriceByMonthAndYear(productId: Int, month: Int, year: Int): Response<BaseResponse<PriceItem>> =
-        api.getPriceByMonthAndYear(productId, month, year)
+    override suspend fun getProductPriceByMonthAndYear(productId: Int, month: Int, year: Int): Response<BaseResponse<PriceItem>> =
+        api.getProductPriceByMonthAndYear(productId, month, year)
+
+    override suspend fun getProductPrices(productId: Int, query: Map<String, String>): Response<BaseResponse<PriceListResponse>> =
+        api.getProductPrices(productId, query)
 }

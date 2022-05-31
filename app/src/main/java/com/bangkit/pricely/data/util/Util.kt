@@ -42,12 +42,12 @@ fun <T> Response<BaseResponse<T>>.call(): Flow<ApiResult<T>> =
             } else {
                 response.errorBody()?.let {
                     val errorResponse = Gson().fromJson(it.string(), BaseResponse::class.java)
-                    val message = "${errorResponse.message.orEmpty()} ${errorResponse.detail}"
+                    val message = "CODE ${errorResponse.code}:\n${errorResponse.message.orEmpty()} ${errorResponse.detail}"
                     emit(ApiResult.Error(errorResponse.code, message))
                 }
             }
         } catch (e: Exception) {
-            emit(ApiResult.Error(999, e.message.orEmpty()))
+            emit(ApiResult.Error(999, "CODE 999: \n${e.message.orEmpty()}"))
         }
     }.flowOn(Dispatchers.IO)
 

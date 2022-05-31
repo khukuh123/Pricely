@@ -7,11 +7,15 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 interface PriceApiClient {
     @GET("/api/price/{productId}?year=true")
-    suspend fun getAvailableYears(@Path("productId") productId: Int): Response<BaseResponse<PriceListResponse>>
+    suspend fun getProductAvailableYears(@Path("productId") productId: Int): Response<BaseResponse<PriceListResponse>>
 
     @GET("/api/price/{productId}")
-    suspend fun getPriceByMonthAndYear(@Path("productId") productId: Int,@Query("month") month: Int, @Query("year") year: Int): Response<BaseResponse<PriceItem>>
+    suspend fun getProductPriceByMonthAndYear(@Path("productId") productId: Int,@Query("month") month: Int, @Query("year") year: Int): Response<BaseResponse<PriceItem>>
+    
+    @GET("/api/price/{productId}")
+    suspend fun getProductPrices(@Path("productId") productId: Int, @QueryMap query: Map<String, String>): Response<BaseResponse<PriceListResponse>>
 }

@@ -22,7 +22,13 @@ class HeaderInterceptor: Interceptor {
                 .protocol(Protocol.HTTP_2)
                 .body(
                     Gson().toJson(
-                        BaseResponse<Any>(999, null, e.message, false, e.message)
+                        BaseResponse<Any>(
+                            999,
+                            null,
+                            e.message,
+                            false,
+                            ""
+                        )
                     ).toResponseBody()
                 )
                 .request(chain.request())

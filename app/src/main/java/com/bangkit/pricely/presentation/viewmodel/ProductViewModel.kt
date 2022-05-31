@@ -19,6 +19,7 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
     }
 
     fun getProductDetail(productId: Int){
+        _productDetail.value = Resource.Loading()
         viewModelScope.collectResult(_productDetail){
             productUseCase.getProductDetail(productId)
         }
