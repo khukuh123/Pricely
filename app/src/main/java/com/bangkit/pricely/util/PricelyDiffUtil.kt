@@ -1,7 +1,7 @@
 package com.bangkit.pricely.util
 
 import androidx.recyclerview.widget.DiffUtil
-import com.bangkit.pricely.domain.product.model.Category
+import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.domain.product.model.Product
 
 object PricelyDiffUtil {

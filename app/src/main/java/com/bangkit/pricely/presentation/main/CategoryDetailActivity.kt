@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityCategoryDetailBinding
-import com.bangkit.pricely.domain.product.model.Category
+import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.detail.ProductDetailActivity
+import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.*
+import com.bangkit.pricely.util.dialog.getErrorDialog
+import com.bangkit.pricely.util.dialog.getLoadingDialog
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
 import org.koin.android.ext.android.inject
 
@@ -35,10 +38,18 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
         }
     }
 
+    private val productViewModel: ProductViewModel by inject()
+    private val categoryViewModel: CategoryViewModel by inject()
+
+    private var categoryId: Int = 0
+
+
     override fun getViewBinding(): ActivityCategoryDetailBinding =
         ActivityCategoryDetailBinding.inflate(layoutInflater)
 
     override fun setupIntent() {
+        categoryId = intent.getIntExtra(BundleKeys.CATEGORY_ID,0)
+
         category = intent.getParcelableExtra(BundleKeys.CATEGORIES)!!
 
         // TODO: Change categoryId value to category.id and delete when(category.name) blocks
@@ -55,6 +66,9 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
     }
 
     override fun setupUI() {
+
+        setLoadingDialog(getLoadingDialog(this))
+        setErrorDialog(getErrorDialog(this))
         val title = category.name.ifEmpty { "Vegetables" }
         setupToolbar(
             binding.toolbar.toolbar,
@@ -71,6 +85,14 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
 
     override fun setupAction() {
 
+    }
+
+    private fun getAllProductCategory(categoryId: Int){
+        productViewModel.getAllProductCategory(categoryId)
+    }
+
+    private fun getCategoryDetail(categoryId: Int){
+        categoryViewModel.getCategoryDetail(categoryId)
     }
 
     override fun setupProcess() {
@@ -91,6 +113,8 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
             }
         }
 
+        getAllProductCategory(categoryId)
+        getCategoryDetail(categoryId)
     }
 
     override fun setupObserver() {
@@ -150,6 +174,42 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
             rvVerticalRecommendation.gone()
         }
     }
+        categoryViewModel.categoryDetail.observe(this,
+            onLoading = {
+                showLoading()
+
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it){getCategoryDetail(categoryId)}
+            },
+
+            onSuccess = {
+                dismissLoading()
+                setupToolbar(
+                    binding.toolbar.toolbar,
+                    it.name,
+                    true
+                )
+                binding.tvCategoryDescription.text = it.description
+            }
+        )
+        productViewModel.allProductCategory.observe(this,
+            onLoading = {
+                showLoading()
+
+
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it){getAllProductCategory(categoryId)}
+            },
+
+            onSuccess = {
+                dismissLoading()
+                productAdapter.submitList(it)
+            }
+        )
 
     private fun getAllProducts() {
         productViewModel.getListAllProduct()

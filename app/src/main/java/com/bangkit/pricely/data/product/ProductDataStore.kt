@@ -12,6 +12,9 @@ class ProductDataStore(private val webService: ProductApi) : ProductRepository {
     override suspend fun getProductDetail(productId: Int): Flow<Resource<Product>> =
         webService.getProductDetail(productId).call().mapToDomain{ it.map() }
 
+    override suspend fun getAllProductCategory(categoryId: Int): Flow<Resource<List<Product>>> =
+        webService.getAllProductCategory(categoryId).call().mapToDomain { it.map()  }
+
     override suspend fun getListRecommendation(recommendation: Boolean):
             Flow<Resource<List<Product>>> =
         webService.getListRecommendation(recommendation).call().mapToDomain { it.map() }

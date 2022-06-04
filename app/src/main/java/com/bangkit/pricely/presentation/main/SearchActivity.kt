@@ -77,6 +77,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
                 val recommendationCategory = Category(CategoryDetailActivity.RECOMMENDATION, getString(R.string.label_description_recommendation),
                     1,"")
                 CategoryDetailActivity.start(this@SearchActivity, recommendationCategory)
+                CategoryDetailActivity.start(this@SearchActivity, 0)
             }
         }
     }

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import com.bangkit.pricely.base.BaseAdapter
 import com.bangkit.pricely.base.BaseViewHolder
 import com.bangkit.pricely.databinding.ItemCategoryBinding
-import com.bangkit.pricely.domain.product.model.Category
+import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.util.PricelyDiffUtil
 import com.bangkit.pricely.util.dp
 import com.bangkit.pricely.util.setImageFromUrl

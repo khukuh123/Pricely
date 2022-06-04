@@ -1,6 +1,10 @@
 package com.bangkit.pricely.di
 
 import com.bangkit.pricely.BuildConfig
+import com.bangkit.pricely.data.category.CategoryDataStore
+import com.bangkit.pricely.data.category.CategoryRepository
+import com.bangkit.pricely.data.category.remote.CategoryApi
+import com.bangkit.pricely.data.category.remote.CategoryApiClient
 import com.bangkit.pricely.data.price.PriceDataStore
 import com.bangkit.pricely.data.price.PriceRepository
 import com.bangkit.pricely.data.price.remote.PriceApi
@@ -12,10 +16,13 @@ import com.bangkit.pricely.data.product.remote.ProductApiClient
 import com.bangkit.pricely.data.util.HeaderInterceptor
 import com.bangkit.pricely.data.util.getSSLConfiguration
 import com.bangkit.pricely.data.util.getTrustManager
+import com.bangkit.pricely.domain.category.CategoryInteractor
+import com.bangkit.pricely.domain.category.CategoryUseCase
 import com.bangkit.pricely.domain.price.PriceInteractor
 import com.bangkit.pricely.domain.price.PriceUseCase
 import com.bangkit.pricely.domain.product.ProductInteractor
 import com.bangkit.pricely.domain.product.ProductUseCase
+import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
 import com.bangkit.pricely.presentation.viewmodel.PriceViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.AppConst
@@ -84,25 +91,40 @@ val networkModule = module {
             .create(PriceApiClient::class.java)
     }
 
+    single<CategoryApiClient> {
+        Retrofit.Builder()
+            .baseUrl(AppConst.API_URL_BASE)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(get())
+            .build()
+            .create(CategoryApiClient::class.java)
+    }
+
     single {
         ProductApi(get())
     }
     single {
         PriceApi(get())
     }
+    single {
+        CategoryApi(get())
+    }
 }
 
 val repositoryModule = module {
     single<ProductRepository> { ProductDataStore(get()) }
     single<PriceRepository> { PriceDataStore(get()) }
+    single<CategoryRepository> { CategoryDataStore(get()) }
 }
 
 val useCaseModule = module {
     single<ProductUseCase> { ProductInteractor(get()) }
     single<PriceUseCase> { PriceInteractor(get()) }
+    single<CategoryUseCase> { CategoryInteractor(get()) }
 }
 
 val viewModelModule = module {
     viewModel { ProductViewModel(get()) }
     viewModel { PriceViewModel(get()) }
+    viewModel { CategoryViewModel(get()) }
 }
