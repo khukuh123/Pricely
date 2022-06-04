@@ -17,11 +17,7 @@ class CategoryBottomSheet private constructor(
 ) : BaseBottomSheetDialog<FragmentCategoryListBinding>() {
 
     private lateinit var categories: ArrayList<Category>
-    private val categoryAdapter by lazy {
-        CategoryAdapter {
-            onItemClicked.invoke(it)
-        }
-    }
+    private lateinit var categoryAdapter: CategoryAdapter
 
     override val TAG: String = CategoryBottomSheet::class.java.simpleName
 
@@ -32,18 +28,22 @@ class CategoryBottomSheet private constructor(
         categories = arguments?.getParcelableArrayList<Category>(BundleKeys.CATEGORIES) as ArrayList<Category>
     }
 
-    override fun setupAction() {
-
-    }
-
     override fun setupUI() {
         with(binding) {
+            categoryAdapter = CategoryAdapter()
+
             rvCategoryList.apply {
                 adapter = categoryAdapter
                 layoutManager = GridLayoutManager(requireContext(), 4)
                 addItemDecoration(PricelyGridLayoutItemDecoration(4, 8.dp))
                 categoryAdapter.submitList(categories)
             }
+        }
+    }
+
+    override fun setupAction() {
+        categoryAdapter.setOnClickedItem { category, _ ->
+            onItemClicked.invoke(category)
         }
     }
 

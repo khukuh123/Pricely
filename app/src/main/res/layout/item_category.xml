@@ -3,12 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgIconCategory"
         style="@style/PricelyCategoryIcon"
+        app:civ_border_color="@color/greenLeaf"
+        app:civ_border_width="@dimen/dimen_0dp"
         tools:src="@drawable/ic_baseline_image_24" />
 
     <com.google.android.material.textview.MaterialTextView

@@ -93,6 +93,18 @@ class ProductsSectionView @JvmOverloads constructor(
         this.onViewAllButtonClicked = listener
     }
 
+    fun setTitle(title: String){
+        binding.tvSectionTitle.text = title
+    }
+
+    fun showLoading(isShow: Boolean){
+        productAdapter.showLoading(true)
+    }
+
+    fun showFooter(isShow: Boolean){
+        productAdapter.showFooter(isShow)
+    }
+
     override fun onDetachedFromWindow() {
         _binding = null
         super.onDetachedFromWindow()

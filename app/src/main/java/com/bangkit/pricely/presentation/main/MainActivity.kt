@@ -22,22 +22,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val productViewModel: ProductViewModel by inject()
 
-    private val categoryAdapter by lazy {
-        CategoryAdapter(
-            onItemClicked = { category ->
-                when(category.type) {
-                    1 -> {
-                        CategoryDetailActivity.start(this@MainActivity, category)
-                    }
-                    2 -> {
-                        CategoryBottomSheet.newInstance(ArrayList(getDummyBottomSheetCategory())){ newCategory ->
-                            CategoryDetailActivity.start(this@MainActivity, newCategory)
-                        }.showDialog(supportFragmentManager)
-                    }
-                }
-            }
-        )
-    }
+    private lateinit var categoryAdapter: CategoryAdapter
 
     override fun getViewBinding(): ActivityMainBinding {
         installSplashScreen()
@@ -68,6 +53,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 val recommendationCategory = Category(CategoryDetailActivity.RECOMMENDATION, getString(R.string.label_description_recommendation),
                     1,"")
                 CategoryDetailActivity.start(this@MainActivity, recommendationCategory)
+            }
+
+            categoryAdapter.setOnClickedItem { category, position ->
+                when(category.type) {
+                    0 -> {
+                        categoryAdapter.selectCategory(position)
+                    }
+                    1 -> {
+                        categoryAdapter.selectCategory(position)
+                    }
+                    2 -> {
+                        CategoryBottomSheet.newInstance(ArrayList(getDummyBottomSheetCategory())){ newCategory ->
+                            CategoryDetailActivity.start(this@MainActivity, newCategory)
+                        }.showDialog(supportFragmentManager)
+                    }
+                }
             }
         }
     }
@@ -140,6 +141,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun setupRecyclerView() {
         with(binding) {
+            categoryAdapter = CategoryAdapter()
+
             rvCategory.apply {
                 adapter = categoryAdapter
                 layoutManager = GridLayoutManager(this@MainActivity, 4)
