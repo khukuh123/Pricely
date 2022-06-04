@@ -13,14 +13,20 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
+import com.bangkit.pricely.data.product.remote.response.RecommendationResponseItem
 import com.bangkit.pricely.databinding.ActivitySearchScreenBinding
+import com.bangkit.pricely.domain.product.model.Category
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.detail.ProductDetailActivity
+import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.*
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
 import com.bangkit.pricely.util.recyclerview.PricelyLinearLayoutItemDecoration
+import org.koin.android.ext.android.inject
 
 class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
+
+    private val productViewModel: ProductViewModel by inject()
 
     private val searchProductAdapter by lazy {
         ProductVerticalAdapter {
@@ -69,7 +75,9 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     override fun setupAction() {
         with(binding) {
             viewRecommendationSection.setOnViewAllButtonClicked {
-                CategoryDetailActivity.start(this@SearchActivity)
+                val recommendationCategory = Category(CategoryDetailActivity.RECOMMENDATION, getString(R.string.label_description_recommendation),
+                    1,"")
+                CategoryDetailActivity.start(this@SearchActivity, recommendationCategory)
             }
         }
     }
@@ -102,17 +110,38 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     }
 
     override fun setupProcess() {
-        binding.viewRecommendationSection.setProducts(getDummyData())
+        getRecommendation()
         suggestionAdapter.submitList(getDummySuggestion())
     }
 
     override fun setupObserver() {
-
+        productViewModel.listRecommendation.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it, ::getRecommendation)
+            },
+            onSuccess = {
+                dismissLoading()
+                if (it.size > 3) setRecommendation(it.take(3)) else setRecommendation(it)
+            }
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) onBackPressed()
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun getRecommendation() {
+        productViewModel.getListRecommendation(true)
+    }
+
+    private fun setRecommendation(list: List<RecommendationResponseItem>) {
+        val listProduct: ArrayList<Product> = listProductFromRecommendation(list)
+        binding.viewRecommendationSection.setProducts(listProduct)
     }
 
     private fun setupRecyclerView() {

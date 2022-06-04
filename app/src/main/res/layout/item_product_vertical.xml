@@ -18,6 +18,7 @@
             android:layout_height="@dimen/dimen_98dp"
             android:contentDescription="@string/content_product_image"
             android:background="@color/whiteGrayish"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_baseline_image_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

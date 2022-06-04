@@ -3,6 +3,7 @@ package com.bangkit.pricely.util
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -15,10 +16,14 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bangkit.pricely.R
+import com.bangkit.pricely.data.product.remote.response.AllProductResponseItem
+import com.bangkit.pricely.data.product.remote.response.RecommendationResponseItem
+import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.domain.util.Resource
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -172,4 +177,38 @@ fun <T> AutoCompleteTextView.setAdapter(
 fun Context.hideSoftInput(view: View){
     val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun listProductFromRecommendation(list: List<RecommendationResponseItem>) : ArrayList<Product> {
+    val listProduct: ArrayList<Product> = ArrayList()
+    for (item in list) {
+        val product = Product(
+            id = item.id.orZero(),
+            imageUrl = item.imageUrl.orEmpty(),
+            name = item.name.orEmpty(),
+            weight = item.weight.orZero(),
+            unit = item.unit.orEmpty(),
+            price = item.price.orZero(),
+            isRise = false,
+            description = "")
+        listProduct.add(product)
+    }
+    return listProduct
+}
+
+fun listProductFromProductResponse(list: List<AllProductResponseItem>) : ArrayList<Product> {
+    val listProduct: ArrayList<Product> = ArrayList()
+    for (item in list) {
+        val product = Product(
+            id = item.id.orZero(),
+            imageUrl = item.imageUrl.orEmpty(),
+            name = item.name.orEmpty(),
+            weight = item.weight.orZero(),
+            unit = item.unit.orEmpty(),
+            price = item.price.orZero(),
+            isRise = false,
+            description = "")
+        listProduct.add(product)
+    }
+    return listProduct
 }

@@ -7,15 +7,15 @@
     <string name="menu_search" translatable="true">Search</string>
     <string name="menu_language" translatable="true">Language</string>
     <string name="label_all_product" translatable="true">All Product</string>
-    <string name="label_fruit" translatable="true">Fruit</string>
-    <string name="label_meat" translatable="true">Meat</string>
-    <string name="label_vegetable" translatable="true">Vegetable</string>
-    <string name="label_food" translatable="true">Food</string>
-    <string name="label_drink" translatable="true">Drink</string>
-    <string name="label_grocery" translatable="true">Grocery</string>
+    <string name="label_fruit" translatable="true">Fruits</string>
+    <string name="label_meat" translatable="true">Meats</string>
+    <string name="label_vegetable" translatable="true">Vegetables</string>
+    <string name="label_food" translatable="true">Meals</string>
+    <string name="label_drink" translatable="true">Beverages</string>
+    <string name="label_grocery" translatable="true">Groceries</string>
     <string name="label_other" translatable="true">Other</string>
-    <string name="label_seafood" translatable="true">Seafood</string>
-    <string name="label_seasoning" translatable="true">Herb</string>
+    <string name="label_seafood" translatable="true">Seafoods</string>
+    <string name="label_seasoning" translatable="true">Herbs</string>
     <string name="label_recommendation" translatable="true">Recommendation</string>
     <string name="action_view_all" translatable="true">View All</string>
     <string name="content_product_image" translatable="true">Product Image</string>
@@ -35,4 +35,6 @@
     <string name="message_search" translatable="true">Try another keyword?</string>
     <string name="label_search_result" translatable="true">Show __%d__ result for __\"%s\"__</string>
     <string name="label_product_category" translatable="true">Product Category</string>
+    <string name="label_description_allproduct" translatable="true">All product data available here</string>
+    <string name="label_description_recommendation" translatable="true">Recommended products of choice</string>
 </resources>
