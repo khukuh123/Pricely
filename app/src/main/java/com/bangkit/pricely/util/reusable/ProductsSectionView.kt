@@ -77,7 +77,11 @@ class ProductsSectionView @JvmOverloads constructor(
             clear()
             data?.let { addAll(data) }
         }
-        productAdapter.submitList(products.toList())
+        productAdapter.submitList(products.toList()){
+            productAdapter.showFooter(true)
+            productAdapter.showLoading(false)
+            binding.rvSectionProducts.scrollToPosition(0)
+        }
     }
 
     fun addProducts(vararg product: Product){

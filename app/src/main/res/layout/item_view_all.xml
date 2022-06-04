@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/dimen_200dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.button.MaterialButton
@@ -15,6 +15,13 @@
         app:iconTint="@color/anotherGrey"
         app:icon="@drawable/ic_baseline_chevron_right_24"
         android:elevation="@dimen/dimen_4dp"
-        android:layout_margin="@dimen/dimen_4dp"/>
+        android:layout_margin="@dimen/dimen_4dp" />
 
-</LinearLayout>
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/pbViewAll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:indeterminate="true" />
+
+</FrameLayout>

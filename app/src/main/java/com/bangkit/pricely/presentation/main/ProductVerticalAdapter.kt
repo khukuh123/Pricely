@@ -8,7 +8,6 @@ import androidx.viewbinding.ViewBinding
 import com.bangkit.pricely.base.BaseAdapter
 import com.bangkit.pricely.base.BaseFooterAdapter
 import com.bangkit.pricely.base.BaseViewHolder
-import com.bangkit.pricely.databinding.ItemProductBinding
 import com.bangkit.pricely.databinding.ItemProductVerticalBinding
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.util.PricelyDiffUtil
@@ -46,6 +45,6 @@ class ProductVerticalAdapter(
     }
 
     fun showFooter(isShow: Boolean){
-        footerAdapter?.show(isShow)
+        footerAdapter?.showFooter(isShow)
     }
 }

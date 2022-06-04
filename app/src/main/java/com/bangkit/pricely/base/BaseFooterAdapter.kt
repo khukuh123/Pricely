@@ -11,9 +11,12 @@ abstract class BaseFooterAdapter<VH : BaseFooterViewHolder> : RecyclerView.Adapt
         holder.bind()
     }
 
-    override fun getItemCount(): Int = 1
-
-    fun show(isShow: Boolean) {
-        if (isShow) notifyItemInserted(0) else notifyItemRemoved(0)
+    override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        if(payloads.isEmpty())
+            super.onBindViewHolder(holder, position, payloads)
+        else
+            holder.bind(payloads)
     }
+
+    override fun getItemCount(): Int = 1
 }
