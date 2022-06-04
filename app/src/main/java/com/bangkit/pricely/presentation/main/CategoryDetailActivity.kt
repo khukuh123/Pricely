@@ -6,8 +6,6 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
-import com.bangkit.pricely.data.product.remote.response.AllProductResponseItem
-import com.bangkit.pricely.data.product.remote.response.RecommendationResponseItem
 import com.bangkit.pricely.databinding.ActivityCategoryDetailBinding
 import com.bangkit.pricely.domain.product.model.Category
 import com.bangkit.pricely.domain.product.model.Product
@@ -157,27 +155,24 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
         productViewModel.getListAllProduct()
     }
 
-    private fun setAllProduct(list: List<AllProductResponseItem>) {
-        val listProduct: ArrayList<Product> = listProductFromProductResponse(list)
-        productAdapter.submitList(listProduct)
+    private fun setAllProduct(list: List<Product>) {
+        productAdapter.submitList(list)
     }
 
     private fun getRecommendation() {
         productViewModel.getListRecommendation(true)
     }
 
-    private fun setRecommendation(it: List<RecommendationResponseItem>) {
-        val listProduct: ArrayList<Product> = listProductFromRecommendation(it)
-        productAdapter.submitList(listProduct)
+    private fun setRecommendation(list: List<Product>) {
+        productAdapter.submitList(list)
     }
 
-    private fun setRecommendationByCategory(it: List<RecommendationResponseItem>) {
-        val listProduct: ArrayList<Product> = listProductFromRecommendation(it)
-        recommendationByCategoryAdapter.submitList(listProduct)
+    private fun setRecommendationByCategory(list: List<Product>) {
+        recommendationByCategoryAdapter.submitList(null)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home) onBackPressed()
+        if (item.itemId == android.R.id.home) onBackPressed()
         return super.onOptionsItemSelected(item)
     }
 

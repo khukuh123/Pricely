@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bangkit.pricely.data.product.remote.response.AllProductResponseItem
-import com.bangkit.pricely.data.product.remote.response.RecommendationResponseItem
 import com.bangkit.pricely.domain.product.ProductUseCase
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.domain.util.Resource
@@ -16,13 +14,13 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
     private val _productDetail: MutableLiveData<Resource<Product>> = MutableLiveData()
     val productDetail: LiveData<Resource<Product>> get() = _productDetail
 
-    private val _listRecommendation: MutableLiveData<Resource<List<RecommendationResponseItem>>> =
+    private val _listRecommendation: MutableLiveData<Resource<List<Product>>> =
         MutableLiveData()
-    val listRecommendation: LiveData<Resource<List<RecommendationResponseItem>>> get() = _listRecommendation
+    val listRecommendation: LiveData<Resource<List<Product>>> get() = _listRecommendation
 
-    private val _listAllProduct: MutableLiveData<Resource<List<AllProductResponseItem>>> =
+    private val _listAllProduct: MutableLiveData<Resource<List<Product>>> =
         MutableLiveData()
-    val listAllProduct: LiveData<Resource<List<AllProductResponseItem>>> get() = _listAllProduct
+    val listAllProduct: LiveData<Resource<List<Product>>> get() = _listAllProduct
 
     init {
         _productDetail.value = Resource.Loading()

@@ -80,7 +80,7 @@ class ProductsSectionView @JvmOverloads constructor(
         productAdapter.submitList(products.toList()){
             productAdapter.showFooter(true)
             productAdapter.showLoading(false)
-            binding.rvSectionProducts.scrollToPosition(0)
+            binding.rvSectionProducts.smoothScrollToPosition(0)
         }
     }
 

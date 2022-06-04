@@ -13,16 +13,16 @@ interface ProductApiClient {
     @GET("api/product/{productId}")
     suspend fun getProductDetail(@Path("productId") id: Int): Response<BaseResponse<ProductDetailItem>>
 
-    @GET("api/products?")
+    @GET("api/products")
     suspend fun getListRecommendation(@Query("recommendation") recommendation: Boolean):
             Response<BaseResponse<RecommendationResponse>>
 
-    @GET("api/products?")
+    @GET("api/products")
     suspend fun getListRecommendationByCategory(
         @Query("category") categoryId: Int,
         @Query("recommendation") recommendation: Boolean):
             Response<BaseResponse<RecommendationResponse>>
 
-    @GET("api/products?")
+    @GET("api/products")
     suspend fun getListAllProduct(): Response<BaseResponse<AllProductResponse>>
 }

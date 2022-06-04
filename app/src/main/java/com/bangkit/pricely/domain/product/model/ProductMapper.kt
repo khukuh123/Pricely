@@ -15,8 +15,8 @@ fun ProductDetailItem.map() =
         description = description.orEmpty()
     )
 
-fun RecommendationResponseItem.map(): RecommendationResponseItem =
-    RecommendationResponseItem(
+fun RecommendationResponseItem.map(): Product =
+    Product(
         unit = unit.orEmpty(),
         price = price.orZero(),
         imageUrl = imageUrl.orEmpty(),
@@ -25,10 +25,10 @@ fun RecommendationResponseItem.map(): RecommendationResponseItem =
         id = id.orZero()
     )
 
-fun RecommendationResponse.map(): List<RecommendationResponseItem> = this.map { it.map() }
+fun RecommendationResponse.map(): List<Product> = this.map { it.map() }
 
-fun AllProductResponseItem.map(): AllProductResponseItem =
-    AllProductResponseItem(
+fun AllProductResponseItem.map(): Product =
+    Product(
         id = id.orZero(),
         imageUrl = imageUrl.orEmpty(),
         name = name.orEmpty(),
@@ -37,4 +37,4 @@ fun AllProductResponseItem.map(): AllProductResponseItem =
         weight = weight.orZero()
     )
 
-fun AllProductResponse.map(): List<AllProductResponseItem> = this.map { it.map() }
+fun AllProductResponse.map(): List<Product> = this.map { it.map() }

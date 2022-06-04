@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
-import com.bangkit.pricely.data.product.remote.response.RecommendationResponseItem
 import com.bangkit.pricely.databinding.ActivitySearchScreenBinding
 import com.bangkit.pricely.domain.product.model.Category
 import com.bangkit.pricely.domain.product.model.Product
@@ -139,9 +138,8 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
         productViewModel.getListRecommendation(true)
     }
 
-    private fun setRecommendation(list: List<RecommendationResponseItem>) {
-        val listProduct: ArrayList<Product> = listProductFromRecommendation(list)
-        binding.viewRecommendationSection.setProducts(listProduct)
+    private fun setRecommendation(list: List<Product>) {
+        binding.viewRecommendationSection.setProducts(list)
     }
 
     private fun setupRecyclerView() {

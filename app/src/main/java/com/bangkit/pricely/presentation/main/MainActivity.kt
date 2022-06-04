@@ -4,18 +4,18 @@ import android.content.Intent
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
-import com.bangkit.pricely.data.product.remote.response.AllProductResponseItem
-import com.bangkit.pricely.data.product.remote.response.RecommendationResponseItem
 import com.bangkit.pricely.databinding.ActivityMainBinding
 import com.bangkit.pricely.domain.product.model.Category
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
-import com.bangkit.pricely.util.*
+import com.bangkit.pricely.util.dp
+import com.bangkit.pricely.util.observe
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
+import com.bangkit.pricely.util.setupToolbar
 import org.koin.android.ext.android.inject
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -116,14 +116,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         productViewModel.getListRecommendation(true)
     }
 
-    private fun setAllProduct(list: List<AllProductResponseItem>) {
-        val listProduct: ArrayList<Product> = listProductFromProductResponse(list)
-        binding.viewAllProductSection.setProducts(listProduct)
+    private fun setAllProduct(list: List<Product>) {
+        binding.viewAllProductSection.setProducts(list)
     }
 
-    private fun setRecommendation(list: List<RecommendationResponseItem>) {
-        val listProduct: ArrayList<Product> = listProductFromRecommendation(list)
-        binding.viewRecommendationSection.setProducts(listProduct)
+    private fun setRecommendation(list: List<Product>) {
+        binding.viewRecommendationSection.setProducts(list)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -132,7 +130,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.menu_search -> SearchActivity.start(this)
             R.id.menu_language -> startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
             else -> {}

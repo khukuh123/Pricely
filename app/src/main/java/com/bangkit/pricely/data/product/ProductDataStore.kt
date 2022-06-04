@@ -1,8 +1,6 @@
 package com.bangkit.pricely.data.product
 
 import com.bangkit.pricely.data.product.remote.ProductApi
-import com.bangkit.pricely.data.product.remote.response.AllProductResponseItem
-import com.bangkit.pricely.data.product.remote.response.RecommendationResponseItem
 import com.bangkit.pricely.data.util.call
 import com.bangkit.pricely.data.util.mapToDomain
 import com.bangkit.pricely.domain.product.model.Product
@@ -15,15 +13,15 @@ class ProductDataStore(private val webService: ProductApi) : ProductRepository {
         webService.getProductDetail(productId).call().mapToDomain{ it.map() }
 
     override suspend fun getListRecommendation(recommendation: Boolean):
-            Flow<Resource<List<RecommendationResponseItem>>> =
-        webService.getListRecommendation(recommendation).call().mapToDomain{ it.map() }
+            Flow<Resource<List<Product>>> =
+        webService.getListRecommendation(recommendation).call().mapToDomain { it.map() }
 
     override suspend fun getListRecommendationByCategory(categoryId: Int, recommendation: Boolean):
-            Flow<Resource<List<RecommendationResponseItem>>> =
+            Flow<Resource<List<Product>>> =
         webService.getListRecommendationByCategory(categoryId, recommendation)
-            .call().mapToDomain{ it.map() }
+            .call().mapToDomain { it.map() }
 
-    override suspend fun getListAllProduct(): Flow<Resource<List<AllProductResponseItem>>> =
-        webService.getListAllProduct().call().mapToDomain{ it.map() }
+    override suspend fun getListAllProduct(): Flow<Resource<List<Product>>> =
+        webService.getListAllProduct().call().mapToDomain { it.map() }
 
 }
