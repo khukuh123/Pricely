@@ -14,8 +14,17 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
     private val _productDetail: MutableLiveData<Resource<Product>> = MutableLiveData()
     val productDetail: LiveData<Resource<Product>> get() = _productDetail
 
+    private val _listRecommendation: MutableLiveData<Resource<List<Product>>> =
+        MutableLiveData()
+    val listRecommendation: LiveData<Resource<List<Product>>> get() = _listRecommendation
+
+    private val _listAllProduct: MutableLiveData<Resource<List<Product>>> =
+        MutableLiveData()
+    val listAllProduct: LiveData<Resource<List<Product>>> get() = _listAllProduct
+
     init {
         _productDetail.value = Resource.Loading()
+        _listRecommendation.value = Resource.Loading()
     }
 
     fun getProductDetail(productId: Int){
@@ -25,4 +34,24 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
         }
     }
 
+    fun getListRecommendation(recommendation: Boolean){
+        _listRecommendation.value = Resource.Loading()
+        viewModelScope.collectResult(_listRecommendation){
+            productUseCase.getListRecommendation(recommendation)
+        }
+    }
+
+    fun getListRecommendationByCategory(categoryId: Int, recommendation: Boolean){
+        _listRecommendation.value = Resource.Loading()
+        viewModelScope.collectResult(_listRecommendation){
+            productUseCase.getListRecommendationByCategory(categoryId, recommendation)
+        }
+    }
+
+    fun getListAllProduct() {
+        _listAllProduct.value = Resource.Loading()
+        viewModelScope.collectResult(_listAllProduct) {
+            productUseCase.getListAllProduct()
+        }
+    }
 }

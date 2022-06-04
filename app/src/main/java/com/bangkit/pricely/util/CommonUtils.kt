@@ -22,7 +22,6 @@ import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import java.lang.StringBuilder
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat

@@ -77,7 +77,11 @@ class ProductsSectionView @JvmOverloads constructor(
             clear()
             data?.let { addAll(data) }
         }
-        productAdapter.submitList(products.toList())
+        productAdapter.submitList(products.toList()){
+            productAdapter.showFooter(true)
+            productAdapter.showLoading(false)
+            binding.rvSectionProducts.smoothScrollToPosition(0)
+        }
     }
 
     fun addProducts(vararg product: Product){
@@ -87,6 +91,18 @@ class ProductsSectionView @JvmOverloads constructor(
 
     fun setOnViewAllButtonClicked(listener: () -> Unit) {
         this.onViewAllButtonClicked = listener
+    }
+
+    fun setTitle(title: String){
+        binding.tvSectionTitle.text = title
+    }
+
+    fun showLoading(isShow: Boolean){
+        productAdapter.showLoading(true)
+    }
+
+    fun showFooter(isShow: Boolean){
+        productAdapter.showFooter(isShow)
     }
 
     override fun onDetachedFromWindow() {

@@ -7,4 +7,6 @@ abstract class BaseFooterViewHolder(private val _binding: ViewBinding): Recycler
     protected val binding
         get() = _binding
     abstract fun bind()
+
+    abstract fun bind(payload: MutableList<Any>)
 }

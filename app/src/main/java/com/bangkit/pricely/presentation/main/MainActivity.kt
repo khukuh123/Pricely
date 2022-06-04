@@ -4,36 +4,25 @@ import android.content.Intent
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.recyclerview.widget.GridLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityMainBinding
 import com.bangkit.pricely.domain.product.model.Category
 import com.bangkit.pricely.domain.product.model.Product
+import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.dp
+import com.bangkit.pricely.util.observe
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
 import com.bangkit.pricely.util.setupToolbar
-import com.bangkit.pricely.util.showToast
+import org.koin.android.ext.android.inject
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    private val categoryAdapter by lazy {
-        CategoryAdapter(
-            onItemClicked = { category ->
-                when(category.type) {
-                    1 -> {
-                        CategoryDetailActivity.start(this)
-                    }
-                    2 -> {
-                        CategoryBottomSheet.newInstance(ArrayList(getDummyBottomSheetCategory())){
-                            CategoryDetailActivity.start(this)
-                        }.showDialog(supportFragmentManager)
-                    }
-                }
-            }
-        )
-    }
+    private val productViewModel: ProductViewModel by inject()
+
+    private lateinit var categoryAdapter: CategoryAdapter
 
     override fun getViewBinding(): ActivityMainBinding {
         installSplashScreen()
@@ -54,23 +43,87 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun setupAction() {
         with(binding) {
             viewAllProductSection.setOnViewAllButtonClicked {
-                showToast("Go to all product page")
+                // TODO: Change this category model to the newest category
+                val allProductCategory = Category(CategoryDetailActivity.ALL_PRODUCT,getString(R.string.label_description_allproduct),
+                    1,"")
+                CategoryDetailActivity.start(this@MainActivity, allProductCategory)
             }
             viewRecommendationSection.setOnViewAllButtonClicked {
-                showToast("Go to recommendation page")
+                // TODO: Change this category model to the newest category
+                val recommendationCategory = Category(CategoryDetailActivity.RECOMMENDATION, getString(R.string.label_description_recommendation),
+                    1,"")
+                CategoryDetailActivity.start(this@MainActivity, recommendationCategory)
+            }
+
+            categoryAdapter.setOnClickedItem { category, position ->
+                when(category.type) {
+                    0 -> {
+                        categoryAdapter.selectCategory(position)
+                    }
+                    1 -> {
+                        categoryAdapter.selectCategory(position)
+                    }
+                    2 -> {
+                        CategoryBottomSheet.newInstance(ArrayList(getDummyBottomSheetCategory())){ newCategory ->
+                            CategoryDetailActivity.start(this@MainActivity, newCategory)
+                        }.showDialog(supportFragmentManager)
+                    }
+                }
             }
         }
     }
 
     override fun setupProcess() {
-        with(binding){
-            viewAllProductSection.setProducts(getDummyProducts())
-            viewRecommendationSection.setProducts(getDummyProducts())
-        }
+        getRecommendation()
+        getAllProducts()
         categoryAdapter.submitList(getDummyCategory())
     }
 
-    override fun setupObserver() {}
+    override fun setupObserver() {
+        productViewModel.listRecommendation.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it, ::getRecommendation)
+            },
+            onSuccess = {
+                dismissLoading()
+                if (it.size > 3) setRecommendation(it.take(3)) else setRecommendation(it)
+            }
+        )
+
+        productViewModel.listAllProduct.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it, ::getAllProducts)
+            },
+            onSuccess = {
+                dismissLoading()
+                if (it.size > 3) setAllProduct(it.take(3)) else setAllProduct(it)
+            }
+        )
+    }
+
+    private fun getAllProducts() {
+        productViewModel.getListAllProduct()
+    }
+
+    private fun getRecommendation() {
+        productViewModel.getListRecommendation(true)
+    }
+
+    private fun setAllProduct(list: List<Product>) {
+        binding.viewAllProductSection.setProducts(list)
+    }
+
+    private fun setRecommendation(list: List<Product>) {
+        binding.viewRecommendationSection.setProducts(list)
+    }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -78,7 +131,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.menu_search -> SearchActivity.start(this)
             R.id.menu_language -> startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
             else -> {}
@@ -88,6 +141,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private fun setupRecyclerView() {
         with(binding) {
+            categoryAdapter = CategoryAdapter()
+
             rvCategory.apply {
                 adapter = categoryAdapter
                 layoutManager = GridLayoutManager(this@MainActivity, 4)
@@ -95,18 +150,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             }
         }
     }
-
-    private fun getDummyProducts() =
-        Array(6){
-            val rand = (300..500).random()
-            val price = "${rand}00".toInt()
-            Product(
-                id = it,
-                name = "Product #$it",
-                price = price,
-                unit = "Kg / Kg"
-            )
-        }.toList()
 
     /* Type 0 for Unclickable, 1 for Intent, 2 for Show Bottom Sheet */
     private fun getDummyBottomSheetCategory(): List<Category> {

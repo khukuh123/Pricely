@@ -35,7 +35,6 @@
 
             <View style="@style/PricelySectionDivider" />
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvVerticalProdcuts"
                 android:layout_width="match_parent"
@@ -46,6 +45,32 @@
                 tools:listitem="@layout/item_product"
                 tools:spanCount="2" />
 
+            <View android:id="@+id/sectionRecommendation"
+                style="@style/PricelySectionDivider" />
+
+            <TextView
+                android:id="@+id/tvSectionTitle"
+                style="@style/PricelyProductSectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                android:text="@string/label_recommendation"
+                android:layout_marginVertical="@dimen/dimen_12dp"
+                android:textColor="@color/grayBlackish"
+                android:layout_marginStart="@dimen/dimen_24dp"
+                app:layout_constraintEnd_toStartOf="@id/btnViewAllProduct"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvVerticalRecommendation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                tools:listitem="@layout/item_product"
+                tools:spanCount="2" />
 
         </LinearLayout>
 
