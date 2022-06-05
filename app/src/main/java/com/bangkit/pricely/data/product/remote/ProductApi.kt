@@ -2,6 +2,7 @@ package com.bangkit.pricely.data.product.remote
 
 import com.bangkit.pricely.data.product.remote.response.ProductDetailItem
 import com.bangkit.pricely.data.product.remote.response.ProductListResponse
+import com.bangkit.pricely.data.product.remote.response.SuggestionResponseItem
 import com.bangkit.pricely.data.util.BaseResponse
 import retrofit2.Response
 
@@ -23,4 +24,6 @@ class ProductApi(private val api: ProductApiClient) : ProductApiClient {
             Response<BaseResponse<ProductListResponse>> =
         api.getProductsRecommendationByCategory(categoryId, recommendation)
 
+    override suspend fun getSuggestions(): Response<BaseResponse<SuggestionResponseItem>> =
+        api.getSuggestions()
 }

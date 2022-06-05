@@ -14,7 +14,8 @@
         android:drawablePadding="@dimen/dimen_8dp"
         android:textSize="@dimen/text_size_12sp"
         android:paddingBottom="@dimen/dimen_2dp"
-        app:drawableStartCompat="@drawable/ic_suggestion"
+        app:drawableStartCompat="@drawable/ic_search"
+        app:drawableTint="@color/greenLeaf"
         tools:text="@tools:sample/lorem" />
 
 </LinearLayout>

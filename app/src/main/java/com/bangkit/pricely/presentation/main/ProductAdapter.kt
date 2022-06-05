@@ -45,11 +45,7 @@ class ProductAdapter(
         return ConcatAdapter(this, adapter)
     }
 
-    fun showFooter(isShow: Boolean){
-        footerAdapter?.showFooter(isShow)
-    }
-
-    fun showLoading(isShow: Boolean){
-        footerAdapter?.showLoading(isShow)
+    fun setIsDoneLoading(isDoneLoading: Boolean){
+        footerAdapter?.showFooter(isDoneLoading)
     }
 }

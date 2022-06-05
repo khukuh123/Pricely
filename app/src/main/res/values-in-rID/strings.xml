@@ -47,4 +47,5 @@
     <string name="samples_month_3_letter">Jan</string>
     <string name="label_description_allproduct" translatable="true">Semua data produk yang tersedia disini</string>
     <string name="label_description_recommendation" translatable="true">Rekomendasi produk-produk pilihan</string>
+    <string name="label_all_products_description">Berikut barang-barang yang tersedia di sistem kami</string>
 </resources>

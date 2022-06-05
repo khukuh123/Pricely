@@ -1,6 +1,7 @@
 package com.bangkit.pricely.domain.product
 
 import com.bangkit.pricely.domain.product.model.Product
+import com.bangkit.pricely.domain.product.model.Suggestion
 import com.bangkit.pricely.domain.util.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -15,4 +16,6 @@ interface ProductUseCase {
 
     suspend fun getProductsRecommendationByCategory(categoryId: Int, recommendation: Boolean):
             Flow<Resource<List<Product>>>
+
+    suspend fun getSuggestions(): Flow<Resource<List<Suggestion>>>
 }

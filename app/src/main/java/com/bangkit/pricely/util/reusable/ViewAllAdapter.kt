@@ -29,13 +29,9 @@ class ViewAllAdapter(
         override fun bind(payload: MutableList<Any>) {
             with(binding as ItemViewAllBinding){
                 (payload.firstOrNull() as? Map<String, Boolean>)?.let { map ->
-                    map["showFooter"]?.let { showFooter ->
-                        btnViewAll.isVisible = showFooter
-                        pbViewAll.isVisible = !showFooter
-                    }
-                    map["showLoading"]?.let { showLoading ->
-                        pbViewAll.isVisible = showLoading
-                        btnViewAll.isVisible = !showLoading
+                    map[IS_DONE_LOADING]?.let { isDoneLoading ->
+                        btnViewAll.isVisible = isDoneLoading
+                        pbViewAll.isVisible = !isDoneLoading
                     }
                 }
             }
@@ -45,25 +41,19 @@ class ViewAllAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseFooterViewHolder =
         ViewAllViewHolder(ItemViewAllBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
-    fun showFooter(isShow: Boolean) {
+    fun showFooter(isDoneLoading: Boolean) {
         notifyItemRangeChanged(
             0,
             1,
             mapOf(
-                "showFooter" to isShow
+                IS_DONE_LOADING to isDoneLoading
             )
         )
-        showFooter = isShow
+        showFooter = isDoneLoading
+        showLoading = !isDoneLoading
     }
 
-    fun showLoading(isShow: Boolean) {
-        notifyItemRangeChanged(
-            0,
-            1,
-            mapOf(
-                "showLoading" to isShow
-            )
-        )
-        showLoading = isShow
+    companion object{
+        private const val IS_DONE_LOADING = "is_done_loading"
     }
 }

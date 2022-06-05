@@ -6,10 +6,10 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.pricely.R
@@ -56,20 +56,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
             "",
             true
         )
-        with(binding) {
-            toolbar.tilSearch.apply {
-                editText?.let {
-                    it.setOnEditorActionListener { _, actionId, _ ->
-                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                            searchProduct(it.text.toString())
-                            hideSoftInput(it)
-                            return@setOnEditorActionListener true
-                        }
-                        return@setOnEditorActionListener false
-                    }
-                }
-            }
-        }
+        setupSearch()
     }
 
     override fun setupAction() {
@@ -82,40 +69,13 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
         }
     }
 
-    private fun searchProduct(text: String) {
-        with(binding) {
-            searchProductAdapter.submitList(getDummyData())
-            when {
-                text == "empty" -> {
-                    groupSearchResult.visible()
-                    groupSuggestion.gone()
-                    msvSearch.showEmptyList(getString(R.string.empty_search), getString(R.string.message_search))
-                    tvSearchResult.setPatternSpan(getString(R.string.label_search_result, 0, text), "\\_{2}.*?\\_{2}")
-                    viewRecommendationSection.visible()
-                }
-                text.isEmpty() -> {
-                    groupSearchResult.gone()
-                    groupSuggestion.visible()
-                    viewRecommendationSection.visible()
-                }
-                else -> {
-                    groupSearchResult.visible()
-                    groupSuggestion.gone()
-                    msvSearch.showContent()
-                    tvSearchResult.setPatternSpan(getString(R.string.label_search_result, getDummyData().size, text), "\\_{2}.*?\\_{2}")
-                    viewRecommendationSection.gone()
-                }
-            }
-        }
-    }
-
     override fun setupProcess() {
         getRecommendation()
-        suggestionAdapter.submitList(getDummySuggestion())
+        getSuggestions()
     }
 
     override fun setupObserver() {
-        productViewModel.products.observe(this,
+        productViewModel.productsRecommendation.observe(this,
             onLoading = {
                 showLoading()
             },
@@ -126,6 +86,17 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
             onSuccess = {
                 dismissLoading()
                 if (it.size > 3) setRecommendation(it.take(3)) else setRecommendation(it)
+            }
+        )
+        productViewModel.suggestions.observe(this,
+            onLoading = {
+
+            },
+            onError = {
+                showErrorDialog(it, ::getSuggestions)
+            },
+            onSuccess = {
+                suggestionAdapter.submitList(it.map { suggestion -> suggestion.name })
             }
         )
     }
@@ -139,9 +110,14 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
         productViewModel.getProductsRecommendation(true)
     }
 
+    private fun getSuggestions() {
+        productViewModel.getSuggestions()
+    }
+
     private fun setRecommendation(list: List<Product>) {
         binding.viewRecommendationSection.setProducts(list)
     }
+
 
     private fun setupRecyclerView() {
         with(binding) {
@@ -158,14 +134,6 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
         }
     }
 
-    private fun getDummySuggestion(): List<String> {
-        return listOf(
-            "cucumber",
-            "tomato",
-            "mango"
-        )
-    }
-
     private fun getDummyData(): List<Product> {
         return listOf(
             Product(0, name = "Tomat", price= 3000, unit = "gram / pack"),
@@ -174,7 +142,6 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
             Product(3, name = "Tomat", price= 3000, unit = "gram / pack"),
         )
     }
-
 
     private fun TextView.setPatternSpan(text: String, textPattern: String){
         val buffer = StringBuffer()
@@ -188,13 +155,71 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
             matcher.appendReplacement(buffer, spanText)
             spannable.append(buffer)
             val start = spannable.length - spanText.length
-            spannable.setSpan(ForegroundColorSpan(ResourcesCompat.getColor(resources, R.color.greenLeaf, null)), start, spannable.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannable.setSpan(ForegroundColorSpan(ResourcesCompat.getColor(resources, R.color.greenLeaf, null)),
+                start,
+                spannable.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
         buffer.setLength(0)
         matcher.appendTail(buffer)
         spannable.append(buffer)
 
         this.text = spannable
+    }
+
+
+    private fun searchProduct(text: String) {
+        with(binding) {
+            searchProductAdapter.submitList(getDummyData())
+            when (text) {
+                "empty" -> {
+                    groupSearchResult.visible()
+                    groupSuggestion.gone()
+                    msvSearch.showEmptyList(getString(R.string.empty_search), getString(R.string.message_search))
+                    tvSearchResult.setPatternSpan(getString(R.string.label_search_result, 0, text), "\\_{2}.*?\\_{2}")
+                    viewRecommendationSection.visible()
+                }
+                else -> {
+                    groupSearchResult.visible()
+                    groupSuggestion.gone()
+                    msvSearch.showContent()
+                    tvSearchResult.setPatternSpan(getString(R.string.label_search_result, getDummyData().size, text), "\\_{2}.*?\\_{2}")
+                    viewRecommendationSection.gone()
+                }
+            }
+        }
+    }
+
+    private fun showSuggestions() {
+        with(binding) {
+            groupSearchResult.gone()
+            groupSuggestion.visible()
+            viewRecommendationSection.visible()
+        }
+    }
+
+    private fun setupSearch() {
+        with(binding) {
+            toolbar.tilSearch.apply {
+                editText?.let { editText ->
+                    setEndIconOnClickListener {
+                        editText.setText("")
+                    }
+                    editText.addTextChangedListener { editable ->
+                        if (editable?.isEmpty() == true) showSuggestions()
+                    }
+                    editText.setOnEditorActionListener { _, actionId, _ ->
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                            searchProduct(editText.text.toString())
+                            hideSoftInput(editText)
+                            return@setOnEditorActionListener true
+                        }
+                        return@setOnEditorActionListener false
+                    }
+                }
+                requestFocus()
+            }
+        }
     }
 
     companion object {

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bangkit.pricely.domain.product.ProductUseCase
 import com.bangkit.pricely.domain.product.model.Product
+import com.bangkit.pricely.domain.product.model.Suggestion
 import com.bangkit.pricely.domain.util.Resource
 import com.bangkit.pricely.util.collectResult
 
@@ -29,11 +30,15 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
         MutableLiveData()
     val products: LiveData<Resource<List<Product>>> get() = _products
 
+    private val _suggestions: MutableLiveData<Resource<List<Suggestion>>> = MutableLiveData()
+    val suggestions: LiveData<Resource<List<Suggestion>>> get() = _suggestions
+
     init {
         _productDetail.value = Resource.Loading()
         _productsByCategory.value = Resource.Loading()
         _productsRecommendation.value = Resource.Loading()
         _productsRecommendationByCategory.value = Resource.Loading()
+        _suggestions.value = Resource.Loading()
     }
 
     fun getProductDetail(productId: Int) {
@@ -68,6 +73,13 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
         _productsRecommendationByCategory.value = Resource.Loading()
         viewModelScope.collectResult(_productsRecommendationByCategory) {
             productUseCase.getProductsRecommendationByCategory(categoryId, recommendation)
+        }
+    }
+
+    fun getSuggestions(){
+        _suggestions.value = Resource.Loading()
+        viewModelScope.collectResult(_suggestions) {
+            productUseCase.getSuggestions()
         }
     }
 }

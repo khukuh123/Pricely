@@ -72,15 +72,16 @@ class ProductsSectionView @JvmOverloads constructor(
     }
 
     fun setProducts(data: List<Product>?) {
-        productAdapter.submitList(null)
         products.apply {
             clear()
             data?.let { addAll(data) }
         }
+        productAdapter.setIsDoneLoading(false)
         productAdapter.submitList(products.toList()){
-            productAdapter.showFooter(true)
-            productAdapter.showLoading(false)
-            binding.rvSectionProducts.smoothScrollToPosition(0)
+            if(data != null) {
+                productAdapter.setIsDoneLoading(true)
+                binding.rvSectionProducts.scrollToPosition(0)
+            }
         }
     }
 
@@ -91,18 +92,6 @@ class ProductsSectionView @JvmOverloads constructor(
 
     fun setOnViewAllButtonClicked(listener: () -> Unit) {
         this.onViewAllButtonClicked = listener
-    }
-
-    fun setTitle(title: String){
-        binding.tvSectionTitle.text = title
-    }
-
-    fun showLoading(isShow: Boolean){
-        productAdapter.showLoading(true)
-    }
-
-    fun showFooter(isShow: Boolean){
-        productAdapter.showFooter(isShow)
     }
 
     override fun onDetachedFromWindow() {
