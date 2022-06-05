@@ -11,8 +11,8 @@ import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityMainBinding
 import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.domain.product.model.Product
-import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
+import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.dialog.getErrorDialog
 import com.bangkit.pricely.util.dialog.getLoadingDialog
 import com.bangkit.pricely.util.dp
@@ -20,23 +20,24 @@ import com.bangkit.pricely.util.observe
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
 import com.bangkit.pricely.util.setupToolbar
 import org.koin.android.ext.android.inject
-import com.bangkit.pricely.util.showToast
-import org.koin.android.ext.android.inject
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val productViewModel: ProductViewModel by inject()
+    private val categoryViewModel: CategoryViewModel by inject()
 
     private lateinit var categoryAdapter: CategoryAdapter
-
-    private val categoryViewModel: CategoryViewModel by inject()
+    private lateinit var selectedCategory: Category
+    private val categoryList: MutableList<Category> = mutableListOf()
 
     override fun getViewBinding(): ActivityMainBinding {
         installSplashScreen()
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
-    override fun setupIntent() {}
+    override fun setupIntent() {
+        selectedCategory = getAllProductCategory()
+    }
 
     override fun setupUI() {
         setupToolbar(
@@ -51,29 +52,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setupAction() {
         with(binding) {
-            viewAllProductSection.setOnViewAllButtonClicked {
-                // TODO: Change this category model to the newest category
-                val allProductCategory = Category(CategoryDetailActivity.ALL_PRODUCT,getString(R.string.label_description_allproduct),
-                    1,"")
-                CategoryDetailActivity.start(this@MainActivity, allProductCategory)
+            viewProductSection.setOnViewAllButtonClicked {
+                CategoryDetailActivity.start(this@MainActivity, selectedCategory)
             }
             viewRecommendationSection.setOnViewAllButtonClicked {
-                // TODO: Change this category model to the newest category
-                val recommendationCategory = Category(CategoryDetailActivity.RECOMMENDATION, getString(R.string.label_description_recommendation),
-                    1,"")
-                CategoryDetailActivity.start(this@MainActivity, recommendationCategory)
+                CategoryDetailActivity.start(this@MainActivity, selectedCategory)
             }
 
             categoryAdapter.setOnClickedItem { category, position ->
                 when(category.type) {
                     0 -> {
                         categoryAdapter.selectCategory(position)
+                        selectedCategory = category
+                        getProductsByCategory()
+                        getProductsRecommendationByCategory()
                     }
                     1 -> {
                         categoryAdapter.selectCategory(position)
+                        selectedCategory = category
+                        getProductsByCategory()
+                        getProductsRecommendationByCategory()
                     }
                     2 -> {
-                        CategoryBottomSheet.newInstance(ArrayList(getDummyBottomSheetCategory())){ newCategory ->
+                        CategoryBottomSheet.newInstance(ArrayList(categoryList)) { newCategory ->
                             CategoryDetailActivity.start(this@MainActivity, newCategory)
                         }.showDialog(supportFragmentManager)
                     }
@@ -83,88 +84,82 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun setupProcess() {
-        with(binding) {
-            viewAllProductSection.setProducts(getDummyProducts())
-            viewRecommendationSection.setProducts(getDummyProducts())
-        }
         getCategoryList()
-
-        getRecommendation()
-        getAllProducts()
-        categoryAdapter.submitList(getDummyCategory())
-    }
-
-    private fun getCategoryList() {
-        categoryViewModel.getCategoryList()
+        getProductsRecommendationByCategory()
+        getProductsByCategory()
     }
 
     override fun setupObserver() {
         categoryViewModel.categoryList.observe(this,
             onLoading = {
                 showLoading()
-
-
             },
             onError = {
                 dismissLoading()
-                showErrorDialog(it){getCategoryList()}
+                showErrorDialog(it, ::getCategoryList)
             },
 
             onSuccess = {
                 dismissLoading()
-
-                categoryList = ArrayList(it)
-                val newList = categoryList.take(6).toMutableList()
-                newList.add(0, Category(0, resources.getString(R.string.label_all_product), "-", 0, "https://cdn-icons-png.flaticon.com/512/291/291893.png"))
-                newList.add(Category(0, resources.getString(R.string.label_other), "-", 2, "https://cdn-icons-png.flaticon.com/512/291/291893.png"))
-                categoryAdapter.submitList(newList)
+                setCategories(it)
             }
         )
-    }
-    override fun setupObserver() {
-        productViewModel.listRecommendation.observe(this,
+        productViewModel.productsByCategory.observe(this,
             onLoading = {
                 showLoading()
+                binding.viewProductSection.setProducts(null)
             },
             onError = {
                 dismissLoading()
-                showErrorDialog(it, ::getRecommendation)
+                showErrorDialog(it, ::getProductsByCategory)
             },
             onSuccess = {
                 dismissLoading()
-                if (it.size > 3) setRecommendation(it.take(3)) else setRecommendation(it)
+                setProductsByCategory(it.take(3))
             }
         )
-
-        productViewModel.listAllProduct.observe(this,
+        productViewModel.productsRecommendationByCategory.observe(this,
             onLoading = {
                 showLoading()
+                binding.viewProductSection.setProducts(null)
             },
             onError = {
                 dismissLoading()
-                showErrorDialog(it, ::getAllProducts)
+                showErrorDialog(it, ::getProductsRecommendationByCategory)
             },
             onSuccess = {
                 dismissLoading()
-                if (it.size > 3) setAllProduct(it.take(3)) else setAllProduct(it)
+                setProductsRecommendation(it.take(3))
             }
         )
-    }
-
-    private fun getAllProducts() {
-        productViewModel.getListAllProduct()
-    }
-
-    private fun getRecommendation() {
-        productViewModel.getListRecommendation(true)
-    }
-
-    private fun setAllProduct(list: List<Product>) {
-        binding.viewAllProductSection.setProducts(list)
-    }
-
-    private fun setRecommendation(list: List<Product>) {
-        binding.viewRecommendationSection.setProducts(list)
+        productViewModel.productsRecommendation.observe(this,
+            onLoading = {
+                showLoading()
+                binding.viewProductSection.setProducts(null)
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it, ::getProductsRecommendationByCategory)
+            },
+            onSuccess = {
+                dismissLoading()
+                setProductsRecommendation(it.take(3))
+            }
+        )
+        productViewModel.products.observe(this,
+            onLoading = {
+                showLoading()
+                binding.viewProductSection.setProducts(null)
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it, ::getProductsByCategory)
+            },
+            onSuccess = {
+                dismissLoading()
+                setProductsByCategory(it.take(3))
+            }
+        )
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -193,123 +188,55 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    private fun getDummyProducts() =
-        Array(6) {
-            val rand = (300..500).random()
-            val price = "${rand}00".toInt()
-            Product(
-                id = it,
-                name = "Product #$it",
-                price = price,
-                unit = "Kg / Kg"
-            )
-        }.toList()
+    private fun getCategoryList() {
+        categoryViewModel.getCategoryList()
+    }
 
-    /* Type 0 for Unclickable, 1 for Intent, 2 for Show Bottom Sheet */
-//    private fun getDummyBottomSheetCategory(): List<Category> {
-//        return listOf(
-//            Category(
-//                resources.getString(R.string.label_fruit),
-//                "Fruits are the means by which flowering plants (also known as angiosperms) disseminate their seeds. Edible fruits in particular have long propagated using the movements of humans and animals in a symbiotic relationship that is the means for seed dispersal for the one group and nutrition for the other; in fact, humans and many animals have become dependent on fruits as a source of food. Consequently, fruits account for a substantial fraction of the world's agricultural output, and some (such as the apple and the pomegranate) have acquired extensive cultural and symbolic meanings.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_meat),
-//                "Meat is animal flesh that is eaten as food. Humans have hunted, farmed, and scavenged animals for meat since prehistoric times. The establishment of settlements in the Neolithic Revolution allowed the domestication of animals such as chickens, sheep, rabbits, pigs and cattle. This eventually led to their use in meat production on an industrial scale in slaughterhouses.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_vegetable),
-//                "Vegetables are parts of plants that are consumed by humans or other animals as food. The original meaning is still commonly used and is applied to plants collectively to refer to all edible plant matter, including the flowers, fruits, stems, leaves, roots, and seeds.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_food),
-//                "Food is any substance consumed to provide nutritional support for an organism. Food is usually of plant, animal, or fungal origin, and contains essential nutrients, such as carbohydrates, fats, proteins, vitamins, or minerals. The substance is ingested by an organism and assimilated by the organism's cells to provide energy, maintain life, or stimulate growth. Different species of animals have different feeding behaviours that satisfy the needs of their unique metabolisms, often evolved to fill a specific ecological niche within specific geographical contexts.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_drink),
-//                "A drink (or beverage) is a liquid intended for human consumption. In addition to their basic function of satisfying thirst, drinks play important roles in human culture. Common types of drinks include plain drinking water, milk, juice, smoothies and soft drinks. Traditionally warm beverages include coffee, tea, and hot chocolate. Caffeinated drinks that contain the stimulant caffeine have a long history.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_grocery),
-//                "A grocery store (AE), grocery shop (BE) or simply grocery is a store that primarily retails a general range of food products, which may be fresh or packaged. In everyday U.S. usage, however, \"grocery store\" is a synonym for supermarket, and is not used to refer to other types of stores that sell groceries. In the UK, shops that sell food are distinguished as grocers or grocery shops (though in everyday use, people usually use either the term \"supermarket\" or a \"corner shop\" or \"convenience shop\").",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_seafood),
-//                "Seafood is any form of sea life regarded as food by humans, prominently including fish and shellfish. Shellfish include various species of molluscs (e.g. bivalve molluscs such as clams, oysters and mussels, and cephalopods such as octopus and squid), crustaceans (e.g. shrimp, crabs, and lobster), and echinoderms (e.g. sea cucumbers and sea urchins). Historically, marine mammals such as cetaceans (whales and dolphins) as well as seals have been eaten as food, though that happens to a lesser extent in modern times. Edible sea plants such as some seaweeds and microalgae are widely eaten as sea vegetables around the world, especially in Asia.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_seasoning),
-//                "In general use, herbs are a widely distributed and widespread group of plants, excluding vegetables and other plants consumed for macronutrients, with savory or aromatic properties that are used for flavoring and garnishing food, for medicinal purposes, or for fragrances. Culinary use typically distinguishes herbs from spices. Herbs generally refers to the leafy green or flowering parts of a plant (either fresh or dried), while spices are usually dried and produced from other parts of the plant, including seeds, bark, roots and fruits.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//        )
-//    }
+    private fun getProductsByCategory() {
+        if (selectedCategory.type > 0)
+            productViewModel.getProductsByCategory(selectedCategory.id)
+        else
+            productViewModel.getProducts()
+    }
 
-    /* Type 0 for Unclickable, 1 for Intent, 2 for Show Bottom Sheet */
-//    private fun getDummyCategory(): List<Category> {
-//        return listOf(
-//            Category(
-//                resources.getString(R.string.label_all_product),
-//                "-",
-//                0,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_fruit),
-//                "Fruits are the means by which flowering plants (also known as angiosperms) disseminate their seeds. Edible fruits in particular have long propagated using the movements of humans and animals in a symbiotic relationship that is the means for seed dispersal for the one group and nutrition for the other; in fact, humans and many animals have become dependent on fruits as a source of food. Consequently, fruits account for a substantial fraction of the world's agricultural output, and some (such as the apple and the pomegranate) have acquired extensive cultural and symbolic meanings.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_meat),
-//                "Meat is animal flesh that is eaten as food. Humans have hunted, farmed, and scavenged animals for meat since prehistoric times. The establishment of settlements in the Neolithic Revolution allowed the domestication of animals such as chickens, sheep, rabbits, pigs and cattle. This eventually led to their use in meat production on an industrial scale in slaughterhouses.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_vegetable),
-//                "Vegetables are parts of plants that are consumed by humans or other animals as food. The original meaning is still commonly used and is applied to plants collectively to refer to all edible plant matter, including the flowers, fruits, stems, leaves, roots, and seeds.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_food),
-//                "Food is any substance consumed to provide nutritional support for an organism. Food is usually of plant, animal, or fungal origin, and contains essential nutrients, such as carbohydrates, fats, proteins, vitamins, or minerals. The substance is ingested by an organism and assimilated by the organism's cells to provide energy, maintain life, or stimulate growth. Different species of animals have different feeding behaviours that satisfy the needs of their unique metabolisms, often evolved to fill a specific ecological niche within specific geographical contexts.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_drink),
-//                "A drink (or beverage) is a liquid intended for human consumption. In addition to their basic function of satisfying thirst, drinks play important roles in human culture. Common types of drinks include plain drinking water, milk, juice, smoothies and soft drinks. Traditionally warm beverages include coffee, tea, and hot chocolate. Caffeinated drinks that contain the stimulant caffeine have a long history.",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_grocery),
-//                "A grocery store (AE), grocery shop (BE) or simply grocery is a store that primarily retails a general range of food products, which may be fresh or packaged. In everyday U.S. usage, however, \"grocery store\" is a synonym for supermarket, and is not used to refer to other types of stores that sell groceries. In the UK, shops that sell food are distinguished as grocers or grocery shops (though in everyday use, people usually use either the term \"supermarket\" or a \"corner shop\" or \"convenience shop\").",
-//                1,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//            Category(
-//                resources.getString(R.string.label_other),
-//                "-",
-//                2,
-//                "https://cdn-icons-png.flaticon.com/512/291/291893.png"
-//            ),
-//        )
-//    }
+    private fun getProductsRecommendationByCategory() {
+        if (selectedCategory.type > 0)
+            productViewModel.getProductsRecommendationByCategory(selectedCategory.id, true)
+        else
+            productViewModel.getProductsRecommendation(true)
+    }
+
+    private fun setCategories(list: List<Category>) {
+        categoryList.addAll(list)
+        val newList = categoryList.take(6).toMutableList()
+        newList.add(0, getAllProductCategory())
+        newList.add(getOthersCategory())
+        categoryAdapter.submitList(newList)
+    }
+
+    private fun setProductsByCategory(list: List<Product>) {
+        binding.viewProductSection.setProducts(list)
+    }
+
+    private fun setProductsRecommendation(list: List<Product>) {
+        binding.viewRecommendationSection.setProducts(list)
+    }
+
+    private fun getAllProductCategory(): Category =
+        Category(
+            id = 0,
+            name = resources.getString(R.string.label_all_product),
+            description = getString(R.string.label_all_products_description),
+            type = 0,
+            imgUrl = "https://cdn-icons-png.flaticon.com/512/291/291893.png"
+        )
+
+    private fun getOthersCategory(): Category =
+        Category(
+            2,
+            resources.getString(R.string.label_other),
+            "",
+            2,
+            "https://cdn-icons-png.flaticon.com/512/291/291893.png"
+        )
 }

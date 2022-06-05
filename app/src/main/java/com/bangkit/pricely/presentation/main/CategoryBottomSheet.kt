@@ -23,12 +23,12 @@ class CategoryBottomSheet private constructor(
         FragmentCategoryListBinding.inflate(layoutInflater, container, false)
 
     override fun initIntent() {
-        categories = arguments?.getParcelableArrayList<Category>(BundleKeys.CATEGORIES) as ArrayList<Category>
+        categories = arguments?.getParcelableArrayList<Category>(BundleKeys.CATEGORY) as ArrayList<Category>
     }
 
     override fun setupUI() {
         with(binding) {
-            categoryAdapter = CategoryAdapter()
+            categoryAdapter = CategoryAdapter(isSelectable = false)
 
             rvCategoryList.apply {
                 adapter = categoryAdapter
@@ -49,7 +49,7 @@ class CategoryBottomSheet private constructor(
         fun newInstance(data: ArrayList<Category>, onItemClicked: (Category) -> Unit): CategoryBottomSheet =
             CategoryBottomSheet(onItemClicked).apply {
                 arguments = Bundle().apply {
-                    putParcelableArrayList(BundleKeys.CATEGORIES, data)
+                    putParcelableArrayList(BundleKeys.CATEGORY, data)
                 }
             }
     }

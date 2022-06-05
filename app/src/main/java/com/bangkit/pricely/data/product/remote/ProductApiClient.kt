@@ -1,9 +1,7 @@
 package com.bangkit.pricely.data.product.remote
 
-import com.bangkit.pricely.data.product.remote.response.AllProductCategoryResponse
-import com.bangkit.pricely.data.product.remote.response.AllProductResponse
 import com.bangkit.pricely.data.product.remote.response.ProductDetailItem
-import com.bangkit.pricely.data.product.remote.response.RecommendationResponse
+import com.bangkit.pricely.data.product.remote.response.ProductListResponse
 import com.bangkit.pricely.data.util.BaseResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -15,19 +13,20 @@ interface ProductApiClient {
     suspend fun getProductDetail(@Path("productId") id: Int): Response<BaseResponse<ProductDetailItem>>
 
     @GET("api/products")
-    suspend fun getAllProductCategory(@Query("category") id: Int): Response<BaseResponse<AllProductCategoryResponse>>
+    suspend fun getProductsByCategory(@Query("category") id: Int): Response<BaseResponse<ProductListResponse>>
 
 
     @GET("api/products")
-    suspend fun getListRecommendation(@Query("recommendation") recommendation: Boolean):
-            Response<BaseResponse<RecommendationResponse>>
+    suspend fun getProductsRecommendation(@Query("recommendation") recommendation: Boolean):
+            Response<BaseResponse<ProductListResponse>>
 
     @GET("api/products")
-    suspend fun getListRecommendationByCategory(
+    suspend fun getProductsRecommendationByCategory(
         @Query("category") categoryId: Int,
-        @Query("recommendation") recommendation: Boolean):
-            Response<BaseResponse<RecommendationResponse>>
+        @Query("recommendation") recommendation: Boolean,
+    ):
+            Response<BaseResponse<ProductListResponse>>
 
     @GET("api/products")
-    suspend fun getListAllProduct(): Response<BaseResponse<AllProductResponse>>
+    suspend fun getProducts(): Response<BaseResponse<ProductListResponse>>
 }

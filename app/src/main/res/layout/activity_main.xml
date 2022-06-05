@@ -41,7 +41,7 @@
                 app:layout_constraintTop_toBottomOf="@id/rvCategory" />
 
             <com.bangkit.pricely.util.reusable.ProductsSectionView
-                android:id="@+id/viewAllProductSection"
+                android:id="@+id/viewProductSection"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
@@ -55,7 +55,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/viewAllProductSection"/>
+                app:layout_constraintTop_toBottomOf="@id/viewProductSection"/>
 
 
             <com.bangkit.pricely.util.reusable.ProductsSectionView
@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/viewAllProductSection"
+                app:layout_constraintTop_toBottomOf="@id/viewProductSection"
                 android:layout_marginTop="@dimen/dimen_40dp"
                 app:title="@string/label_recommendation"
                 app:layout_constraintBottom_toBottomOf="parent"

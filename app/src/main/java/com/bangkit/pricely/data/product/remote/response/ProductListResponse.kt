@@ -2,9 +2,9 @@ package com.bangkit.pricely.data.product.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-class AllProductCategoryResponse : ArrayList<AllProductCategoryResponseItem>()
+class ProductListResponse : ArrayList<ProductItem>()
 
-data class AllProductCategoryResponseItem(
+data class ProductItem(
     @SerializedName("id")
     val id: Int?,
     @SerializedName("image_url")

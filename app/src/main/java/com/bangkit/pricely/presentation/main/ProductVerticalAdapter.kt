@@ -26,7 +26,8 @@ class ProductVerticalAdapter(
                 tvProductName.text = data.name
                 tvPriceProduct.text = formatPrice(data.price)
                 imgProduct.setImageFromUrl(data.imageUrl)
-                tvUnitProduct.text = data.unit
+                val weight = "${data.weight} ${data.unit}"
+                tvUnitProduct.text = weight
                 imgProduct.setImageFromUrl(data.imageUrl, 130, 98)
                 root.setOnClickListener {
                     onItemClicked.invoke(data)

@@ -10,10 +10,12 @@ import com.bangkit.pricely.util.PricelyDiffUtil
 import com.bangkit.pricely.util.dp
 import com.bangkit.pricely.util.setImageFromUrl
 
-class CategoryAdapter : BaseAdapter<Category, ItemCategoryBinding, CategoryAdapter.CategoryViewHolder>
+class CategoryAdapter(
+    private val isSelectable: Boolean = true
+) : BaseAdapter<Category, ItemCategoryBinding, CategoryAdapter.CategoryViewHolder>
     (PricelyDiffUtil.categoryDiffUtil) {
 
-    private var selectedCategory: Int? = null
+    private var selectedCategory: Int = 0
     private var previousCategory: Int? = null
     private var onItemClicked: ((Category, Int) -> Unit)? = null
 
@@ -26,6 +28,7 @@ class CategoryAdapter : BaseAdapter<Category, ItemCategoryBinding, CategoryAdapt
                 root.setOnClickListener {
                     onItemClicked?.invoke(data, bindingAdapterPosition)
                 }
+                if(bindingAdapterPosition == 0 && isSelectable) imgIconCategory.borderWidth = 2.dp
             }
         }
 
@@ -45,10 +48,11 @@ class CategoryAdapter : BaseAdapter<Category, ItemCategoryBinding, CategoryAdapt
     }
 
     fun selectCategory(position: Int) {
-        if (selectedCategory != null) previousCategory = selectedCategory
+        previousCategory = selectedCategory
         selectedCategory = position
         notifyItemChanged(position, mapOf("isSelected" to true))
-        if (previousCategory != null) notifyItemChanged(previousCategory!!, mapOf("isSelected" to false))
+        if (previousCategory != null)
+            notifyItemChanged(previousCategory!!, mapOf("isSelected" to false))
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int, payloads: MutableList<Any>) {
