@@ -14,44 +14,60 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
     private val _productDetail: MutableLiveData<Resource<Product>> = MutableLiveData()
     val productDetail: LiveData<Resource<Product>> get() = _productDetail
 
-    private val _listRecommendation: MutableLiveData<Resource<List<Product>>> =
-        MutableLiveData()
-    val listRecommendation: LiveData<Resource<List<Product>>> get() = _listRecommendation
+    private val _productsByCategory: MutableLiveData<Resource<List<Product>>> = MutableLiveData()
+    val productsByCategory: LiveData<Resource<List<Product>>> get() = _productsByCategory
 
-    private val _listAllProduct: MutableLiveData<Resource<List<Product>>> =
+    private val _productsRecommendation: MutableLiveData<Resource<List<Product>>> =
         MutableLiveData()
-    val listAllProduct: LiveData<Resource<List<Product>>> get() = _listAllProduct
+    val productsRecommendation: LiveData<Resource<List<Product>>> get() = _productsRecommendation
+
+    private val _productsRecommendationByCategory: MutableLiveData<Resource<List<Product>>> =
+        MutableLiveData()
+    val productsRecommendationByCategory: LiveData<Resource<List<Product>>> get() = _productsRecommendationByCategory
+
+    private val _products: MutableLiveData<Resource<List<Product>>> =
+        MutableLiveData()
+    val products: LiveData<Resource<List<Product>>> get() = _products
 
     init {
         _productDetail.value = Resource.Loading()
-        _listRecommendation.value = Resource.Loading()
+        _productsByCategory.value = Resource.Loading()
+        _productsRecommendation.value = Resource.Loading()
+        _productsRecommendationByCategory.value = Resource.Loading()
     }
 
-    fun getProductDetail(productId: Int){
+    fun getProductDetail(productId: Int) {
         _productDetail.value = Resource.Loading()
-        viewModelScope.collectResult(_productDetail){
+        viewModelScope.collectResult(_productDetail) {
             productUseCase.getProductDetail(productId)
         }
     }
 
-    fun getListRecommendation(recommendation: Boolean){
-        _listRecommendation.value = Resource.Loading()
-        viewModelScope.collectResult(_listRecommendation){
-            productUseCase.getListRecommendation(recommendation)
+    fun getProducts() {
+        _products.value = Resource.Loading()
+        viewModelScope.collectResult(_products) {
+            productUseCase.getProducts()
         }
     }
 
-    fun getListRecommendationByCategory(categoryId: Int, recommendation: Boolean){
-        _listRecommendation.value = Resource.Loading()
-        viewModelScope.collectResult(_listRecommendation){
-            productUseCase.getListRecommendationByCategory(categoryId, recommendation)
+    fun getProductsByCategory(categoryId: Int) {
+        _productsByCategory.value = Resource.Loading()
+        viewModelScope.collectResult(_productsByCategory) {
+            productUseCase.getProductsByCategory(categoryId)
         }
     }
 
-    fun getListAllProduct() {
-        _listAllProduct.value = Resource.Loading()
-        viewModelScope.collectResult(_listAllProduct) {
-            productUseCase.getListAllProduct()
+    fun getProductsRecommendation(recommendation: Boolean) {
+        _productsRecommendationByCategory.value = Resource.Loading()
+        viewModelScope.collectResult(_productsRecommendation) {
+            productUseCase.getProductsRecommendation(recommendation)
+        }
+    }
+
+    fun getProductsRecommendationByCategory(categoryId: Int, recommendation: Boolean) {
+        _productsRecommendationByCategory.value = Resource.Loading()
+        viewModelScope.collectResult(_productsRecommendationByCategory) {
+            productUseCase.getProductsRecommendationByCategory(categoryId, recommendation)
         }
     }
 }

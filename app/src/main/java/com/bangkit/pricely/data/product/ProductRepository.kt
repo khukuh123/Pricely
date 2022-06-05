@@ -7,10 +7,12 @@ import kotlinx.coroutines.flow.Flow
 interface ProductRepository {
     suspend fun getProductDetail(productId: Int): Flow<Resource<Product>>
 
-    suspend fun getListRecommendation(recommendation: Boolean): Flow<Resource<List<Product>>>
+    suspend fun getProducts(): Flow<Resource<List<Product>>>
 
-    suspend fun getListRecommendationByCategory(categoryId: Int, recommendation: Boolean):
+    suspend fun getProductsByCategory(categoryId: Int): Flow<Resource<List<Product>>>
+
+    suspend fun getProductsRecommendation(recommendation: Boolean): Flow<Resource<List<Product>>>
+
+    suspend fun getProductsRecommendationByCategory(categoryId: Int, recommendation: Boolean):
             Flow<Resource<List<Product>>>
-
-    suspend fun getListAllProduct(): Flow<Resource<List<Product>>>
 }

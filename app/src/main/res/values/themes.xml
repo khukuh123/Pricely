@@ -159,7 +159,7 @@
 <!--    TextInputEditText-->
     <style name="PricelyTextInputEditText.Search" parent="Widget.AppCompat.EditText">
         <item name="android:hint">@string/hint_search</item>
-        <item name="android:imeOptions">actionDone</item>
+        <item name="android:imeOptions">actionSearch</item>
         <item name="android:inputType">text</item>
         <item name="android:textAppearance">@style/PricelyInterRegularText</item>
         <item name="android:textSize">@dimen/text_size_14sp</item>

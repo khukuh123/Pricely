@@ -6,6 +6,7 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivitySearchScreenBinding
-import com.bangkit.pricely.domain.product.model.Category
+import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.detail.ProductDetailActivity
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
@@ -59,7 +60,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
             toolbar.tilSearch.apply {
                 editText?.let {
                     it.setOnEditorActionListener { _, actionId, _ ->
-                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                             searchProduct(it.text.toString())
                             hideSoftInput(it)
                             return@setOnEditorActionListener true
@@ -74,8 +75,8 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     override fun setupAction() {
         with(binding) {
             viewRecommendationSection.setOnViewAllButtonClicked {
-                val recommendationCategory = Category(CategoryDetailActivity.RECOMMENDATION, getString(R.string.label_description_recommendation),
-                    1,"")
+                val recommendationCategory = Category(1, getString(R.string.label_description_recommendation),
+                    "",1, "")
                 CategoryDetailActivity.start(this@SearchActivity, recommendationCategory)
             }
         }
@@ -114,7 +115,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     }
 
     override fun setupObserver() {
-        productViewModel.listRecommendation.observe(this,
+        productViewModel.products.observe(this,
             onLoading = {
                 showLoading()
             },
@@ -135,7 +136,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     }
 
     private fun getRecommendation() {
-        productViewModel.getListRecommendation(true)
+        productViewModel.getProductsRecommendation(true)
     }
 
     private fun setRecommendation(list: List<Product>) {

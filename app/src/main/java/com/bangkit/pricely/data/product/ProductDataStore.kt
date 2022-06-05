@@ -10,18 +10,21 @@ import kotlinx.coroutines.flow.Flow
 
 class ProductDataStore(private val webService: ProductApi) : ProductRepository {
     override suspend fun getProductDetail(productId: Int): Flow<Resource<Product>> =
-        webService.getProductDetail(productId).call().mapToDomain{ it.map() }
+        webService.getProductDetail(productId).call().mapToDomain { it.map() }
 
-    override suspend fun getListRecommendation(recommendation: Boolean):
-            Flow<Resource<List<Product>>> =
-        webService.getListRecommendation(recommendation).call().mapToDomain { it.map() }
+    override suspend fun getProducts(): Flow<Resource<List<Product>>> =
+        webService.getProducts().call().mapToDomain { it.map() }
 
-    override suspend fun getListRecommendationByCategory(categoryId: Int, recommendation: Boolean):
+    override suspend fun getProductsByCategory(categoryId: Int): Flow<Resource<List<Product>>> =
+        webService.getProductsByCategory(categoryId).call().mapToDomain { it.map() }
+
+    override suspend fun getProductsRecommendation(recommendation: Boolean):
             Flow<Resource<List<Product>>> =
-        webService.getListRecommendationByCategory(categoryId, recommendation)
+        webService.getProductsRecommendation(recommendation).call().mapToDomain { it.map() }
+
+    override suspend fun getProductsRecommendationByCategory(categoryId: Int, recommendation: Boolean):
+            Flow<Resource<List<Product>>> =
+        webService.getProductsRecommendationByCategory(categoryId, recommendation)
             .call().mapToDomain { it.map() }
-
-    override suspend fun getListAllProduct(): Flow<Resource<List<Product>>> =
-        webService.getListAllProduct().call().mapToDomain { it.map() }
 
 }

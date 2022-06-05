@@ -1,6 +1,5 @@
 package com.bangkit.pricely.util
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.view.View
@@ -14,11 +13,12 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import coil.Coil
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
 import com.bangkit.pricely.R
 import com.bangkit.pricely.domain.util.Resource
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -63,20 +63,21 @@ fun View.gone() {
     visibility = View.GONE
 }
 
-@SuppressLint("CheckResult")
 fun ImageView.setImageFromUrl(image: String, size: Int? = null) {
     this.setImageFromUrl(image, size, size)
 }
 
-@SuppressLint("CheckResult")
 fun ImageView.setImageFromUrl(image: String, width: Int?, height: Int?) {
-    val request = RequestOptions().apply {
+    val imageLoader = ImageLoader.Builder(context)
+        .components {
+            add(SvgDecoder.Factory())
+        }
+        .build()
+    this.load(image, imageLoader) {
+        if(width != null && height != null) size(width, height)
         error(R.drawable.ic_baseline_image_24)
         placeholder(R.drawable.ic_baseline_image_24)
-        diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
     }
-    if (width != null && height != null) request.override(width, height)
-    Glide.with(this).load(image).apply(request).into(this)
 }
 
 fun <T> LiveData<Resource<T>>.observe(
