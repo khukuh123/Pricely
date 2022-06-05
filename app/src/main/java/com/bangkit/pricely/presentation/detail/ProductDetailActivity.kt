@@ -15,6 +15,7 @@ import com.bangkit.pricely.util.*
 import com.bangkit.pricely.util.chart.LeftAxisValueFormatter
 import com.bangkit.pricely.util.chart.XAxisValueFormatter
 import com.bangkit.pricely.util.chart.YValueFormatter
+import com.bangkit.pricely.util.dialog.DateSet
 import com.bangkit.pricely.util.dialog.MonthYearPickerDialog
 import com.bangkit.pricely.util.dialog.getErrorDialog
 import com.bangkit.pricely.util.dialog.getLoadingDialog
@@ -24,6 +25,8 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import org.koin.android.ext.android.inject
 import java.lang.StringBuilder
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
@@ -39,6 +42,8 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
     private var month: Int = 1
     private var year: Int = 2022
     private var isMonthly = true
+    private lateinit var currentMonth: DateSet
+    private lateinit var currentYear: DateSet
 
     override fun getViewBinding(): ActivityProductDetailBinding =
         ActivityProductDetailBinding.inflate(layoutInflater)
@@ -60,8 +65,13 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
     }
 
     override fun setupAction() {
-        binding.btnMontAndYearPicker.setOnClickListener {
-            monthYearPickerDialog.show(supportFragmentManager)
+        binding.apply {
+            btnMontAndYearPicker.setOnClickListener {
+                monthYearPickerDialog.show(supportFragmentManager)
+            }
+            btnToday.setOnClickListener {
+                getProductPriceByMonthAndYear(currentMonth.first + 1, currentYear.second.toInt())
+            }
         }
         monthYearPickerDialog.setOnMontAndYearPicked { month, year ->
             this.month = month.first + 1
@@ -73,7 +83,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
     override fun setupProcess() {
         getProductDetail()
         getProductAvailableYears()
-        getProductPrices(isMonthly)
+        getProductPrices()
     }
 
     override fun setupObserver() {
@@ -102,10 +112,16 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
                 dismissLoading()
                 availableYears.addAll(it)
                 val years = availableYears.map { yearItem -> yearItem.year.toString() }
-                monthYearPickerDialog.setMonthsAndYears(
-                    ArrayList(getMonths()),
-                    ArrayList(years)
-                )
+                monthYearPickerDialog.apply {
+                    setMonthsAndYears(
+                        ArrayList(getMonths()),
+                        ArrayList(years)
+                    )
+                }
+                val month = Calendar.getInstance().get(Calendar.MONTH) - 1
+                currentMonth = DateSet(month, getMonths()[month])
+                val year = Calendar.getInstance().get(Calendar.YEAR) - 1 // TODO: Change it later
+                currentYear = DateSet(years.indexOf(year.toString()), year.toString())
             }
         )
         priceViewModel.priceByMontAndYear.observe(this,
@@ -127,7 +143,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             },
             onError = {
                 dismissLoading()
-                showErrorDialog(it) { getProductPrices(isMonthly) }
+                showErrorDialog(it) { getProductPrices() }
             },
             onSuccess = {
                 dismissLoading()
@@ -156,10 +172,10 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
                     onItemClicked = { position, _ ->
                         if(position == 0){
                             isMonthly = true
-                            getProductPrices(isMonthly)
+                            getProductPrices()
                         }else{
                             isMonthly = false
-                            getProductPrices(isMonthly)
+                            getProductPrices()
                         }
                     }
                 )
@@ -280,7 +296,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         priceViewModel.getProductPriceByMonthAndYear(productId, month, year)
     }
 
-    private fun getProductPrices(isMonthly: Boolean){
+    private fun getProductPrices(){
         priceViewModel.getProductPrices(productId, isMonthly)
     }
 
@@ -291,7 +307,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         items.map {
             val month = it.month.take(3).replaceFirstChar { char -> char.uppercase() }
             val stringBuilder = StringBuilder(month)
-            val year = it.year.toString().takeLast(2)
+            val year = currentYear.second.takeLast(2)
             stringBuilder.apply {
                 append(" '")
                 append(year)

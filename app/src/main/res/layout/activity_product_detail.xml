@@ -101,12 +101,23 @@
                 android:id="@+id/btnMontAndYearPicker"
                 android:layout_width="@dimen/dimen_48dp"
                 android:layout_height="@dimen/dimen_48dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="@dimen/dimen_16dp"
+                app:layout_constraintEnd_toStartOf="@id/btnToday"
+                android:layout_marginEnd="@dimen/dimen_8dp"
                 style="@style/PricelyPrimaryButton.IconOnly"
                 app:layout_constraintTop_toTopOf="@id/tvProductName"
                 app:layout_constraintStart_toEndOf="@id/tvProductName"
                 app:icon="@drawable/ic_baseline_calendar_month_24"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnToday"
+                android:layout_width="@dimen/dimen_48dp"
+                android:layout_height="@dimen/dimen_48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/dimen_16dp"
+                style="@style/PricelyPrimaryButton.IconOnly"
+                app:layout_constraintTop_toTopOf="@id/tvProductName"
+                app:layout_constraintStart_toEndOf="@id/btnMontAndYearPicker"
+                app:icon="@drawable/ic_baseline_refresh_24"/>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvProductDescription"
