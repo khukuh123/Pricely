@@ -38,4 +38,5 @@
     <string name="label_description_allproduct" translatable="true">All product data available here</string>
     <string name="label_description_recommendation" translatable="true">Recommended products of choice</string>
     <string name="label_all_products_description">The following products are available in our system.</string>
+    <string name="label_recommendation_description">These are our recommendation products</string>
 </resources>

@@ -184,7 +184,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
     private fun setProductDetail(product: Product){
         with(binding){
-            imgProduct.setImage(product.imageUrl, 200.dp, 100.dp)
+            imgProduct.setImage(product.imageUrl, 200.dp, 100.dp, pbProduct)
             tvProductName.text = product.name
             val weightPerPiece = "${product.weight.formatThousand()} ${product.unit}"
             tvProductWeightPerPiece.text = weightPerPiece

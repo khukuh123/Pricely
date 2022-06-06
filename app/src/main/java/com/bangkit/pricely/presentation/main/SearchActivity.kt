@@ -75,30 +75,31 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     }
 
     override fun setupObserver() {
-        productViewModel.productsRecommendationByCategory.observe(this,
-            onLoading = {
-                showLoading()
-            },
-            onError = {
-                dismissLoading()
-                showErrorDialog(it, ::getRecommendation)
-            },
-            onSuccess = {
-                dismissLoading()
-                if (it.size > 3) setRecommendation(it.take(3)) else setRecommendation(it)
-            }
-        )
-        productViewModel.suggestions.observe(this,
-            onLoading = {
-
-            },
-            onError = {
-                showErrorDialog(it, ::getSuggestions)
-            },
-            onSuccess = {
-                suggestionAdapter.submitList(it.map { suggestion -> suggestion.name })
-            }
-        )
+        with(binding){
+            productViewModel.productsRecommendationByCategory.observe(this@SearchActivity,
+                onLoading = {
+                    msvSearch.showLoading()
+                },
+                onError = {
+                    msvSearch.showError(message = it, onRetry = ::getRecommendation)
+                },
+                onSuccess = {
+                    msvSearch.showContent()
+                    if (it.size > 3) setRecommendation(it.take(3)) else setRecommendation(it)
+                }
+            )
+            productViewModel.suggestions.observe(this@SearchActivity,
+                onLoading = {
+                    // TODO: add msv
+                },
+                onError = {
+                    // TODO: add msv
+                },
+                onSuccess = {
+                    suggestionAdapter.submitList(it.map { suggestion -> suggestion.name })
+                }
+            )
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

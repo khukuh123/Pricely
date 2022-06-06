@@ -13,13 +13,10 @@ import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
-import com.bangkit.pricely.util.CategoryType
+import com.bangkit.pricely.util.*
 import com.bangkit.pricely.util.dialog.getErrorDialog
 import com.bangkit.pricely.util.dialog.getLoadingDialog
-import com.bangkit.pricely.util.dp
-import com.bangkit.pricely.util.observe
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
-import com.bangkit.pricely.util.setupToolbar
 import org.koin.android.ext.android.inject
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
@@ -46,8 +43,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             "",
             false
         )
-        setLoadingDialog(getLoadingDialog(this))
-        setErrorDialog(getErrorDialog(this))
         setupRecyclerView()
     }
 
@@ -57,7 +52,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 CategoryDetailActivity.start(this@MainActivity, selectedCategory)
             }
             viewRecommendationSection.setOnViewAllButtonClicked {
-                CategoryDetailActivity.start(this@MainActivity, selectedCategory.copy(name = "Recommendation", description = "This is our recommendation", type = -1))
+                CategoryDetailActivity.start(this@MainActivity,
+                    selectedCategory.copy(name = getString(R.string.label_recommendation), description = getString(
+                        R.string.label_recommendation_description), type = -1))
             }
 
             categoryAdapter.setOnClickedItem { category, position ->
@@ -92,48 +89,49 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     override fun setupObserver() {
-        categoryViewModel.categoryList.observe(this,
-            onLoading = {
-                showLoading()
-            },
-            onError = {
-                dismissLoading()
-                showErrorDialog(it, ::getCategoryList)
-            },
+        with(binding){
+            categoryViewModel.categoryList.observe(this@MainActivity,
+                onLoading = {
+                    msvCategory.showLoading()
+                },
+                onError = {
+                    msvCategory.showError(message = it, onRetry = ::getCategoryList)
+                },
 
-            onSuccess = {
-                dismissLoading()
-                setCategories(it)
-            }
-        )
-        productViewModel.productsByCategory.observe(this,
-            onLoading = {
-                showLoading()
-                binding.viewProductSection.setProducts(null)
-            },
-            onError = {
-                dismissLoading()
-                showErrorDialog(it, ::getProductsByCategory)
-            },
-            onSuccess = {
-                dismissLoading()
-                setProductsByCategory(it.take(3))
-            }
-        )
-        productViewModel.productsRecommendationByCategory.observe(this,
-            onLoading = {
-                showLoading()
-                binding.viewProductSection.setProducts(null)
-            },
-            onError = {
-                dismissLoading()
-                showErrorDialog(it, ::getProductsRecommendationByCategory)
-            },
-            onSuccess = {
-                dismissLoading()
-                setProductsRecommendation(it.take(3))
-            }
-        )
+                onSuccess = {
+                    msvCategory.showContent()
+                    setCategories(it)
+                }
+            )
+            productViewModel.productsByCategory.observe(this@MainActivity,
+                onLoading = {
+                    viewProductSection.apply {
+                        setProducts(null)
+                        showLoading()
+                    }
+                },
+                onError = {
+                    viewProductSection.showError(message = it, onRetry = ::getProductsByCategory)
+                },
+                onSuccess = {
+                    setProductsByCategory(it.take(3))
+                }
+            )
+            productViewModel.productsRecommendationByCategory.observe(this@MainActivity,
+                onLoading = {
+                    viewRecommendationSection.apply {
+                        setProducts(null)
+                        showLoading()
+                    }
+                },
+                onError = {
+                    viewRecommendationSection.showError(message = it, onRetry = ::getProductsRecommendationByCategory)
+                },
+                onSuccess = {
+                    setProductsRecommendation(it.take(3))
+                }
+            )
+        }
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
@@ -181,6 +179,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun setCategories(list: List<Category>) {
+        binding.msvCategory.showContent()
         categoryList.addAll(list)
         val newList = categoryList.take(6).toMutableList()
         newList.add(0, getAllProductCategory())

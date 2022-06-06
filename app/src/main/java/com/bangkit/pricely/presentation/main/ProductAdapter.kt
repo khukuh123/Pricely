@@ -27,7 +27,7 @@ class ProductAdapter(
                 val weight = "${data.weight} ${data.unit}"
                 tvUnitProduct.text = weight
                 tvPriceProduct.text = formatPrice(data.price)
-                imgProduct.setImage(data.imageUrl, 130, 98)
+                imgProduct.setImage(data.imageUrl, 130, 98, pbProduct)
                 root.setOnClickListener {
                     onItemClicked.invoke(data)
                 }

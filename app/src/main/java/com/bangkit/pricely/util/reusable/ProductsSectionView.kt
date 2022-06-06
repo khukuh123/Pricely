@@ -12,6 +12,9 @@ import com.bangkit.pricely.presentation.detail.ProductDetailActivity
 import com.bangkit.pricely.presentation.main.ProductAdapter
 import com.bangkit.pricely.util.dp
 import com.bangkit.pricely.util.recyclerview.PricelyLinearLayoutItemDecoration
+import com.bangkit.pricely.util.showContent
+import com.bangkit.pricely.util.showError
+import com.bangkit.pricely.util.showLoading
 
 class ProductsSectionView @JvmOverloads constructor(
     context: Context,
@@ -61,6 +64,7 @@ class ProductsSectionView @JvmOverloads constructor(
                 })
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 addItemDecoration(PricelyLinearLayoutItemDecoration(16.dp, orientation = LinearLayoutManager.HORIZONTAL, edge = 24.dp))
+                itemAnimator = null
             }
         }
     }
@@ -72,15 +76,17 @@ class ProductsSectionView @JvmOverloads constructor(
     }
 
     fun setProducts(data: List<Product>?) {
+        productAdapter.setIsDoneLoading(false)
+        binding.msvSectionProducts.showLoading()
         products.apply {
             clear()
             data?.let { addAll(data) }
         }
-        productAdapter.setIsDoneLoading(false)
-        productAdapter.submitList(products.toList()){
-            if(data != null) {
+        productAdapter.submitList(products.toList()) {
+            if (data != null) {
                 productAdapter.setIsDoneLoading(true)
                 binding.rvSectionProducts.scrollToPosition(0)
+                binding.msvSectionProducts.showContent()
             }
         }
     }
@@ -88,6 +94,14 @@ class ProductsSectionView @JvmOverloads constructor(
     fun addProducts(vararg product: Product){
         products.addAll(product)
         productAdapter.submitList(products.toList())
+    }
+
+    fun showLoading(){
+        binding.msvSectionProducts.showLoading()
+    }
+
+    fun showError(message: String = "", onRetry: () -> Unit){
+        binding.msvSectionProducts.showError(message= message, onRetry = onRetry)
     }
 
     fun setTitle(title: String){

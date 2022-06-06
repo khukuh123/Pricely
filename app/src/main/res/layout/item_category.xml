@@ -7,15 +7,29 @@
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imgIconCategory"
-        style="@style/PricelyCategoryIcon"
-        app:civ_border_color="@color/greenLeaf"
-        app:civ_border_width="@dimen/dimen_0dp"
-        tools:src="@drawable/ic_baseline_image_24" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgIconCategory"
+            style="@style/PricelyCategoryIcon"
+            app:civ_border_color="@color/greenLeaf"
+            app:civ_border_width="@dimen/dimen_0dp"
+            tools:src="@drawable/ic_baseline_image_24" />
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/pbCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+
+    </FrameLayout>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvCategory"
+        android:layout_marginTop="@dimen/dimen_8dp"
         style="@style/PricelyInterMediumText.AnotherGrey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -4,10 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
@@ -62,11 +59,11 @@ fun View.gone() {
     visibility = View.GONE
 }
 
-fun ImageView.setImageFromUrl(image: String, size: Int? = null) {
-    this.setImage(image, size, size)
+fun ImageView.setImageFromUrl(image: String, size: Int? = null, progressBar: ProgressBar? = null) {
+    this.setImage(image, size, size, progressBar)
 }
 
-fun ImageView.setImage(image: Any, width: Int?, height: Int?) {
+fun ImageView.setImage(image: Any, width: Int?, height: Int?, progressBar: ProgressBar? = null) {
     val imageLoader = ImageLoader.Builder(context)
         .components {
             add(SvgDecoder.Factory())
@@ -74,8 +71,12 @@ fun ImageView.setImage(image: Any, width: Int?, height: Int?) {
         .build()
     this.load(image, imageLoader) {
         if(width != null && height != null) size(width, height)
+        listener(
+            onSuccess = { _, _ ->
+                progressBar?.gone()
+            }
+        )
         error(R.drawable.ic_baseline_image_24)
-        placeholder(R.drawable.ic_baseline_image_24)
     }
 }
 

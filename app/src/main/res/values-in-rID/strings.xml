@@ -48,4 +48,5 @@
     <string name="label_description_allproduct" translatable="true">Semua data produk yang tersedia disini</string>
     <string name="label_description_recommendation" translatable="true">Rekomendasi produk-produk pilihan</string>
     <string name="label_all_products_description">Berikut barang-barang yang tersedia di sistem kami</string>
+    <string name="label_recommendation_description">Ini adalah produk-produk rekomendasi kami</string>
 </resources>

@@ -35,15 +35,26 @@
 
             <View style="@style/PricelySectionDivider" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvVerticalProdcuts"
+            <com.kennyc.view.MultiStateView
+                android:id="@+id/msvCategoryDetail"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:nestedScrollingEnabled="false"
-                tools:itemCount="3"
-                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                tools:listitem="@layout/item_product"
-                tools:spanCount="2" />
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dimen_200dp"
+                app:msv_loadingView="@layout/layout_loading"
+                app:msv_errorView="@layout/layout_empty"
+                app:msv_viewState="loading">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvVerticalProdcuts"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:nestedScrollingEnabled="false"
+                    tools:itemCount="3"
+                    tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    tools:listitem="@layout/item_product"
+                    tools:spanCount="2" />
+
+            </com.kennyc.view.MultiStateView>
 
             <View android:id="@+id/sectionRecommendation"
                 style="@style/PricelySectionDivider" />

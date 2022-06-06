@@ -21,24 +21,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvCategory"
-                android:layout_width="match_parent"
+            <com.kennyc.view.MultiStateView
+                android:id="@+id/msvCategory"
+                android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dimen_24dp"
-                android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_min="@dimen/dimen_150dp"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:spanCount="4"
-                tools:itemCount="8"
-                tools:listitem="@layout/item_category" />
+                app:msv_errorView="@layout/layout_empty"
+                app:msv_loadingView="@layout/layout_loading"
+                app:msv_viewState="loading">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvCategory"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dimen_24dp"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:spanCount="4"
+                    tools:itemCount="8"
+                    tools:listitem="@layout/item_category" />
+
+            </com.kennyc.view.MultiStateView>
 
             <View
                 style="@style/PricelySectionDivider"
                 android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvCategory" />
+                app:layout_constraintTop_toBottomOf="@id/msvCategory" />
 
             <com.bangkit.pricely.util.reusable.ProductsSectionView
                 android:id="@+id/viewProductSection"
@@ -46,7 +60,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rvCategory"
+                app:layout_constraintTop_toBottomOf="@id/msvCategory"
                 android:layout_marginTop="@dimen/dimen_40dp"
                 app:title="@string/label_all_product"/>
 

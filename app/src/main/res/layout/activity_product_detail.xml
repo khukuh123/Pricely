@@ -24,13 +24,23 @@
                 android:id="@+id/imgProduct"
                 android:layout_width="@dimen/dimen_0dp"
                 android:layout_height="@dimen/dimen_0dp"
-                android:src="@drawable/ic_baseline_image_24"
+                tools:src="@drawable/ic_baseline_image_24"
                 android:scaleType="centerCrop"
                 app:layout_constraintDimensionRatio="1:0.5"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/pbProduct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toBottomOf="@id/imgProduct"
+                app:layout_constraintEnd_toEndOf="@id/imgProduct"
+                app:layout_constraintStart_toStartOf="@id/imgProduct"
+                app:layout_constraintTop_toTopOf="@id/imgProduct" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvProductName"

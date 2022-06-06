@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityCategoryDetailBinding
 import com.bangkit.pricely.domain.category.model.Category
@@ -49,7 +50,7 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
 
     override fun setupAction() {
         binding.viewRecommendationSection.setOnViewAllButtonClicked {
-            CategoryDetailActivity.start(this, category.copy(name = "Recommendation", description = "This is our recommendation", type = -1))
+            start(this, category.copy(name = getString(R.string.label_recommendation), description = getString(R.string.label_recommendation_description), type = -1))
         }
     }
 
@@ -60,44 +61,44 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
     }
 
     override fun setupObserver() {
-        categoryViewModel.categoryDetail.observe(this,
-            onLoading = {
-                showLoading()
-            },
-            onError = {
-                dismissLoading()
-                showErrorDialog(it) { getCategoryDetail() }
-            },
-            onSuccess = {
-                dismissLoading()
-                binding.tvCategoryDescription.text = it.description
-            }
-        )
-        productViewModel.productsByCategory.observe(this,
-            onLoading = {
-                showLoading()
-            },
-            onError = {
-                dismissLoading()
-                showErrorDialog(it) { getProductsByCategory() }
-            },
-            onSuccess = {
-                dismissLoading()
-                productAdapter.submitList(it)
-            }
-        )
-        productViewModel.productsRecommendationByCategory.observe(this,
-            onLoading = {
-                showLoading()
-            },
-            onError = {
-                dismissLoading()
-                showErrorDialog(it) { getProductsRecommendationByCategory() }
-            },
-            onSuccess = {
-                binding.viewRecommendationSection.setProducts(it.take(3))
-            }
-        )
+        with(binding){
+            categoryViewModel.categoryDetail.observe(this@CategoryDetailActivity,
+                onLoading = {
+                    if(category.type != CategoryType.RECOMMENDATION.type && category.type != CategoryType.ALL_PRODUCT.type) showLoading()
+                },
+                onError = {
+                    dismissLoading()
+                    showErrorDialog(it) { getCategoryDetail() }
+                },
+                onSuccess = {
+                    dismissLoading()
+                    binding.tvCategoryDescription.text = it.description
+                }
+            )
+            productViewModel.productsByCategory.observe(this@CategoryDetailActivity,
+                onLoading = {
+                    msvCategoryDetail.showLoading()
+                },
+                onError = {
+                    msvCategoryDetail.showError(message = it, onRetry = ::getProductsByCategory)
+                },
+                onSuccess = {
+                    binding.msvCategoryDetail.showContent()
+                    productAdapter.submitList(it)
+                }
+            )
+            productViewModel.productsRecommendationByCategory.observe(this@CategoryDetailActivity,
+                onLoading = {
+                    viewRecommendationSection.showLoading()
+                },
+                onError = {
+                    viewRecommendationSection.showError(message = it, onRetry = ::getProductsRecommendationByCategory)
+                },
+                onSuccess = {
+                    viewRecommendationSection.setProducts(it.take(3))
+                }
+            )
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -111,6 +112,7 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
                 categoryViewModel.getCategoryDetail(category.id)
             }
             else -> {
+                dismissLoading()
                 binding.tvCategoryDescription.text = category.description
             }
         }

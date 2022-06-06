@@ -23,7 +23,7 @@ class CategoryAdapter(
         BaseViewHolder<Category>(mBinding) {
         override fun bind(data: Category) {
             with(binding as ItemCategoryBinding) {
-                imgIconCategory.setImageFromUrl(data.imgUrl, 48.dp)
+                imgIconCategory.setImageFromUrl(data.imgUrl, 48.dp, pbCategory)
                 tvCategory.text = data.name
                 root.setOnClickListener {
                     onItemClicked?.invoke(data, bindingAdapterPosition)
@@ -32,10 +32,11 @@ class CategoryAdapter(
             }
         }
 
+        @Suppress("UNCHECKED_CAST")
         fun bind(payloads: MutableList<Any>) {
             with(binding as ItemCategoryBinding) {
                 (payloads.firstOrNull() as? Map<String, Boolean>)?.let { map ->
-                    map["isSelected"]?.let { isSelected ->
+                    map[IS_SELECTED]?.let { isSelected ->
                         if (isSelected) imgIconCategory.borderWidth = 2.dp else imgIconCategory.borderWidth = 0.dp
                     }
                 }
@@ -50,9 +51,9 @@ class CategoryAdapter(
     fun selectCategory(position: Int) {
         previousCategory = selectedCategory
         selectedCategory = position
-        notifyItemChanged(position, mapOf("isSelected" to true))
+        notifyItemChanged(position, mapOf(IS_SELECTED to true))
         if (previousCategory != null)
-            notifyItemChanged(previousCategory!!, mapOf("isSelected" to false))
+            notifyItemChanged(previousCategory!!, mapOf(IS_SELECTED to false))
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int, payloads: MutableList<Any>) {
@@ -61,4 +62,8 @@ class CategoryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder =
         CategoryViewHolder(ItemCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+
+    companion object{
+        private const val IS_SELECTED = "is_selected"
+    }
 }
