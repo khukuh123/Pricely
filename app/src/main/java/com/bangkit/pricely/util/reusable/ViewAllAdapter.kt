@@ -28,7 +28,7 @@ class ViewAllAdapter(
 
         override fun bind(payload: MutableList<Any>) {
             with(binding as ItemViewAllBinding){
-                (payload.firstOrNull() as? Map<String, Boolean>)?.let { map ->
+                (payload as MutableList<Map<String, Boolean>>).forEach { map ->
                     map[IS_DONE_LOADING]?.let { isDoneLoading ->
                         btnViewAll.isVisible = isDoneLoading
                         pbViewAll.isVisible = !isDoneLoading

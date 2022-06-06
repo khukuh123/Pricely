@@ -73,59 +73,31 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
                 binding.tvCategoryDescription.text = it.description
             }
         )
-        if(category.type > 0){
-            productViewModel.productsByCategory.observe(this,
-                onLoading = {
-                    showLoading()
-                },
-                onError = {
-                    dismissLoading()
-                    showErrorDialog(it) { getProductsByCategory() }
-                },
-                onSuccess = {
-                    dismissLoading()
-                    productAdapter.submitList(it)
-                }
-            )
-            productViewModel.productsRecommendationByCategory.observe(this,
-                onLoading = {
-                    showLoading()
-                },
-                onError = {
-                    dismissLoading()
-                    showErrorDialog(it) { getProductsRecommendationByCategory() }
-                },
-                onSuccess = {
-                    binding.viewRecommendationSection.setProducts(it.take(3))
-                }
-            )
-        }else{
-            productViewModel.products.observe(this,
-                onLoading = {
-                    showLoading()
-                },
-                onError = {
-                    dismissLoading()
-                    showErrorDialog(it) { getProductsByCategory() }
-                },
-                onSuccess = {
-                    dismissLoading()
-                    productAdapter.submitList(it)
-                }
-            )
-            productViewModel.productsRecommendation.observe(this,
-                onLoading = {
-                    showLoading()
-                },
-                onError = {
-                    dismissLoading()
-                    showErrorDialog(it) { getProductsRecommendationByCategory() }
-                },
-                onSuccess = {
-                    binding.viewRecommendationSection.setProducts(it.take(3))
-                }
-            )
-        }
+        productViewModel.productsByCategory.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it) { getProductsByCategory() }
+            },
+            onSuccess = {
+                dismissLoading()
+                productAdapter.submitList(it)
+            }
+        )
+        productViewModel.productsRecommendationByCategory.observe(this,
+            onLoading = {
+                showLoading()
+            },
+            onError = {
+                dismissLoading()
+                showErrorDialog(it) { getProductsRecommendationByCategory() }
+            },
+            onSuccess = {
+                binding.viewRecommendationSection.setProducts(it.take(3))
+            }
+        )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

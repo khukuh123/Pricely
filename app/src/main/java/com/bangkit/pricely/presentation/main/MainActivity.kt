@@ -132,34 +132,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 setProductsRecommendation(it.take(3))
             }
         )
-        productViewModel.productsRecommendation.observe(this,
-            onLoading = {
-                showLoading()
-                binding.viewProductSection.setProducts(null)
-            },
-            onError = {
-                dismissLoading()
-                showErrorDialog(it, ::getProductsRecommendationByCategory)
-            },
-            onSuccess = {
-                dismissLoading()
-                setProductsRecommendation(it.take(3))
-            }
-        )
-        productViewModel.products.observe(this,
-            onLoading = {
-                showLoading()
-                binding.viewProductSection.setProducts(null)
-            },
-            onError = {
-                dismissLoading()
-                showErrorDialog(it, ::getProductsByCategory)
-            },
-            onSuccess = {
-                dismissLoading()
-                setProductsByCategory(it.take(3))
-            }
-        )
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {

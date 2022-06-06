@@ -14,7 +14,7 @@
 
         <ImageView
             android:id="@+id/imgProduct"
-            android:layout_width="@dimen/dimen_130dp"
+            android:layout_width="@dimen/dimen_0dp"
             android:layout_height="@dimen/dimen_98dp"
             android:contentDescription="@string/content_product_image"
             android:background="@color/whiteGrayish"

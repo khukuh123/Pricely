@@ -75,7 +75,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     }
 
     override fun setupObserver() {
-        productViewModel.productsRecommendation.observe(this,
+        productViewModel.productsRecommendationByCategory.observe(this,
             onLoading = {
                 showLoading()
             },

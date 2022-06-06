@@ -18,17 +18,9 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
     private val _productsByCategory: MutableLiveData<Resource<List<Product>>> = MutableLiveData()
     val productsByCategory: LiveData<Resource<List<Product>>> get() = _productsByCategory
 
-    private val _productsRecommendation: MutableLiveData<Resource<List<Product>>> =
-        MutableLiveData()
-    val productsRecommendation: LiveData<Resource<List<Product>>> get() = _productsRecommendation
-
     private val _productsRecommendationByCategory: MutableLiveData<Resource<List<Product>>> =
         MutableLiveData()
     val productsRecommendationByCategory: LiveData<Resource<List<Product>>> get() = _productsRecommendationByCategory
-
-    private val _products: MutableLiveData<Resource<List<Product>>> =
-        MutableLiveData()
-    val products: LiveData<Resource<List<Product>>> get() = _products
 
     private val _suggestions: MutableLiveData<Resource<List<Suggestion>>> = MutableLiveData()
     val suggestions: LiveData<Resource<List<Suggestion>>> get() = _suggestions
@@ -36,7 +28,6 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
     init {
         _productDetail.value = Resource.Loading()
         _productsByCategory.value = Resource.Loading()
-        _productsRecommendation.value = Resource.Loading()
         _productsRecommendationByCategory.value = Resource.Loading()
         _suggestions.value = Resource.Loading()
     }
@@ -49,8 +40,8 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
     }
 
     fun getProducts() {
-        _products.value = Resource.Loading()
-        viewModelScope.collectResult(_products) {
+        _productsByCategory.value = Resource.Loading()
+        viewModelScope.collectResult(_productsByCategory) {
             productUseCase.getProducts()
         }
     }
@@ -64,7 +55,7 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
 
     fun getProductsRecommendation(recommendation: Boolean) {
         _productsRecommendationByCategory.value = Resource.Loading()
-        viewModelScope.collectResult(_productsRecommendation) {
+        viewModelScope.collectResult(_productsRecommendationByCategory) {
             productUseCase.getProductsRecommendation(recommendation)
         }
     }
