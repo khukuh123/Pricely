@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityProductDetailBinding
 import com.bangkit.pricely.domain.price.model.Price
+import com.bangkit.pricely.domain.price.model.PriceEntry
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.viewmodel.PriceViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
@@ -23,10 +25,9 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import java.lang.StringBuilder
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
@@ -70,13 +71,13 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
                 monthYearPickerDialog.show(supportFragmentManager)
             }
             btnToday.setOnClickListener {
-                getProductPriceByMonthAndYear(currentMonth.first + 1, currentYear.second.toInt())
+                getProductPriceByMonthAndYear(currentMonth.first, currentYear.second.toInt())
             }
         }
         monthYearPickerDialog.setOnMontAndYearPicked { month, year ->
             this.month = month.first + 1
             this.year = year.second.toInt()
-            getProductPriceByMonthAndYear(month.first + 1, year.second.toInt())
+            getProductPriceByMonthAndYear(month.first, year.second.toInt())
         }
     }
 
@@ -109,19 +110,21 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
                 showErrorDialog(it, ::getProductAvailableYears)
             },
             onSuccess = {
-                dismissLoading()
-                availableYears.addAll(it)
-                val years = availableYears.map { yearItem -> yearItem.year.toString() }
-                monthYearPickerDialog.apply {
-                    setMonthsAndYears(
-                        ArrayList(getMonths()),
-                        ArrayList(years)
-                    )
+                lifecycleScope.launch {
+                    dismissLoading()
+                    availableYears.addAll(it)
+                    val years = availableYears.map { yearItem -> yearItem.year.toString() }
+                    monthYearPickerDialog.apply {
+                        setMonthsAndYears(
+                            ArrayList(getMonths()),
+                            ArrayList(years)
+                        )
+                    }
+                    val month = Calendar.getInstance(localeId).get(Calendar.MONTH) + 1
+                    currentMonth = DateSet(month, getMonths()[month - 1])
+                    val year = Calendar.getInstance(localeId).get(Calendar.YEAR) - 1 // TODO: Change it later
+                    currentYear = DateSet(years.indexOf(year.toString()), year.toString())
                 }
-                val month = Calendar.getInstance().get(Calendar.MONTH) - 1
-                currentMonth = DateSet(month, getMonths()[month])
-                val year = Calendar.getInstance().get(Calendar.YEAR) - 1 // TODO: Change it later
-                currentYear = DateSet(years.indexOf(year.toString()), year.toString())
             }
         )
         priceViewModel.priceByMontAndYear.observe(this,
@@ -147,12 +150,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             },
             onSuccess = {
                 dismissLoading()
-                val xAxisLabels = if(isMonthly){
-                    getMonthlyLabel(it)
-                }else{
-                    getAnnualLabel(it)
-                }
-                setLineChart(historicalData = getEntryList(it), xAxisLabels = xAxisLabels)
+                setLineChart(it,  xAxisLabels = it.labels)
             }
         )
     }
@@ -186,7 +184,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
     private fun setProductDetail(product: Product){
         with(binding){
-            imgProduct.setImageFromUrl(product.imageUrl, 200.dp, 100.dp)
+            imgProduct.setImage(product.imageUrl, 200.dp, 100.dp)
             tvProductName.text = product.name
             val weightPerPiece = "${product.weight.formatThousand()} ${product.unit}"
             tvProductWeightPerPiece.text = weightPerPiece
@@ -207,9 +205,9 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         }
     }
 
-    private fun setLineChart(historicalData: List<Entry>, predictionData: List<Entry> = listOf(), xAxisLabels: List<String>) {
-        val historyDataSet = LineDataSet(historicalData, getString(R.string.label_history))
-        val predictionDataSet = LineDataSet(predictionData, getString(R.string.label_prediction))
+    private fun setLineChart(historicalData: PriceEntry, predictionData: PriceEntry = PriceEntry(), xAxisLabels: List<String>) {
+        val historyDataSet = LineDataSet(historicalData.prices, getString(R.string.label_history))
+        val predictionDataSet = LineDataSet(predictionData.prices, getString(R.string.label_prediction))
         historyDataSet.apply {
             val mColor = ContextCompat.getColor(this@ProductDetailActivity, R.color.greenLeaf)
             color = mColor
@@ -302,21 +300,6 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
     private fun getEntryList(items: List<Price>): List<Entry> =
         items.mapIndexed{ index, price -> Entry(index.toFloat(), price.price.toFloat()) }
-
-    private fun getMonthlyLabel(items: List<Price>): List<String> =
-        items.map {
-            val month = it.month.take(3).replaceFirstChar { char -> char.uppercase() }
-            val stringBuilder = StringBuilder(month)
-            val year = currentYear.second.takeLast(2)
-            stringBuilder.apply {
-                append(" '")
-                append(year)
-            }
-            stringBuilder.toString()
-        }
-
-    private fun getAnnualLabel(items: List<Price>): List<String> =
-        items.map { it.year.toString() }
 
     companion object{
         @JvmStatic

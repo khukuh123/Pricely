@@ -14,6 +14,7 @@ import com.bangkit.pricely.util.PricelyDiffUtil
 import com.bangkit.pricely.util.formatPrice
 import com.bangkit.pricely.util.reusable.ViewAllAdapter
 import com.bangkit.pricely.util.setImageFromUrl
+import com.bangkit.pricely.util.setImage
 
 class ProductVerticalAdapter(
     private val onItemClicked: (Product) -> Unit,
@@ -28,7 +29,7 @@ class ProductVerticalAdapter(
                 imgProduct.setImageFromUrl(data.imageUrl)
                 val weight = "${data.weight} ${data.unit}"
                 tvUnitProduct.text = weight
-                imgProduct.setImageFromUrl(data.imageUrl, 130, 98)
+                imgProduct.setImage(data.imageUrl, 130, 98)
                 root.setOnClickListener {
                     onItemClicked.invoke(data)
                 }

@@ -10,13 +10,10 @@ import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.presentation.detail.ProductDetailActivity
 import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
-import com.bangkit.pricely.util.BundleKeys
+import com.bangkit.pricely.util.*
 import com.bangkit.pricely.util.dialog.getErrorDialog
 import com.bangkit.pricely.util.dialog.getLoadingDialog
-import com.bangkit.pricely.util.dp
-import com.bangkit.pricely.util.observe
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
-import com.bangkit.pricely.util.setupToolbar
 import org.koin.android.ext.android.inject
 
 class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
@@ -47,14 +44,17 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
             true
         )
         setupRecyclerView()
+        if(category.type == CategoryType.RECOMMENDATION.type) binding.viewRecommendationSection.gone()
     }
 
     override fun setupAction() {
-
+        binding.viewRecommendationSection.setOnViewAllButtonClicked {
+            CategoryDetailActivity.start(this, category.copy(name = "Recommendation", description = "This is our recommendation", type = -1))
+        }
     }
 
     override fun setupProcess() {
-        if(category.type > 0) getCategoryDetail() else binding.tvCategoryDescription.text = category.description
+        getCategoryDetail()
         getProductsByCategory()
         getProductsRecommendationByCategory()
     }
@@ -106,21 +106,37 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
     }
 
     private fun getCategoryDetail() {
-        categoryViewModel.getCategoryDetail(category.id)
+        when(category.type){
+            CategoryType.NORMAL.type -> {
+                categoryViewModel.getCategoryDetail(category.id)
+            }
+            else -> {
+                binding.tvCategoryDescription.text = category.description
+            }
+        }
     }
 
     private fun getProductsByCategory() {
-        if(category.type > 0)
-            productViewModel.getProductsByCategory(category.id)
-        else
-            productViewModel.getProducts()
+        when(category.type){
+            CategoryType.NORMAL.type -> {
+                productViewModel.getProductsByCategory(category.id)
+            }
+            else -> {
+                productViewModel.getProducts()
+            }
+        }
     }
 
     private fun getProductsRecommendationByCategory() {
-        if(category.type > 0)
-            productViewModel.getProductsRecommendationByCategory(category.id, true)
-        else
-            productViewModel.getProductsRecommendation(true)
+        when(category.type){
+            CategoryType.NORMAL.type -> {
+                productViewModel.getProductsRecommendationByCategory(category.id, true)
+            }
+            CategoryType.ALL_PRODUCT.type -> {
+                productViewModel.getProductsRecommendation(true)
+            }
+            else -> { } // Recommendation detail will not show the recommendation again
+        }
     }
 
     private fun setupRecyclerView() {

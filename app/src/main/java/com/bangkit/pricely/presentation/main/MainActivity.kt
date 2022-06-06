@@ -13,6 +13,7 @@ import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
+import com.bangkit.pricely.util.CategoryType
 import com.bangkit.pricely.util.dialog.getErrorDialog
 import com.bangkit.pricely.util.dialog.getLoadingDialog
 import com.bangkit.pricely.util.dp
@@ -56,28 +57,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 CategoryDetailActivity.start(this@MainActivity, selectedCategory)
             }
             viewRecommendationSection.setOnViewAllButtonClicked {
-                CategoryDetailActivity.start(this@MainActivity, selectedCategory)
+                CategoryDetailActivity.start(this@MainActivity, selectedCategory.copy(name = "Recommendation", description = "This is our recommendation", type = -1))
             }
 
             categoryAdapter.setOnClickedItem { category, position ->
                 when(category.type) {
-                    0 -> {
+                    CategoryType.ALL_PRODUCT.type -> {
                         categoryAdapter.selectCategory(position)
                         selectedCategory = category
                         getProductsByCategory()
                         getProductsRecommendationByCategory()
                     }
-                    1 -> {
+                    CategoryType.NORMAL.type -> {
                         categoryAdapter.selectCategory(position)
                         selectedCategory = category
                         getProductsByCategory()
                         getProductsRecommendationByCategory()
                     }
-                    2 -> {
+                    CategoryType.OTHER.type -> {
                         CategoryBottomSheet.newInstance(ArrayList(categoryList)) { newCategory ->
                             CategoryDetailActivity.start(this@MainActivity, newCategory)
                         }.showDialog(supportFragmentManager)
                     }
+                    else -> { }
                 }
             }
         }
@@ -187,11 +189,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun setProductsByCategory(list: List<Product>) {
-        binding.viewProductSection.setProducts(list)
+        binding.viewProductSection.apply {
+            setTitle(selectedCategory.name)
+            setProducts(list)
+        }
     }
 
     private fun setProductsRecommendation(list: List<Product>) {
-        binding.viewRecommendationSection.setProducts(list)
+        binding.viewRecommendationSection.apply {
+            setProducts(list)
+        }
     }
 
     private fun getAllProductCategory(): Category =
@@ -209,6 +216,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             resources.getString(R.string.label_other),
             "",
             2,
-            "https://cdn-icons-png.flaticon.com/512/291/291893.png"
+            "https://www.svgrepo.com/download/157749/more.svg"
         )
 }

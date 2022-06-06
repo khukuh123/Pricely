@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bangkit.pricely.domain.price.PriceUseCase
 import com.bangkit.pricely.domain.price.model.Price
+import com.bangkit.pricely.domain.price.model.PriceEntry
 import com.bangkit.pricely.domain.util.Resource
 import com.bangkit.pricely.util.collectResult
 
@@ -17,8 +18,8 @@ class PriceViewModel(private val priceUseCase: PriceUseCase) : ViewModel() {
     val priceByMontAndYear: LiveData<Resource<Price>> get() = _priceByMontAndYear
     val availableYears: LiveData<Resource<List<Price>>> get() = _availableYears
 
-    private val _productPrices: MutableLiveData<Resource<List<Price>>> = MutableLiveData()
-    val productPrices: LiveData<Resource<List<Price>>> get() = _productPrices
+    private val _productPrices: MutableLiveData<Resource<PriceEntry>> = MutableLiveData()
+    val productPrices: LiveData<Resource<PriceEntry>> get() = _productPrices
 
     init {
         _availableYears.value = Resource.Loading()

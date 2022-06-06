@@ -13,7 +13,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import coil.Coil
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
@@ -64,10 +63,10 @@ fun View.gone() {
 }
 
 fun ImageView.setImageFromUrl(image: String, size: Int? = null) {
-    this.setImageFromUrl(image, size, size)
+    this.setImage(image, size, size)
 }
 
-fun ImageView.setImageFromUrl(image: String, width: Int?, height: Int?) {
+fun ImageView.setImage(image: Any, width: Int?, height: Int?) {
     val imageLoader = ImageLoader.Builder(context)
         .components {
             add(SvgDecoder.Factory())

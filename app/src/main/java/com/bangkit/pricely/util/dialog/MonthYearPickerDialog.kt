@@ -71,7 +71,7 @@ class MonthYearPickerDialog : DialogFragment() {
     }
 
     fun show(manager: FragmentManager) {
-        super.show(manager, MonthYearPickerDialog::class.java.simpleName)
+        if(manager.findFragmentByTag(TAG) == null && !isAdded) super.show(manager, TAG)
     }
 
     private fun setupDropDown() {
@@ -81,7 +81,7 @@ class MonthYearPickerDialog : DialogFragment() {
                 months,
                 mapper = { it },
                 onItemClicked = { position, item ->
-                    selectedMonth = DateSet(position, item)
+                    selectedMonth = DateSet(position + 1, item)
                     validatePicker()
                 })
             selectedMonth?.let {
@@ -118,6 +118,8 @@ class MonthYearPickerDialog : DialogFragment() {
     }
 
     companion object{
+        private val TAG = MonthYearPickerDialog::class.java.simpleName
+
         fun newInstance(): MonthYearPickerDialog =
             MonthYearPickerDialog().apply {
                 arguments = Bundle().apply {

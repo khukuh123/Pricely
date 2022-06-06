@@ -90,6 +90,10 @@ class ProductsSectionView @JvmOverloads constructor(
         productAdapter.submitList(products.toList())
     }
 
+    fun setTitle(title: String){
+        binding.tvSectionTitle.text = title
+    }
+
     fun setOnViewAllButtonClicked(listener: () -> Unit) {
         this.onViewAllButtonClicked = listener
     }
