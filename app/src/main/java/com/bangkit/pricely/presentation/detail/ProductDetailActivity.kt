@@ -127,7 +127,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
                 }
             }
         )
-        priceViewModel.priceByMontAndYear.observe(this,
+        priceViewModel.priceByMonthAndYear.observe(this,
             onLoading = {
                 showLoading()
             },
@@ -190,25 +190,30 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             tvProductWeightPerPiece.text = weightPerPiece
             tvProductPrice.text = product.price.formatCurrency()
             tvProductDescription.text = product.description
-            imgIndicator.setImageResource(if(product.isRise) R.drawable.ic_indicator_up else R.drawable.ic_indicator_down)
+            setIndicator(product.isRising)
             tvPriceInfo.text = getString(R.string.label_current_month)
 
             setupDropDown()
         }
     }
 
-    private fun setPriceByMonthAndYear(price: Price){
+    private fun setIndicator(isRising: Boolean){
+        binding.imgIndicator.setImageResource(if(isRising) R.drawable.ic_indicator_up else R.drawable.ic_indicator_down)
+    }
+
+    private fun setPriceByMonthAndYear(price: Product){
         with(binding){
             tvProductPrice.text = price.price.formatCurrency()
             val info = "(${price.month.replaceFirstChar { it.uppercase() }} ${price.year})"
             tvPriceInfo.text = info
+            setIndicator(price.isRising)
         }
     }
 
     private fun setLineChart(historicalData: PriceEntry, predictionData: PriceEntry = PriceEntry(), xAxisLabels: List<String>) {
-        val historyDataSet = LineDataSet(historicalData.prices, getString(R.string.label_history))
+        val actualDataSet = LineDataSet(historicalData.prices, getString(R.string.label_actual))
         val predictionDataSet = LineDataSet(predictionData.prices, getString(R.string.label_prediction))
-        historyDataSet.apply {
+        actualDataSet.apply {
             val mColor = ContextCompat.getColor(this@ProductDetailActivity, R.color.greenLeaf)
             color = mColor
             setDrawValues(false)
@@ -230,7 +235,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         }
         binding.crtPrices.apply {
-            val lineData = LineData(historyDataSet, predictionDataSet).apply {
+            val lineData = LineData(actualDataSet, predictionDataSet).apply {
                 setValueFormatter(YValueFormatter(this@ProductDetailActivity))
             }
             xAxis.valueFormatter = XAxisValueFormatter(this@ProductDetailActivity, xAxisLabels)
@@ -239,28 +244,10 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         }
     }
 
-    private fun getMonthlyPricesData(): List<Entry>{
-        val rand = Random(100)
-        return Array(12){
-            val price = rand.nextDouble(100.00, 235.00)
-            val priceFloat = "${price.toInt()}00.0".toFloat()
-            Entry(it.toFloat(), priceFloat)
-        }.toList()
-    }
-
-    private fun getAnnualPricesData(): List<Entry>{
-        val rand = Random(132)
-        return Array(5){
-            val price = rand.nextDouble(100.00, 235.00)
-            val priceFloat = "${price.toInt()}00.0".toFloat()
-            Entry(it.toFloat(), priceFloat)
-        }.toList()
-    }
-
     private fun getChartTypes(): List<String> {
         return listOf(
-            "Month",
-            "Year"
+            getString(R.string.label_month),
+            getString(R.string.label_year)
         )
     }
 

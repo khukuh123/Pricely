@@ -11,6 +11,8 @@ data class Product(
     val weight: Int = 0,
     val unit: String = "",
     val price: Int = 0,
-    val isRise: Boolean = false,
-    val description: String = ""
+    val isRising: Boolean = false,
+    val description: String = "",
+    val month: String = "",
+    val year: Int = 0
 ): Parcelable

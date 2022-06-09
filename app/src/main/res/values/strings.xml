@@ -27,7 +27,7 @@
     <string name="hint_year" translatable="true">Year</string>
     <string name="action_cancel" translatable="true">Cancel</string>
     <string name="action_pick" translatable="true">Pick</string>
-    <string name="label_history" translatable="true">History</string>
+    <string name="label_actual" translatable="true">Actual</string>
     <string name="label_prediction" translatable="true">Prediction</string>
     <string name="hint_search" translatable="true">What are you looking for?</string>
     <string name="label_suggestion" translatable="true">Suggestion</string>
@@ -39,4 +39,6 @@
     <string name="label_description_recommendation" translatable="true">Recommended products of choice</string>
     <string name="label_all_products_description">The following products are available in our system.</string>
     <string name="label_recommendation_description">These are our recommendation products</string>
+    <string name="label_month">Month</string>
+    <string name="label_year">Year</string>
 </resources>

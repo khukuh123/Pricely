@@ -22,5 +22,7 @@ data class ProductDetailItem(
     @SerializedName("weight")
     val weight: Int?,
     @SerializedName("year")
-    val year: Int?
+    val year: Int?,
+    @SerializedName("is_rising")
+    val isRising: Int
 )

@@ -13,8 +13,10 @@ fun ProductDetailItem.map() =
         weight = weight.orZero(),
         unit = unit.orEmpty(),
         price = price.orZero(),
-        isRise = false,
-        description = description.orEmpty()
+        isRising = isRising.orZero() != 0,
+        description = description.orEmpty(),
+        month = month.orEmpty(),
+        year = year.orZero()
     )
 
 fun ProductListResponse.map(): List<Product> = this.map { it.map() }

@@ -33,7 +33,7 @@
     <string name="hint_year" translatable="true">Tahun</string>
     <string name="action_cancel" translatable="true">Batal</string>
     <string name="action_pick" translatable="true">Pilih</string>
-    <string name="label_history" translatable="true">Riwayat</string>
+    <string name="label_actual" translatable="true">Asli</string>
     <string name="label_prediction" translatable="true">Prediksi</string>
     <string name="hint_search" translatable="true">Mau cari produk apa?</string>
     <string name="label_suggestion" translatable="true">Saran</string>
@@ -49,4 +49,6 @@
     <string name="label_description_recommendation" translatable="true">Rekomendasi produk-produk pilihan</string>
     <string name="label_all_products_description">Berikut barang-barang yang tersedia di sistem kami</string>
     <string name="label_recommendation_description">Ini adalah produk-produk rekomendasi kami</string>
+    <string name="label_month">Bulan</string>
+    <string name="label_year">Tahun</string>
 </resources>

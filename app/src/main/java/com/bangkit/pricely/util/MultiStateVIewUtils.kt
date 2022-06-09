@@ -12,7 +12,9 @@ fun MultiStateView.showEmptyList(title: String? = null, message: String? = null,
         val imgEmpty: ImageView = it.findViewById(R.id.imgEmpty)
         val tvEmptyTitle: TextView = it.findViewById(R.id.tvEmptyTitle)
         val tvEmptyMessage: TextView = it.findViewById(R.id.tvEmptyMessage)
+        val btnRetry: Button = it.findViewById(R.id.btnRetry)
 
+        btnRetry.gone()
         if (imageResId != null) {
             imgEmpty.setImageResource(imageResId)
         } else if (imgEmpty.drawable == null) {
