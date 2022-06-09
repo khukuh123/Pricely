@@ -13,6 +13,8 @@ class ProductInteractor(private val productRepository: ProductRepository) : Prod
     override suspend fun getProducts(): Flow<Resource<List<Product>>> =
         productRepository.getProducts()
 
+    override suspend fun getProductsByName(name: String): Flow<Resource<List<Product>>> =
+        productRepository.getProductsByName(name)
 
     override suspend fun getProductsByCategory(categoryId: Int): Flow<Resource<List<Product>>> =
         productRepository.getProductsByCategory(categoryId)

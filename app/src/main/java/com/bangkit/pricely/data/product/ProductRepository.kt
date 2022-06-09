@@ -10,6 +10,8 @@ interface ProductRepository {
 
     suspend fun getProducts(): Flow<Resource<List<Product>>>
 
+    suspend fun getProductsByName(name: String): Flow<Resource<List<Product>>>
+
     suspend fun getProductsByCategory(categoryId: Int): Flow<Resource<List<Product>>>
 
     suspend fun getProductsRecommendation(recommendation: Boolean): Flow<Resource<List<Product>>>
