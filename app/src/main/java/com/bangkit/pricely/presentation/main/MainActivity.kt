@@ -14,8 +14,6 @@ import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.*
-import com.bangkit.pricely.util.dialog.getErrorDialog
-import com.bangkit.pricely.util.dialog.getLoadingDialog
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
 import org.koin.android.ext.android.inject
 

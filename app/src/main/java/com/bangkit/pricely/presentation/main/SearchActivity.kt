@@ -27,6 +27,7 @@ import org.koin.android.ext.android.inject
 class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
 
     private val productViewModel: ProductViewModel by inject()
+    private var productName: String? = null
 
     private val searchProductAdapter by lazy {
         ProductVerticalAdapter {
@@ -37,7 +38,8 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
         SuggestionAdapter {
             with(binding) {
                 toolbar.tilSearch.editText?.setText(it)
-                searchProduct(it)
+                productName = it
+                searchProduct(productName!!)
             }
         }
     }
@@ -99,6 +101,32 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
                     suggestionAdapter.submitList(it.map { suggestion -> suggestion.name })
                 }
             )
+            productViewModel.productsByName.observe(this@SearchActivity,
+                onLoading = {
+                    msvSearch.showLoading()
+                },
+                onError = {
+                    msvSearch.showError(message = it) {
+                        productName?.let { it1 -> searchProduct(it1) }
+                    }
+                },
+                onSuccess = {
+                    searchProductAdapter.submitList(it)
+                    if (it.isEmpty()) {
+                        groupSearchResult.visible()
+                        groupSuggestion.gone()
+                        msvSearch.showEmptyList(getString(R.string.empty_search), getString(R.string.message_search))
+                        tvSearchResult.setPatternSpan(getString(R.string.label_search_result, 0, productName), "\\_{2}.*?\\_{2}")
+                        viewRecommendationSection.visible()
+                    } else {
+                        groupSearchResult.visible()
+                        groupSuggestion.gone()
+                        msvSearch.showContent()
+                        tvSearchResult.setPatternSpan(getString(R.string.label_search_result, it.size, productName), "\\_{2}.*?\\_{2}")
+                        viewRecommendationSection.gone()
+                    }
+                }
+            )
         }
     }
 
@@ -119,7 +147,6 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
         binding.viewRecommendationSection.setProducts(list)
     }
 
-
     private fun setupRecyclerView() {
         with(binding) {
             rvVerticalProducts.apply {
@@ -133,15 +160,6 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
                 addItemDecoration(PricelyLinearLayoutItemDecoration(8.dp, edge = 16.dp))
             }
         }
-    }
-
-    private fun getDummyData(): List<Product> {
-        return listOf(
-            Product(0, name = "Tomat", price= 3000, unit = "gram / pack"),
-            Product(1, name = "Tomat", price= 3000, unit = "gram / pack"),
-            Product(2, name = "Tomat", price= 3000, unit = "gram / pack"),
-            Product(3, name = "Tomat", price= 3000, unit = "gram / pack"),
-        )
     }
 
     private fun TextView.setPatternSpan(text: String, textPattern: String){
@@ -168,27 +186,8 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
         this.text = spannable
     }
 
-
-    private fun searchProduct(text: String) {
-        with(binding) {
-            searchProductAdapter.submitList(getDummyData())
-            when (text) {
-                "empty" -> {
-                    groupSearchResult.visible()
-                    groupSuggestion.gone()
-                    msvSearch.showEmptyList(getString(R.string.empty_search), getString(R.string.message_search))
-                    tvSearchResult.setPatternSpan(getString(R.string.label_search_result, 0, text), "\\_{2}.*?\\_{2}")
-                    viewRecommendationSection.visible()
-                }
-                else -> {
-                    groupSearchResult.visible()
-                    groupSuggestion.gone()
-                    msvSearch.showContent()
-                    tvSearchResult.setPatternSpan(getString(R.string.label_search_result, getDummyData().size, text), "\\_{2}.*?\\_{2}")
-                    viewRecommendationSection.gone()
-                }
-            }
-        }
+    private fun searchProduct(productName: String) {
+        productViewModel.getProductsByName(productName)
     }
 
     private fun showSuggestions() {
@@ -211,7 +210,8 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
                     }
                     editText.setOnEditorActionListener { _, actionId, _ ->
                         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                            searchProduct(editText.text.toString())
+                            productName = editText.text.toString()
+                            searchProduct(productName!!)
                             hideSoftInput(editText)
                             return@setOnEditorActionListener true
                         }

@@ -16,6 +16,8 @@ interface ProductApiClient {
     @GET("api/products")
     suspend fun getProductsByCategory(@Query("category") id: Int): Response<BaseResponse<ProductListResponse>>
 
+    @GET("api/search")
+    suspend fun getListProductsByName(@Query("query") name: String): Response<BaseResponse<ProductListResponse>>
 
     @GET("api/products")
     suspend fun getProductsRecommendation(@Query("recommendation") recommendation: Boolean):

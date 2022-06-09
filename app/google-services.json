@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "160111556207",
+    "project_id": "pricely-bangkit",
+    "storage_bucket": "pricely-bangkit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:160111556207:android:bfba058db155d069623f9a",
+        "android_client_info": {
+          "package_name": "com.bangkit.pricely"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "160111556207-q10jup80r5trqbn762h60u9be65a70md.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bangkit.pricely",
+            "certificate_hash": "fdb206b540b919c95272b5cd8b7232e8f2676c95"
+          }
+        },
+        {
+          "client_id": "160111556207-gtt4vi8ithrrivnq8s47adqfbtc1lq4t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaopWyPuY5DMasO33HSmTALcdK3aDCwak"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "160111556207-gtt4vi8ithrrivnq8s47adqfbtc1lq4t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

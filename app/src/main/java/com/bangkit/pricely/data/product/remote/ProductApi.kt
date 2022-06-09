@@ -16,6 +16,9 @@ class ProductApi(private val api: ProductApiClient) : ProductApiClient {
     override suspend fun getProductsByCategory(id: Int): Response<BaseResponse<ProductListResponse>> =
         api.getProductsByCategory(id)
 
+    override suspend fun getListProductsByName(name: String): Response<BaseResponse<ProductListResponse>> =
+        api.getListProductsByName(name)
+
     override suspend fun getProductsRecommendation(recommendation: Boolean):
             Response<BaseResponse<ProductListResponse>> =
         api.getProductsRecommendation(recommendation)

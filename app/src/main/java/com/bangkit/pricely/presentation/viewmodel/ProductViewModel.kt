@@ -18,6 +18,9 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
     private val _productsByCategory: MutableLiveData<Resource<List<Product>>> = MutableLiveData()
     val productsByCategory: LiveData<Resource<List<Product>>> get() = _productsByCategory
 
+    private val _productsByName: MutableLiveData<Resource<List<Product>>> = MutableLiveData()
+    val productsByName: LiveData<Resource<List<Product>>> get() = _productsByName
+
     private val _productsRecommendationByCategory: MutableLiveData<Resource<List<Product>>> =
         MutableLiveData()
     val productsRecommendationByCategory: LiveData<Resource<List<Product>>> get() = _productsRecommendationByCategory
@@ -28,6 +31,7 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
     init {
         _productDetail.value = Resource.Loading()
         _productsByCategory.value = Resource.Loading()
+        _productsByName.value = Resource.Loading()
         _productsRecommendationByCategory.value = Resource.Loading()
         _suggestions.value = Resource.Loading()
     }
@@ -50,6 +54,13 @@ class ProductViewModel(private val productUseCase: ProductUseCase): ViewModel() 
         _productsByCategory.value = Resource.Loading()
         viewModelScope.collectResult(_productsByCategory) {
             productUseCase.getProductsByCategory(categoryId)
+        }
+    }
+
+    fun getProductsByName(name: String) {
+        _productsByName.value = Resource.Loading()
+        viewModelScope.collectResult(_productsByName) {
+            productUseCase.getProductsByName(name)
         }
     }
 
