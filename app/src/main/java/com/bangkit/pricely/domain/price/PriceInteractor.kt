@@ -8,8 +8,6 @@ import com.bangkit.pricely.domain.util.Resource
 import com.github.mikephil.charting.data.Entry
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.zip
-import java.util.*
 
 class PriceInteractor(private val repository: PriceRepository) : PriceUseCase {
     override suspend fun getProductAvailableYears(productId: Int): Flow<Resource<List<Price>>> =
@@ -23,7 +21,7 @@ class PriceInteractor(private val repository: PriceRepository) : PriceUseCase {
             val prices = it.data.orEmpty()
             val entries = prices.mapIndexed { i, price -> Entry(i.toFloat(), price.price.toFloat()) }
             val priceEntry = PriceEntry(
-                labels = if(isMonthly)
+                labels = if (isMonthly)
                     getMonthlyLabel(prices)
                 else
                     getAnnualLabel(prices),

@@ -8,8 +8,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.bangkit.pricely.databinding.FragmentMonthYearPickerBinding
 import com.bangkit.pricely.util.setAdapter
-import java.util.*
-import kotlin.collections.ArrayList
 
 typealias DateSet = Pair<Int, String>
 
@@ -52,30 +50,30 @@ class MonthYearPickerDialog : DialogFragment() {
     }
 
     private fun setupAction() {
-        with(binding){
+        with(binding) {
             btnNeutral.setOnClickListener {
                 dismiss()
-                if(!isSelected){
+                if (!isSelected) {
                     selectedMonth = null
                     selectedYear = null
                 }
             }
             btnPositive.setOnClickListener {
-                if(validatePicker()){
+                if (validatePicker()) {
                     onMonthAndYearPicked?.invoke(selectedMonth!!, selectedYear!!)
                 }
-                if(!isSelected) isSelected = true
+                if (!isSelected) isSelected = true
                 dismiss()
             }
         }
     }
 
     fun show(manager: FragmentManager) {
-        if(manager.findFragmentByTag(TAG) == null && !isAdded) super.show(manager, TAG)
+        if (manager.findFragmentByTag(TAG) == null && !isAdded) super.show(manager, TAG)
     }
 
     private fun setupDropDown() {
-        with(binding){
+        with(binding) {
             spnMonth.setAdapter(
                 requireContext(),
                 months,
@@ -108,16 +106,16 @@ class MonthYearPickerDialog : DialogFragment() {
         }
     }
 
-    fun setMonthsAndYears(months: ArrayList<String>, years: ArrayList<String>){
+    fun setMonthsAndYears(months: ArrayList<String>, years: ArrayList<String>) {
         this.months.addAll(months)
         this.years.addAll(years)
     }
 
-    fun setOnMontAndYearPicked(onMonthAndYearPicked: (month: DateSet, year: DateSet) -> Unit){
+    fun setOnMontAndYearPicked(onMonthAndYearPicked: (month: DateSet, year: DateSet) -> Unit) {
         this.onMonthAndYearPicked = onMonthAndYearPicked
     }
 
-    companion object{
+    companion object {
         private val TAG = MonthYearPickerDialog::class.java.simpleName
 
         fun newInstance(): MonthYearPickerDialog =

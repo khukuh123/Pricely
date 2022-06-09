@@ -13,7 +13,6 @@ import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.util.PricelyDiffUtil
 import com.bangkit.pricely.util.formatPrice
 import com.bangkit.pricely.util.reusable.ViewAllAdapter
-import com.bangkit.pricely.util.setImageFromUrl
 import com.bangkit.pricely.util.setImage
 
 class ProductVerticalAdapter(
@@ -28,7 +27,7 @@ class ProductVerticalAdapter(
                 tvPriceProduct.text = formatPrice(data.price)
                 val weight = "${data.weight} ${data.unit}"
                 tvUnitProduct.text = weight
-                imgProduct.setImage(data.imageUrl, 130, 98,  progressBar = pbProduct)
+                imgProduct.setImage(data.imageUrl, 130, 98, progressBar = pbProduct)
                 root.setOnClickListener {
                     onItemClicked.invoke(data)
                 }
@@ -46,7 +45,7 @@ class ProductVerticalAdapter(
         return ConcatAdapter(this, adapter)
     }
 
-    fun showFooter(isShow: Boolean){
+    fun showFooter(isShow: Boolean) {
         footerAdapter?.showFooter(isShow)
     }
 }

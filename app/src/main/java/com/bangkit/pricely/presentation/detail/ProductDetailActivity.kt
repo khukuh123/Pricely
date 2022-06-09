@@ -28,7 +28,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import java.util.*
-import kotlin.random.Random
 
 class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
@@ -133,7 +132,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             },
             onError = {
                 dismissLoading()
-                showErrorDialog(it){ getProductPriceByMonthAndYear(month, year) }
+                showErrorDialog(it) { getProductPriceByMonthAndYear(month, year) }
             },
             onSuccess = {
                 dismissLoading()
@@ -150,28 +149,28 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             },
             onSuccess = {
                 dismissLoading()
-                setLineChart(it,  xAxisLabels = it.labels)
+                setLineChart(it, xAxisLabels = it.labels)
             }
         )
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == android.R.id.home) onBackPressed()
+        if (item.itemId == android.R.id.home) onBackPressed()
         return super.onOptionsItemSelected(item)
     }
 
     private fun setupDropDown() {
-        with(binding){
+        with(binding) {
             spnChartType.apply {
                 setAdapter(
                     this@ProductDetailActivity,
                     getChartTypes(),
                     mapper = { it },
                     onItemClicked = { position, _ ->
-                        if(position == 0){
+                        if (position == 0) {
                             isMonthly = true
                             getProductPrices()
-                        }else{
+                        } else {
                             isMonthly = false
                             getProductPrices()
                         }
@@ -182,8 +181,8 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         }
     }
 
-    private fun setProductDetail(product: Product){
-        with(binding){
+    private fun setProductDetail(product: Product) {
+        with(binding) {
             imgProduct.setImage(product.imageUrl, 200.dp, 100.dp, pbProduct)
             tvProductName.text = product.name
             val weightPerPiece = "${product.weight.formatThousand()} ${product.unit}"
@@ -197,12 +196,12 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         }
     }
 
-    private fun setIndicator(isRising: Boolean){
-        binding.imgIndicator.setImageResource(if(isRising) R.drawable.ic_indicator_up else R.drawable.ic_indicator_down)
+    private fun setIndicator(isRising: Boolean) {
+        binding.imgIndicator.setImageResource(if (isRising) R.drawable.ic_indicator_up else R.drawable.ic_indicator_down)
     }
 
-    private fun setPriceByMonthAndYear(price: Product){
-        with(binding){
+    private fun setPriceByMonthAndYear(price: Product) {
+        with(binding) {
             tvProductPrice.text = price.price.formatCurrency()
             val info = "(${price.month.replaceFirstChar { it.uppercase() }} ${price.year})"
             tvPriceInfo.text = info
@@ -265,30 +264,30 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             description.isEnabled = false
             axisLeft.valueFormatter = LeftAxisValueFormatter(this@ProductDetailActivity)
             isScaleYEnabled = false
-            setExtraOffsets(0f, 0f, 0f,5f)
+            setExtraOffsets(0f, 0f, 0f, 5f)
         }
     }
 
-    private fun getProductDetail(){
+    private fun getProductDetail() {
         productViewModel.getProductDetail(productId)
     }
 
-    private fun getProductAvailableYears(){
+    private fun getProductAvailableYears() {
         priceViewModel.getProductAvailableYears(productId)
     }
 
-    private fun getProductPriceByMonthAndYear(month: Int, year: Int){
+    private fun getProductPriceByMonthAndYear(month: Int, year: Int) {
         priceViewModel.getProductPriceByMonthAndYear(productId, month, year)
     }
 
-    private fun getProductPrices(){
+    private fun getProductPrices() {
         priceViewModel.getProductPrices(productId, isMonthly)
     }
 
     private fun getEntryList(items: List<Price>): List<Entry> =
-        items.mapIndexed{ index, price -> Entry(index.toFloat(), price.price.toFloat()) }
+        items.mapIndexed { index, price -> Entry(index.toFloat(), price.price.toFloat()) }
 
-    companion object{
+    companion object {
         @JvmStatic
         fun start(context: Context, productId: Int) {
             context.startActivity(Intent(context, ProductDetailActivity::class.java).apply {

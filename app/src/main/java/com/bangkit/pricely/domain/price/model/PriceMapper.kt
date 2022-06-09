@@ -2,7 +2,6 @@ package com.bangkit.pricely.domain.price.model
 
 import com.bangkit.pricely.data.price.remote.response.PriceItem
 import com.bangkit.pricely.data.price.remote.response.PriceListResponse
-import com.bangkit.pricely.data.product.remote.response.ProductDetailItem
 import com.bangkit.pricely.util.orZero
 
 fun PriceListResponse.map(): List<Price> =
