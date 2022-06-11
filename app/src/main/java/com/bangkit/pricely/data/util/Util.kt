@@ -85,6 +85,6 @@ fun getTrustManager(context: Context): TrustManagerFactory {
 private fun getCertificate(context: Context): Certificate? {
     // Loading CAs from file
     val certificateFactory: CertificateFactory? = CertificateFactory.getInstance("X.509")
-    return context.resources.openRawResource(R.raw.certificate)
+    return context.resources.openRawResource(R.raw.pricely_cert)
         .use { cert -> certificateFactory?.generateCertificate(cert) }
 }

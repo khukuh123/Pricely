@@ -45,10 +45,8 @@
     <string name="sample_weight_per_piece">500 gram / pack</string>
     <string name="samples_price">Rp 13.000</string>
     <string name="samples_month_3_letter">Jan</string>
-    <string name="label_description_allproduct" translatable="true">Semua data produk yang tersedia disini</string>
+    <string name="label_description_all_product" translatable="true">Semua data produk yang tersedia disini</string>
     <string name="label_description_recommendation" translatable="true">Rekomendasi produk-produk pilihan</string>
-    <string name="label_all_products_description">Berikut barang-barang yang tersedia di sistem kami</string>
-    <string name="label_recommendation_description">Ini adalah produk-produk rekomendasi kami</string>
     <string name="label_month">Bulan</string>
     <string name="label_year">Tahun</string>
 </resources>

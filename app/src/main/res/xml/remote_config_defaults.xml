@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<defaults>
+  <entry>
+    <key>baseUrlApi</key>
+    <value>https://35.240.197.171</value>
+  </entry>
+  <entry>
+    <key>recommendationDescription</key>
+    <value>These are our recommendation procucts</value>
+  </entry>
+  <entry>
+    <key>allProductsDescription</key>
+    <value>These products are available on our system</value>
+  </entry>
+</defaults>

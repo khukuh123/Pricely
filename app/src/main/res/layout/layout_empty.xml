@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:keep="@layout/layout_empty">
+    tools:keep="@layout/layout_empty"
+    android:padding="@dimen/dimen_16dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imgEmpty"
@@ -25,6 +26,7 @@
         android:layout_marginTop="@dimen/dimen_8dp"
         android:textSize="@dimen/text_size_18sp"
         android:textStyle="bold"
+        android:gravity="center_horizontal"
         app:layout_constraintBottom_toTopOf="@id/tvEmptyMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dimen_16dp"
         android:textSize="@dimen/text_size_16sp"
+        android:gravity="center_horizontal"
         app:layout_constraintBottom_toTopOf="@id/btnRetry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

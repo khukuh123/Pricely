@@ -1,26 +1,32 @@
 package com.bangkit.pricely.presentation.main
 
+import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
+import com.bangkit.pricely.base.reloadModules
 import com.bangkit.pricely.databinding.ActivityMainBinding
 import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.*
+import com.bangkit.pricely.util.RemoteConfigKey.isRemoteConfigLoadingDone
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import org.koin.android.ext.android.inject
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val productViewModel: ProductViewModel by inject()
     private val categoryViewModel: CategoryViewModel by inject()
+    private val remoteConfig: FirebaseRemoteConfig by inject()
 
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var selectedCategory: Category
@@ -28,6 +34,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun getViewBinding(): ActivityMainBinding {
         installSplashScreen()
+
+        var oneTimeListener = false
+        val content: View = findViewById(android.R.id.content)
+        content.viewTreeObserver.addOnPreDrawListener {
+            if(!oneTimeListener && !isRemoteConfigLoadingDone){
+                oneTimeListener = true
+                remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        with(remoteConfig) {
+                            AppConst.API_KEY = getString(RemoteConfigKey.API_KEY)
+                            AppConst.API_URL_BASE = getString(RemoteConfigKey.BASE_URL)
+                        }
+                        isRemoteConfigLoadingDone = true
+                        reloadModules()
+                        restart(this)
+                    } else {
+                        showToast("Failed to fetch remote config\n${task.exception?.message.toString()}")
+                        isRemoteConfigLoadingDone = false
+                    }
+                }
+            }
+            isRemoteConfigLoadingDone
+        }
         return ActivityMainBinding.inflate(layoutInflater)
     }
 
@@ -50,9 +79,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 CategoryDetailActivity.start(this@MainActivity, selectedCategory)
             }
             viewRecommendationSection.setOnViewAllButtonClicked {
+                val description = remoteConfig.getString(RemoteConfigKey.RECOMMENDATION_DESCRIPTION)
                 CategoryDetailActivity.start(this@MainActivity,
-                    selectedCategory.copy(name = getString(R.string.label_recommendation), description = getString(
-                        R.string.label_recommendation_description), type = -1))
+                    selectedCategory.copy(name = getString(R.string.label_recommendation), description = description, type = -1))
             }
 
             categoryAdapter.setOnClickedItem { category, position ->
@@ -198,14 +227,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
-    private fun getAllProductCategory(): Category =
-        Category(
+    private fun getAllProductCategory(): Category {
+        val description = remoteConfig.getString(RemoteConfigKey.ALL_PRODUCTS_DESCRIPTION)
+        return Category(
             id = 0,
             name = resources.getString(R.string.label_all_product),
-            description = getString(R.string.label_all_products_description),
+            description = description,
             type = 0,
             imgUrl = "https://cdn-icons-png.flaticon.com/512/291/291893.png"
         )
+    }
 
     private fun getOthersCategory(): Category =
         Category(
@@ -215,4 +246,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             2,
             "https://www.svgrepo.com/download/157749/more.svg"
         )
+
+    companion object{
+        @JvmStatic
+        fun restart(context: Context) =
+            context.startActivity(Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            })
+    }
 }

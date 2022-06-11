@@ -80,14 +80,13 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
         with(binding){
             productViewModel.productsRecommendationByCategory.observe(this@SearchActivity,
                 onLoading = {
-                    msvSearch.showLoading()
+                    viewRecommendationSection.showLoading()
                 },
                 onError = {
-                    msvSearch.showError(message = it, onRetry = ::getRecommendation)
+                    viewRecommendationSection.showError(message = it, onRetry = ::getRecommendation)
                 },
                 onSuccess = {
-                    msvSearch.showContent()
-                    if (it.size > 3) setRecommendation(it.take(3)) else setRecommendation(it)
+                    setRecommendation(it.take(3))
                 }
             )
             productViewModel.suggestions.observe(this@SearchActivity,
@@ -106,9 +105,12 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
                     msvSearch.showLoading()
                 },
                 onError = {
+                    groupSearchResult.visible()
+                    groupSuggestion.gone()
                     msvSearch.showError(message = it) {
                         productName?.let { it1 -> searchProduct(it1) }
                     }
+                    viewRecommendationSection.gone()
                 },
                 onSuccess = {
                     searchProductAdapter.submitList(it)

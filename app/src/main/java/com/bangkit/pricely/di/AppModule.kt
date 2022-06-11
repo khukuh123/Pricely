@@ -1,6 +1,9 @@
 package com.bangkit.pricely.di
 
+import android.content.Context
+import android.util.Log
 import com.bangkit.pricely.BuildConfig
+import com.bangkit.pricely.R
 import com.bangkit.pricely.data.category.CategoryDataStore
 import com.bangkit.pricely.data.category.CategoryRepository
 import com.bangkit.pricely.data.category.remote.CategoryApi
@@ -26,12 +29,19 @@ import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
 import com.bangkit.pricely.presentation.viewmodel.PriceViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.AppConst
+import com.bangkit.pricely.util.RemoteConfigKey
+import com.bangkit.pricely.util.showToast
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.koin.java.KoinJavaComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
@@ -73,30 +83,32 @@ val networkModule = module {
             .build()
     }
 
-    single<ProductApiClient> {
+    scope(named("baseUrl")){
+        scoped {
+            provideBaseUrlHolder()
+        }
+    }
+
+    single<Retrofit>{
         Retrofit.Builder()
             .baseUrl(AppConst.API_URL_BASE)
             .addConverterFactory(GsonConverterFactory.create())
             .client(get())
             .build()
+    }
+
+    single<ProductApiClient> {
+        get<Retrofit>()
             .create(ProductApiClient::class.java)
     }
 
     single<PriceApiClient> {
-        Retrofit.Builder()
-            .baseUrl(AppConst.API_URL_BASE)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(get())
-            .build()
+        get<Retrofit>()
             .create(PriceApiClient::class.java)
     }
 
     single<CategoryApiClient> {
-        Retrofit.Builder()
-            .baseUrl(AppConst.API_URL_BASE)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(get())
-            .build()
+        get<Retrofit>()
             .create(CategoryApiClient::class.java)
     }
 
@@ -127,4 +139,22 @@ val viewModelModule = module {
     viewModel { ProductViewModel(get()) }
     viewModel { PriceViewModel(get()) }
     viewModel { CategoryViewModel(get()) }
+}
+
+val firebaseModule = module {
+    single {
+        val remoteConfig = Firebase.remoteConfig
+        val settings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 0
+        }
+        remoteConfig.apply {
+            setConfigSettingsAsync(settings)
+            setDefaultsAsync(R.xml.remote_config_defaults)
+        }
+        remoteConfig
+    }
+}
+
+fun provideBaseUrlHolder(): String {
+    return AppConst.API_URL_BASE
 }

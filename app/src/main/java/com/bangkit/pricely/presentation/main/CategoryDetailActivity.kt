@@ -15,6 +15,7 @@ import com.bangkit.pricely.util.*
 import com.bangkit.pricely.util.dialog.getErrorDialog
 import com.bangkit.pricely.util.dialog.getLoadingDialog
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import org.koin.android.ext.android.inject
 
 class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
@@ -22,6 +23,7 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
     private lateinit var category: Category
     private val productViewModel: ProductViewModel by inject()
     private val categoryViewModel: CategoryViewModel by inject()
+    private val remoteConfig: FirebaseRemoteConfig by inject()
 
     private val productAdapter by lazy {
         ProductVerticalAdapter {
@@ -50,7 +52,8 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
 
     override fun setupAction() {
         binding.viewRecommendationSection.setOnViewAllButtonClicked {
-            start(this, category.copy(name = getString(R.string.label_recommendation), description = getString(R.string.label_recommendation_description), type = -1))
+            val description = remoteConfig.getString(RemoteConfigKey.RECOMMENDATION_DESCRIPTION)
+            start(this, category.copy(name = getString(R.string.label_recommendation), description = description, type = -1))
         }
     }
 

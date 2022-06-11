@@ -28,8 +28,8 @@ fun MultiStateView.showEmptyList(title: String? = null, message: String? = null,
 }
 
 fun MultiStateView.showError(title: String? = null, message: String? = null, imageResId: Int? = null, onRetry: (() -> Unit)? = null) {
-    this.viewState = MultiStateView.ViewState.EMPTY
-    this.getView(MultiStateView.ViewState.EMPTY)?.let {
+    this.viewState = MultiStateView.ViewState.ERROR
+    this.getView(MultiStateView.ViewState.ERROR)?.let {
         val imgEmpty: ImageView = it.findViewById(R.id.imgEmpty)
         val tvEmptyTitle: TextView = it.findViewById(R.id.tvEmptyTitle)
         val tvEmptyMessage: TextView = it.findViewById(R.id.tvEmptyMessage)
