@@ -31,6 +31,7 @@ import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.AppConst
 import com.bangkit.pricely.util.RemoteConfigKey
 import com.bangkit.pricely.util.showToast
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
@@ -52,11 +53,16 @@ import javax.net.ssl.X509TrustManager
 val networkModule = module {
 
     val httpLogging = "http_logging"
+    val chuckerLogging = "chucker_logging"
 
     single<Interceptor>(named(httpLogging)) {
         HttpLoggingInterceptor().setLevel(
             if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         )
+    }
+
+    single<Interceptor>(named(chuckerLogging)) {
+        ChuckerInterceptor.Builder(get()).build()
     }
 
     single {
@@ -77,6 +83,7 @@ val networkModule = module {
         OkHttpClient.Builder()
             .addInterceptor(HeaderInterceptor())
             .addInterceptor(interceptor = get(named(httpLogging)))
+            .addInterceptor(interceptor = get(named(chuckerLogging)))
             .connectTimeout(120, TimeUnit.SECONDS)
             .connectTimeout(120, TimeUnit.SECONDS)
             .sslSocketFactory(get(), get())
