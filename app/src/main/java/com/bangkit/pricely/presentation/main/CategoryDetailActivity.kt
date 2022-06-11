@@ -42,7 +42,7 @@ class CategoryDetailActivity :  BaseActivity<ActivityCategoryDetailBinding>() {
         setLoadingDialog(getLoadingDialog(this))
         setErrorDialog(getErrorDialog(this))
         setupToolbar(
-            binding.toolbar.toolbar,
+            binding.toolbarContainer.toolbar,
             category.name,
             true
         )

@@ -66,7 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun setupUI() {
         setupToolbar(
-            binding.toolbar.toolbar,
+            binding.toolbarContainer.toolbar,
             "",
             false
         )

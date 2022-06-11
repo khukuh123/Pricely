@@ -9,7 +9,7 @@
     tools:context=".presentation.main.MainActivity">
 
     <include
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarContainer"
         layout="@layout/layout_toolbar" />
 
     <androidx.core.widget.NestedScrollView

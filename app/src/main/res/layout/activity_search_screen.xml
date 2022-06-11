@@ -8,7 +8,7 @@
     tools:context=".presentation.main.SearchActivity">
 
     <include
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarContainer"
         layout="@layout/layout_search_toolbar" />
 
     <androidx.core.widget.NestedScrollView

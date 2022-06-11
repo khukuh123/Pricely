@@ -54,7 +54,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
 
     override fun setupUI() {
         setupToolbar(
-            binding.toolbar.toolbar,
+            binding.toolbarContainer.toolbar,
             getString(R.string.title_product_detail),
             true
         )
