@@ -122,9 +122,11 @@ fun formatLargeValue(value: Long, digit: Int = 1, base: Array<String>): String {
         it.reversed()
     }.reversed()
     val result = StringBuilder("${chunkedTextValue.first()}.")
-    for (i in 0 until digit) {
-        result.append(chunkedTextValue[1][i])
-    }
+    try {
+        for (i in 0 until digit) {
+            result.append(chunkedTextValue[1][i])
+        }
+    }catch (e: IndexOutOfBoundsException){ }
     result.append(base[chunkedTextValue.size - 1])
     return if (chunkedTextValue.size > 1)
         result.toString()
