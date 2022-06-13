@@ -8,7 +8,7 @@
     tools:context=".presentation.main.CategoryDetailActivity">
 
     <include
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarContainer"
         layout="@layout/layout_general_toolbar" />
 
     <androidx.core.widget.NestedScrollView

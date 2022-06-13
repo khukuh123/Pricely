@@ -37,7 +37,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     private val suggestionAdapter by lazy {
         SuggestionAdapter {
             with(binding) {
-                toolbar.tilSearch.editText?.setText(it)
+                toolbarContainer.tilSearch.editText?.setText(it)
                 productName = it
                 searchProduct(productName!!)
             }
@@ -54,7 +54,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     override fun setupUI() {
         setupRecyclerView()
         setupToolbar(
-            binding.toolbar.toolbar,
+            binding.toolbarContainer.toolbar,
             "",
             true
         )
@@ -202,7 +202,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
 
     private fun setupSearch() {
         with(binding) {
-            toolbar.tilSearch.apply {
+            toolbarContainer.tilSearch.apply {
                 editText?.let { editText ->
                     setEndIconOnClickListener {
                         editText.setText("")

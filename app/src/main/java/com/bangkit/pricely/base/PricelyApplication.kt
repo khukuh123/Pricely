@@ -2,6 +2,7 @@
 package com.bangkit.pricely.base
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import com.bangkit.pricely.di.*
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
@@ -19,6 +20,7 @@ class PricelyApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         startKoin {
             androidLogger(Level.NONE)
             androidContext(this@PricelyApplication)
