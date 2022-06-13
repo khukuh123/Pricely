@@ -9,7 +9,7 @@ import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bangkit.pricely.R
@@ -22,6 +22,10 @@ import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.*
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
 import com.bangkit.pricely.util.recyclerview.PricelyLinearLayoutItemDecoration
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 
 class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
@@ -59,6 +63,20 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
             true
         )
         setupSearch()
+        binding.toolbarContainer.tilSearch.editText?.let { editText ->
+            editText
+                .initFlowBinding()
+                .distinctUntilChanged()
+                .debounce(750)
+                .onEach {
+                    if(it.isEmpty()) {
+                        showSuggestions()
+                    }else {
+                        productName = it.toString()
+                        searchProduct(it.toString())
+                    }
+                }.launchIn(lifecycleScope)
+        }
     }
 
     override fun setupAction() {
@@ -155,6 +173,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
                 adapter = searchProductAdapter
                 layoutManager = GridLayoutManager(this@SearchActivity, 2)
                 addItemDecoration(PricelyGridLayoutItemDecoration(2, 16.dp, 16.dp))
+                itemAnimator = null
             }
             rvSuggestion.apply {
                 adapter = suggestionAdapter
@@ -189,6 +208,7 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
     }
 
     private fun searchProduct(productName: String) {
+        searchProductAdapter.submitList(null)
         productViewModel.getProductsByName(productName)
     }
 
@@ -206,9 +226,6 @@ class SearchActivity : BaseActivity<ActivitySearchScreenBinding>() {
                 editText?.let { editText ->
                     setEndIconOnClickListener {
                         editText.setText("")
-                    }
-                    editText.addTextChangedListener { editable ->
-                        if (editable?.isEmpty() == true) showSuggestions()
                     }
                     editText.setOnEditorActionListener { _, actionId, _ ->
                         if (actionId == EditorInfo.IME_ACTION_SEARCH) {

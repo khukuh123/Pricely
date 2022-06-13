@@ -2,6 +2,8 @@ package com.bangkit.pricely.util
 
 import android.content.Context
 import android.content.res.Resources
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -16,7 +18,11 @@ import coil.load
 import com.bangkit.pricely.R
 import com.bangkit.pricely.domain.util.Resource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -34,6 +40,25 @@ private val decimalFormatSymbols = DecimalFormatSymbols(localeId).apply {
     digit = '.'
 }
 private val numberFormatter = DecimalFormat("###,###.#", decimalFormatSymbols)
+
+fun EditText.initFlowBinding(): Flow<CharSequence> =
+    callbackFlow<CharSequence> {
+        val textChangeListener = object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) =
+                Unit
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                trySend(s ?: "")
+            }
+
+            override fun afterTextChanged(s: Editable?) = Unit
+        }
+        addTextChangedListener(textChangeListener)
+        awaitClose { this@initFlowBinding.removeTextChangedListener(textChangeListener) }
+    }.onStart {
+        if(this@initFlowBinding.text.toString().isNotEmpty())
+            emit(text)
+    }
 
 fun Int?.orZero(): Int = (this ?: 0)
 
