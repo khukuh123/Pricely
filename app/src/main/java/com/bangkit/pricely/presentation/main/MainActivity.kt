@@ -5,19 +5,15 @@ import android.content.Intent
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
-import com.bangkit.pricely.base.reloadModules
 import com.bangkit.pricely.databinding.ActivityMainBinding
 import com.bangkit.pricely.domain.category.model.Category
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.viewmodel.CategoryViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
 import com.bangkit.pricely.util.*
-import com.bangkit.pricely.util.RemoteConfigKey.isRemoteConfigLoadingDone
 import com.bangkit.pricely.util.recyclerview.PricelyGridLayoutItemDecoration
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import org.koin.android.ext.android.inject
@@ -32,33 +28,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     private lateinit var selectedCategory: Category
     private val categoryList: MutableList<Category> = mutableListOf()
 
-    override fun getViewBinding(): ActivityMainBinding {
-        installSplashScreen()
-
-        var oneTimeListener = false
-        val content: View = findViewById(android.R.id.content)
-        content.viewTreeObserver.addOnPreDrawListener {
-            if(!oneTimeListener && !isRemoteConfigLoadingDone){
-                oneTimeListener = true
-                remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        with(remoteConfig) {
-                            AppConst.API_KEY = getString(RemoteConfigKey.API_KEY)
-                            AppConst.API_URL_BASE = getString(RemoteConfigKey.BASE_URL)
-                        }
-                        isRemoteConfigLoadingDone = true
-                        reloadModules()
-                        restart(this)
-                    } else {
-                        showToast("Failed to fetch remote config\n${task.exception?.message.toString()}")
-                        isRemoteConfigLoadingDone = false
-                    }
-                }
-            }
-            isRemoteConfigLoadingDone
-        }
-        return ActivityMainBinding.inflate(layoutInflater)
-    }
+    override fun getViewBinding(): ActivityMainBinding =
+        ActivityMainBinding.inflate(layoutInflater)
 
     override fun setupIntent() {
         selectedCategory = getAllProductCategory()

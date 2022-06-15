@@ -27,12 +27,18 @@ import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 val Int.dp
     get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
 
 val localeId = Locale("id", "ID")
+val currenDate = Calendar.getInstance(localeId)
+val Calendar.month
+    get() = this[Calendar.MONTH] + 1
+val Calendar.year
+    get() = this[Calendar.YEAR]
 
 private val currencyFormatter = NumberFormat.getCurrencyInstance(localeId)
 private val decimalFormatSymbols = DecimalFormatSymbols(localeId).apply {
@@ -40,6 +46,13 @@ private val decimalFormatSymbols = DecimalFormatSymbols(localeId).apply {
     digit = '.'
 }
 private val numberFormatter = DecimalFormat("###,###.#", decimalFormatSymbols)
+
+fun String.getMonthNumber(): Int {
+    val date = SimpleDateFormat("MMMM", Locale.ENGLISH).parse(this)
+    val calendar = Calendar.getInstance(Locale.ENGLISH)
+    calendar.time = date as Date
+    return calendar[Calendar.MONTH] + 1
+}
 
 fun EditText.initFlowBinding(): Flow<CharSequence> =
     callbackFlow<CharSequence> {

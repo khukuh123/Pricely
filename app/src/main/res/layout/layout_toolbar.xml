@@ -13,10 +13,10 @@
         android:layout_width="@dimen/dimen_32dp"
         android:layout_height="@dimen/dimen_32dp"
         android:contentDescription="@string/content_icon"
-        android:scaleX="2"
-        android:scaleY="2"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
         android:layout_marginEnd="@dimen/dimen_8dp"
-        android:src="@drawable/ic_launcher_foreground"
+        android:src="@drawable/ic_pricely"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

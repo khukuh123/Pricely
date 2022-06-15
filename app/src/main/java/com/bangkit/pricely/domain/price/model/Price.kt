@@ -13,4 +13,5 @@ data class Price(
 data class PriceEntry(
     val labels: List<String> = listOf(),
     val prices: List<Entry> = listOf(),
+    val predictions: List<Entry> = listOf()
 )

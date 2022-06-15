@@ -9,7 +9,6 @@ import com.bangkit.pricely.R
 import com.bangkit.pricely.base.BaseActivity
 import com.bangkit.pricely.databinding.ActivityProductDetailBinding
 import com.bangkit.pricely.domain.price.model.Price
-import com.bangkit.pricely.domain.price.model.PriceEntry
 import com.bangkit.pricely.domain.product.model.Product
 import com.bangkit.pricely.presentation.viewmodel.PriceViewModel
 import com.bangkit.pricely.presentation.viewmodel.ProductViewModel
@@ -121,7 +120,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
                     }
                     val month = Calendar.getInstance(localeId).get(Calendar.MONTH) + 1
                     currentMonth = DateSet(month, getMonths()[month - 1])
-                    val year = Calendar.getInstance(localeId).get(Calendar.YEAR) - 1 // TODO: Change it later
+                    val year = Calendar.getInstance(localeId).get(Calendar.YEAR)
                     currentYear = DateSet(years.indexOf(year.toString()), year.toString())
                 }
             }
@@ -149,7 +148,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             },
             onSuccess = {
                 dismissLoading()
-                setLineChart(it, xAxisLabels = it.labels)
+                setLineChart(actualData = it.prices, predictionData = it.predictions, xAxisLabels = it.labels)
             }
         )
     }
@@ -190,7 +189,8 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             tvProductPrice.text = product.price.formatCurrency()
             tvProductDescription.text = product.description
             setIndicator(product.isRising)
-            tvPriceInfo.text = getString(R.string.label_current_month)
+            val info = "(${product.month.replaceFirstChar { it.uppercase() }} ${product.year})"
+            tvPriceInfo.text = info
 
             setupDropDown()
         }
@@ -209,9 +209,9 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
         }
     }
 
-    private fun setLineChart(historicalData: PriceEntry, predictionData: PriceEntry = PriceEntry(), xAxisLabels: List<String>) {
-        val actualDataSet = LineDataSet(historicalData.prices, getString(R.string.label_actual))
-        val predictionDataSet = LineDataSet(predictionData.prices, getString(R.string.label_prediction))
+    private fun setLineChart(actualData: List<Entry>, predictionData: List<Entry>, xAxisLabels: List<String>) {
+        val actualDataSet = LineDataSet(actualData, getString(R.string.label_actual))
+        val predictionDataSet = LineDataSet(predictionData, getString(R.string.label_prediction))
         actualDataSet.apply {
             val mColor = ContextCompat.getColor(this@ProductDetailActivity, R.color.greenLeaf)
             color = mColor
@@ -229,7 +229,7 @@ class ProductDetailActivity : BaseActivity<ActivityProductDetailBinding>() {
             circleColors = listOf(mColor)
             circleHoleRadius = 1.5f
             circleRadius = 3f
-            enableDashedLine(20f, 10f, 0f)
+            enableDashedLine(20f, 5f, 0f)
             lineWidth = 2f
             mode = LineDataSet.Mode.HORIZONTAL_BEZIER
         }

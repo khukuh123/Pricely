@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.bangkit.pricely">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".base.PricelyApplication"
@@ -13,21 +13,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Pricely"
-        tools:targetApi="m">
+        tools:targetApi="m"
+        tools:ignore="LockedOrientationActivity">
+        <activity
+            android:name=".presentation.main.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="firebase_performance_logcat_enabled"
-            android:value="true"/>
+            android:value="true" />
+
         <activity
             android:name=".presentation.detail.ProductDetailActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".presentation.main.MainActivity"
+            android:name=".presentation.main.SplashScreenActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            android:theme="@style/Theme.App.Starting">
+            android:theme="@style/Theme.Pricely.Starting"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,16 +40,12 @@
         </activity>
         <activity
             android:name=".presentation.main.CategoryDetailActivity"
-            android:screenOrientation="portrait"
-            android:exported="false">
-
-        </activity>
-
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".presentation.main.SearchActivity"
-            android:screenOrientation="portrait"
-            android:exported="true" >
-        </activity>
+            android:exported="true"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
