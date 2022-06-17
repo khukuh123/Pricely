@@ -11,22 +11,22 @@ An application that can show us the pricing of the products that are available o
 ## Screenshots
 
 ### Main Page
-![Main Page](https://github.com/khukuh123/Pricely/blob/master/screenshots/MainPage.jpeg)
+<img src="https://github.com/khukuh123/Pricely/blob/master/screenshots/MainPage.jpeg" alt="mainpage" width="324"/>
 
 ### List Category
-![List Category](https://github.com/khukuh123/Pricely/blob/master/screenshots/ListCategory.jpeg)
+<img src="https://github.com/khukuh123/Pricely/blob/master/screenshots/ListCategory.jpeg" alt="listcategory" width="324"/>
 
 ### Category Detail
-![Category Detail](https://github.com/khukuh123/Pricely/blob/master/screenshots/CategoryDetail.jpeg)
+<img src="https://github.com/khukuh123/Pricely/blob/master/screenshots/CategoryDetail.jpeg" alt="categorydetail" width="324"/>
 
 ### Search Product
-![Search Product](https://github.com/khukuh123/Pricely/blob/master/screenshots/SearchProduct.jpeg)
+<img src="https://github.com/khukuh123/Pricely/blob/master/screenshots/SearchProduct.jpeg" alt="searchproduct" width="324"/>
 
 ### Product Detail
-![Product Detail](https://github.com/khukuh123/Pricely/blob/master/screenshots/ProductDetail.jpeg)
+<img src="https://github.com/khukuh123/Pricely/blob/master/screenshots/ProductDetail.jpeg" alt="productdetail" width="324"/>
 
 ### Price Specific
-![Price Specific](https://github.com/khukuh123/Pricely/blob/master/screenshots/PriceSpecific.jpeg)
+<img src="https://github.com/khukuh123/Pricely/blob/master/screenshots/PriceSpecific.jpeg" alt="pricespecific" width="324"/>
 
 ### Chart Category
-![Chart Category](https://github.com/khukuh123/Pricely/blob/master/screenshots/ChartCategory.jpeg)
+<img src="https://github.com/khukuh123/Pricely/blob/master/screenshots/ChartCategory.jpeg" alt="chartcategory" width="324"/>
