@@ -1,6 +1,8 @@
 # Pricely
 <img src="https://user-images.githubusercontent.com/55405108/174299554-1d346e3d-025d-4942-920a-29aaf10426eb.jpg" alt="drawing" width="500"/>
-An application that can show us the pricing of the products that are available on the database including the historical and prediction data
+An application that can show us the pricing of the products that are available on the database including the historical and prediction data. 
+
+Link Figma in [here](https://www.figma.com/file/guJ6luI5DJgKBENBNnubm4/Pricing-Optimization-Wireframe). 
 
 ## Get Started
 1. Download and Install App from [here](https://drive.google.com/file/d/1M7b0LTIHVilDMXuThs6PZGlCwYJj2JWt/view?usp=sharing).
